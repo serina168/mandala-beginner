@@ -2,7 +2,21 @@
 """一級講師課程教學過程簡報 — 溫暖療癒柔色系 v2
    結構：封面 → 講師 → 課程重點 → 材料 → Part1 色彩學 → Part2 曼陀羅設計 → Part3 課程流程/照片/成果/報名
 """
-import os, math
+import os, math, base64
+
+def _fix_img(path):
+    """If image stored as base64 text (first byte < 0x80), decode to binary."""
+    try:
+        with open(path, 'rb') as f:
+            b = f.read(1)
+        if b and b[0] < 0x80:
+            with open(path, 'r') as f:
+                data = f.read().strip()
+            with open(path, 'wb') as f:
+                f.write(base64.b64decode(data))
+    except Exception:
+        pass
+
 from pptx import Presentation
 from pptx.util import Inches, Pt, Emu
 from pptx.dml.color import RGBColor
@@ -13,6 +27,19 @@ from PIL import Image
 
 L1   = "/home/user/mandala/l1"
 DIAG = f"{L1}/diagrams"
+
+# Fix any images stored as base64 text (can happen when pushed via GitHub API)
+for _img in [
+    f"{L1}/bg_ending.jpg", f"{L1}/bg_watercolor.jpg", f"{L1}/art_octagon4.jpg",
+    f"{L1}/art1.jpg", f"{L1}/art2.jpg", f"{L1}/art3.jpg",
+    f"{L1}/art4.jpg", f"{L1}/art5.jpg", f"{L1}/art6.jpg",
+    f"{L1}/hero.jpg", f"{L1}/teacher_full.jpg", f"{L1}/teacher_portrait.jpg",
+    f"{DIAG}/el_dots.png", f"{DIAG}/el_geometry.png", f"{DIAG}/el_leaves.png",
+    f"{DIAG}/el_lines.png", f"{DIAG}/el_petals.png", f"{DIAG}/el_teardrop.png",
+    f"{DIAG}/structure.png",
+]:
+    if os.path.exists(_img):
+        _fix_img(_img)
 
 # ── 溫暖療癒柔色系 ──────────────────────────────────────
 CREAM      = RGBColor(0xFB, 0xF6, 0xEF)
