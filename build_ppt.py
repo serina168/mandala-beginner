@@ -12,8 +12,12 @@ def _fix_img(path):
         if b and b[0] < 0x80:
             with open(path, 'r') as f:
                 data = f.read().strip()
+            missing = len(data) % 4
+            if missing:
+                data += '=' * (4 - missing)
+            decoded = base64.b64decode(data)
             with open(path, 'wb') as f:
-                f.write(base64.b64decode(data))
+                f.write(decoded)
     except Exception:
         pass
 
