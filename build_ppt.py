@@ -884,10 +884,10 @@ sec_title(s, 0.85, 0.85, "考核通過作品", size=28)
 txt(s, 0.9, 1.62, 11.5, 0.5,
     "完成 22 小時課程並通過考核——八角板木器 × 施華洛世奇鑽飾。", 14, color=TAUPE)
 arts=["art1.jpg","art2.jpg","art3.jpg","art4.jpg","art5.jpg","art6.jpg"]
-cw=3.9; ch=2.5; gx=0.28; gy=0.2; x0=(SW-(cw*3+gx*2))/2
+cw=3.9; ch=2.65; gx=0.28; gy=0.12; x0=(SW-(cw*3+gx*2))/2
 for i,a in enumerate(arts):
     r,c=divmod(i,3)
-    pic_top(s, f"{L1}/{a}", x0+c*(cw+gx), 2.05+r*(ch+gy), cw, ch)
+    pic_contain(s, f"{L1}/{a}", x0+c*(cw+gx), 1.88+r*(ch+gy), cw, ch)
 
 # 學員成果・第一屆（6 張合照，2×3 格）
 s = slide(); bg(s)
@@ -895,10 +895,10 @@ eyebrow(s, 0.9, 0.5, "GRADUATION  PRIDE")
 sec_title(s, 0.85, 0.85, "學員成果・第一屆驕傲時刻", size=26)
 txt(s, 0.9, 1.62, 11.5, 0.45, "從一張底板，到捧在手心的完成作品——這是屬於你的里程碑。", 14, color=TAUPE)
 c1_pride = ["ind2.jpg","ind3.jpg","ind4.jpg","inst2.jpg","inst3.jpg","inst4.jpg"]
-cw=3.9; ch=2.5; gx=0.28; gy=0.2; x0=(SW-(cw*3+gx*2))/2
+cw=3.9; ch=2.65; gx=0.28; gy=0.12; x0=(SW-(cw*3+gx*2))/2
 for i,fn in enumerate(c1_pride):
     r,c=divmod(i,3)
-    pic_top(s, f"{L1}/c1/{fn}", x0+c*(cw+gx), 2.05+r*(ch+gy), cw, ch)
+    pic_contain(s, f"{L1}/c1/{fn}", x0+c*(cw+gx), 1.88+r*(ch+gy), cw, ch)
 
 # 學員成果・第二屆（3 張）
 photo_wall("學員成果・第二屆驕傲時刻",
