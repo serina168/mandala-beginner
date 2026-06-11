@@ -216,15 +216,20 @@ def photo_wall(title, sub, imgs):
 # ============================================================
 # 1. 封面
 # ============================================================
-s = slide(); bg(s, INK)
-pic_cover(s, f"{L1}/hero.jpg", 0, 0, SW, SH, border=False)
-ov = rect(s, 0, 0, SW, SH, INK); set_alpha(ov, 46)
+s = slide()
+s.background.fill.solid(); s.background.fill.fore_color.rgb = CREAM
+_p0 = s.shapes.add_picture(f"{L1}/bg_ending.jpg", Inches(0), Inches(0), Inches(SW), Inches(SH))
+_p0.line.fill.background()
+_ov0 = s.shapes.add_shape(MSO_SHAPE.RECTANGLE, Inches(0), Inches(0), Inches(8.2), Inches(SH))
+_ov0.fill.solid(); _ov0.fill.fore_color.rgb = WHITE
+_ov0.line.fill.background(); _ov0.shadow.inherit = False
+set_alpha(_ov0, 55)
 rect(s, 1.0, 2.35, 0.09, 2.55, GOLD)
-eyebrow(s, 1.35, 2.45, "MANDALA  ADVANCED  INSTRUCTOR")
-txt(s, 1.32, 2.85, 11, 1.4, "曼陀羅心靈彩繪", 50, color=WHITE, bold=True)
-txt(s, 1.32, 3.95, 11, 1.0, "一級講師課程・教學過程紀錄", 30, color=CREAM, bold=True)
-txt(s, 1.35, 5.15, 11, 0.6,
-    "色彩學　×　曼陀羅設計　×　22 小時兩日密集　×　黃彥蓁老師親授", 16, color=GOLD)
+eyebrow(s, 1.35, 2.45, "MANDALA  ADVANCED  INSTRUCTOR", color=ROSE_DEEP)
+txt(s, 1.32, 2.85, 7.5, 1.4, "曼陀羅心靈彩繪", 50, color=INK, bold=True)
+txt(s, 1.32, 3.95, 7.5, 1.0, "一級講師課程", 30, color=ROSE_DEEP, bold=True)
+txt(s, 1.35, 5.15, 7.5, 0.6,
+    "色彩學　×　曼陀羅設計　×　22 小時兩日密集　×　黃彥蓁老師親授", 15, color=TAUPE)
 
 # ============================================================
 # 2. 講師介紹
@@ -937,33 +942,26 @@ for i,b in enumerate(bens):
     txt(s, x+0.72, y, cw-0.9, 0.9, b, 13.5, color=INK, anchor=MSO_ANCHOR.MIDDLE)
 
 # ============================================================
-#  結尾（四角曼陀羅裝飾，中央留空顯文字）
+#  結尾（bg_ending.jpg 底圖，白色半透明圓角矩形顯文字）
 # ============================================================
-s = slide(); bg(s, INK)
-# 四角裝飾圓環（放在角落，不遮文字）
-for ox, oy in [(0, 0), (SW, 0), (0, SH), (SW, SH)]:
-    for rr, col, lw in [(1.5, TAUPE, 0.4), (1.1, GOLD, 0.5), (0.65, ROSE, 0.4)]:
-        rect(s, ox-rr, oy-rr, rr*2, rr*2, INK, line=col, lw=lw, shape=MSO_SHAPE.OVAL)
-    # 小點環
-    for k in range(8):
-        a = math.radians(k * 45)
-        px = ox + 1.3 * math.cos(a) - 0.05
-        py = oy + 1.3 * math.sin(a) - 0.05
-        rect(s, px, py, 0.10, 0.10, TAUPE, shape=MSO_SHAPE.OVAL)
-# 上下橫線（極細金線）
-rect(s, 1.8, 1.55, SW-3.6, 0.035, GOLD)
-rect(s, 1.8, SH-1.55, SW-3.6, 0.035, GOLD)
-# 文字區（中央清晰）
-txt(s, 1.0, 2.1, 11.3, 1.0, "一起，從會畫到能教",
-    42, color=WHITE, bold=True, align=PP_ALIGN.CENTER)
-gold_line(s, (SW-1.1)/2, 3.35)
-txt(s, 1.0, 3.55, 11.3, 0.65, "曼陀羅心靈彩繪・第十七屆一級講師課程",
-    21, color=CREAM, align=PP_ALIGN.CENTER)
-txt(s, 1.0, 4.35, 11.3, 0.6, "台中・平日班　6/15（一）、6/16（二）　09:00–21:00",
-    17, color=GOLD, align=PP_ALIGN.CENTER)
-txt(s, 1.0, 5.1, 11.3, 0.5,
-    "上課地點：台中市西屯區中康街 7 號（瑞恩悅琚）・小班制不超過 10 人",
-    13.5, color=CREAM, align=PP_ALIGN.CENTER)
+s = slide()
+s.background.fill.solid(); s.background.fill.fore_color.rgb = CREAM
+END_IMG = f"{L1}/bg_ending.jpg"
+if os.path.exists(END_IMG):
+    p = s.shapes.add_picture(END_IMG, Inches(0), Inches(0), Inches(SW), Inches(SH))
+    p.line.fill.background()
+cx, cw, cy, ch = 2.0, 9.33, 1.55, 4.45
+ov_text = s.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(cx), Inches(cy), Inches(cw), Inches(ch))
+ov_text.fill.solid(); ov_text.fill.fore_color.rgb = WHITE
+ov_text.line.fill.background(); ov_text.shadow.inherit = False
+set_alpha(ov_text, 72)
+rect(s, cx+1.5, cy+0.28, cw-3.0, 0.04, GOLD)
+txt(s, cx, cy+0.52, cw, 1.1, "一起，從會畫到能教", 46, color=ROSE_DEEP, bold=True, align=PP_ALIGN.CENTER)
+rect(s, cx+3.5, cy+1.68, cw-7.0, 0.04, GOLD)
+txt(s, cx, cy+1.82, cw, 0.65, "曼陀羅心靈彩繪・第十七屆一級講師課程", 20, color=INK, bold=True, align=PP_ALIGN.CENTER)
+txt(s, cx, cy+2.52, cw, 0.52, "台中・平日班　6/15（一）、6/16（二）　09:00–21:00", 16, color=ROSE_DEEP, bold=True, align=PP_ALIGN.CENTER)
+txt(s, cx, cy+3.1, cw, 0.42, "上課地點：台中市西屯區中康街 7 號（瑞恩悅琚）・小班制不超過 10 人", 13, color=TAUPE, align=PP_ALIGN.CENTER)
+rect(s, cx+1.5, cy+3.72, cw-3.0, 0.04, GOLD)
 
 out = "/home/user/mandala/一級講師課程教學過程.pptx"
 prs.save(out)
