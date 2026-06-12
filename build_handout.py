@@ -27,18 +27,41 @@ from pptx.dml.color import RGBColor
 from pptx.enum.text import PP_ALIGN, MSO_ANCHOR
 from pptx.enum.shapes import MSO_SHAPE
 from pptx.oxml.ns import qn
-from PIL import Image
+from PIL import Image, ImageDraw
 
-L1 = "/home/user/mandala/l1"
+L1   = "/home/user/mandala/l1"
+DIAG = f"{L1}/diagrams"
 
 for _img in [
     f"{L1}/bg_ending.jpg", f"{L1}/bg_watercolor.jpg", f"{L1}/bg_cover.jpg",
     f"{L1}/art1.jpg", f"{L1}/art2.jpg", f"{L1}/art3.jpg",
     f"{L1}/art4.jpg", f"{L1}/art5.jpg", f"{L1}/art6.jpg",
     f"{L1}/art_octagon4.jpg",
+    f"{DIAG}/el_dots.png", f"{DIAG}/el_geometry.png", f"{DIAG}/el_leaves.png",
+    f"{DIAG}/el_lines.png", f"{DIAG}/el_petals.png", f"{DIAG}/el_teardrop.png",
+    f"{DIAG}/structure.png",
 ]:
     if os.path.exists(_img):
         _fix_img(_img)
+
+def _make_div_png(n, path, size=400):
+    img = Image.new("RGB", (size, size), (0xFB, 0xF6, 0xEF))
+    dr = ImageDraw.Draw(img)
+    cx = cy = size // 2; r = size // 2 - 18
+    dr.ellipse([cx-r, cy-r, cx+r, cy+r], fill=(0xF3, 0xE7, 0xD8),
+               outline=(0xC9, 0xA9, 0x6E), width=6)
+    for k in range(n):
+        ang = math.radians(k * 360.0 / n - 90)
+        ex = int(cx + r * math.cos(ang)); ey = int(cy + r * math.sin(ang))
+        dr.line([cx, cy, ex, ey], fill=(0xA9, 0x5C, 0x66), width=4)
+    dr.ellipse([cx-r, cy-r, cx+r, cy+r], fill=None, outline=(0xC9, 0xA9, 0x6E), width=6)
+    dr.ellipse([cx-13, cy-13, cx+13, cy+13], fill=(0xC9, 0x7B, 0x84))
+    img.save(path)
+
+_DIV = {}
+for _n in [4, 6, 8, 12]:
+    _DIV[_n] = f"/tmp/_ho_div_{_n}.png"
+    _make_div_png(_n, _DIV[_n])
 
 # ── 色系 ─────────────────────────────────────────────────────
 CREAM      = RGBColor(0xFB, 0xF6, 0xEF)
@@ -574,7 +597,7 @@ for i, (t, d) in enumerate(steps1):
 # P14  第二天 + 大型八角板設計應用（完整說明）
 # ============================================================
 s = slide(); bg(s)
-header(s, "DAY 2  &  OCTAGON  APPLICATION", "第二天・完成與教學力・八角板應用")
+header(s, "DAY 2  ·  FINISHING  &  TEACHING", "第二天・完成細節・貼鑽・作品解析・教學引導")
 pgnum(s, 14)
 txt(s, ML, 1.18, CW, 0.38, "第二天・完成與教學力", 16, color=ROSE_DEEP, bold=True)
 rect(s, ML, 1.54, CW, 0.055, CREAM_DEEP)
@@ -786,11 +809,11 @@ def skill_card(s, tech, y_start, card_h=4.84):
     txt(s, ML + 0.22, y_start + 4.30, CW - 0.44, 0.50,
         review, 11, color=ROSE_DEEP, spacing=1.2)
 
-# 每頁兩項技法，共五頁
+# 技法03-10 先出（P16-P19），01-02 移至P21後面（P22）
 CARD_H = 4.84; CARD_GAP = 0.22
-for page_i in range(5):
+for _order_i, page_i in enumerate([1, 2, 3, 4]):
     s = slide(); bg(s)
-    pg_num = 16 + page_i
+    pg_num = 16 + _order_i
     eb_suffix = f"  {page_i * 2 + 1:02d}–{page_i * 2 + 2:02d}"
     header(s, f"CERTIFICATION  SKILLS{eb_suffix}", "一級講師考核必備技巧")
     pgnum(s, pg_num)
@@ -804,7 +827,7 @@ for page_i in range(5):
 # ============================================================
 s = slide(); bg(s)
 header(s, "CERTIFICATION  &  AFTER  GRADUATION", "證書考核・結業後持續陪伴")
-pgnum(s, 21)
+pgnum(s, 20)
 txt(s, ML, 1.18, CW, 0.38, "一級講師・證書考核流程", 16, color=ROSE_DEEP, bold=True)
 rect(s, ML, 1.54, CW, 0.055, CREAM_DEEP)
 reqs = [
@@ -847,6 +870,13 @@ for i, b in enumerate(bens):
     rect(s, x, y, cw_bn, 0.78, WHITE, line=CREAM_DEEP, lw=1.0, shape=MSO_SHAPE.ROUNDED_RECTANGLE)
     rect(s, x + 0.2, y + 0.29, 0.22, 0.22, SAGE, shape=MSO_SHAPE.OVAL)
     txt(s, x + 0.56, y, cw_bn - 0.70, 0.78, b, 11.5, color=INK, anchor=MSO_ANCHOR.MIDDLE)
+
+# P21  考核技法 01-02（移至最後）
+s = slide(); bg(s)
+header(s, "CERTIFICATION  SKILLS  01–02", "一級講師考核必備技巧")
+pgnum(s, 21)
+skill_card(s, techniques[0], 1.22, CARD_H)
+skill_card(s, techniques[1], 1.22 + CARD_H + CARD_GAP, CARD_H)
 
 OUT = "/home/user/mandala/mandala_l1_handout.pptx"
 prs.save(OUT)
