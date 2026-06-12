@@ -34,7 +34,7 @@ DIAG = f"{L1}/diagrams"
 
 # Fix any images stored as base64 text (can happen when pushed via GitHub API)
 for _img in [
-    f"{L1}/bg_ending.jpg", f"{L1}/bg_watercolor.jpg", f"{L1}/art_octagon4.jpg",
+    f"{L1}/bg_ending.jpg", f"{L1}/bg_cover.jpg", f"{L1}/bg_watercolor.jpg", f"{L1}/art_octagon4.jpg",
     f"{L1}/art1.jpg", f"{L1}/art2.jpg", f"{L1}/art3.jpg",
     f"{L1}/art4.jpg", f"{L1}/art5.jpg", f"{L1}/art6.jpg",
     f"{L1}/hero.jpg", f"{L1}/teacher_full.jpg", f"{L1}/teacher_portrait.jpg",
@@ -249,13 +249,8 @@ def photo_wall(title, sub, imgs):
 # ============================================================
 s = slide()
 s.background.fill.solid(); s.background.fill.fore_color.rgb = CREAM
-_p0 = s.shapes.add_picture(f"{L1}/bg_ending.jpg", Inches(0), Inches(0), Inches(SW), Inches(SH))
+_p0 = s.shapes.add_picture(f"{L1}/bg_cover.jpg", Inches(0), Inches(0), Inches(SW), Inches(SH))
 _p0.line.fill.background()
-_ov0 = s.shapes.add_shape(MSO_SHAPE.RECTANGLE, Inches(0), Inches(0), Inches(8.2), Inches(SH))
-_ov0.fill.solid(); _ov0.fill.fore_color.rgb = WHITE
-_ov0.line.fill.background(); _ov0.shadow.inherit = False
-set_alpha(_ov0, 55)
-rect(s, 1.0, 2.35, 0.09, 2.55, GOLD)
 eyebrow(s, 1.35, 2.45, "MANDALA  ADVANCED  INSTRUCTOR", color=ROSE_DEEP)
 txt(s, 1.32, 2.85, 7.5, 1.4, "曼陀羅心靈彩繪", 50, color=INK, bold=True)
 txt(s, 1.32, 3.95, 7.5, 1.0, "一級講師課程", 30, color=ROSE_DEEP, bold=True)
@@ -1011,22 +1006,13 @@ for i,b in enumerate(bens):
 # ============================================================
 s = slide()
 s.background.fill.solid(); s.background.fill.fore_color.rgb = CREAM
-END_IMG = f"{L1}/bg_ending.jpg"
-if os.path.exists(END_IMG):
-    p = s.shapes.add_picture(END_IMG, Inches(0), Inches(0), Inches(SW), Inches(SH))
-    p.line.fill.background()
-cx, cw, cy, ch = 2.0, 9.33, 1.55, 4.45
-ov_text = s.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(cx), Inches(cy), Inches(cw), Inches(ch))
-ov_text.fill.solid(); ov_text.fill.fore_color.rgb = WHITE
-ov_text.line.fill.background(); ov_text.shadow.inherit = False
-set_alpha(ov_text, 72)
-rect(s, cx+1.5, cy+0.28, cw-3.0, 0.04, GOLD)
+_pe = s.shapes.add_picture(f"{L1}/bg_cover.jpg", Inches(0), Inches(0), Inches(SW), Inches(SH))
+_pe.line.fill.background()
+cx, cw, cy = 2.0, 9.33, 1.55
 txt(s, cx, cy+0.52, cw, 1.1, "一起，從會畫到能教", 46, color=ROSE_DEEP, bold=True, align=PP_ALIGN.CENTER)
-rect(s, cx+3.5, cy+1.68, cw-7.0, 0.04, GOLD)
 txt(s, cx, cy+1.82, cw, 0.65, "曼陀羅心靈彩繪・第十七屆一級講師課程", 20, color=INK, bold=True, align=PP_ALIGN.CENTER)
 txt(s, cx, cy+2.52, cw, 0.52, "台中・平日班　6/15（一）、6/16（二）　09:00–21:00", 16, color=ROSE_DEEP, bold=True, align=PP_ALIGN.CENTER)
 txt(s, cx, cy+3.1, cw, 0.42, "上課地點：台中市西屯區中康街 7 號（瑞恩悅琚）・小班制不超過 10 人", 13, color=TAUPE, align=PP_ALIGN.CENTER)
-rect(s, cx+1.5, cy+3.72, cw-3.0, 0.04, GOLD)
 
 out = "/home/user/mandala/一級講師課程教學過程.pptx"
 prs.save(out)
