@@ -523,9 +523,9 @@ def _ho_color_page(pg, name, col, en, kws, vals, traits, physio, spirit, tip):
     rect(s, ML, y + 0.54, CW, 0.04, CREAM_DEEP)
     txt(s, ML + 0.06, y + 0.64, CW - 0.12, 0.84, spirit, 12, color=TAUPE, spacing=1.30)
     y += 1.58
-    rect(s, ML, y, CW, 1.06, CREAM_DEEP, shape=MSO_SHAPE.ROUNDED_RECTANGLE)
+    rect(s, ML, y, CW, 1.30, CREAM_DEEP, shape=MSO_SHAPE.ROUNDED_RECTANGLE)
     txt(s, ML + 0.18, y + 0.08, CW - 0.36, 0.30, "✦  曼陀羅應用建議", 11, color=GOLD, bold=True)
-    txt(s, ML + 0.18, y + 0.42, CW - 0.36, 0.56, tip, 11, color=TAUPE, spacing=1.2)
+    txt(s, ML + 0.18, y + 0.42, CW - 0.36, 0.80, tip, 11, color=TAUPE, spacing=1.2)
 
 # ============================================================
 # P9  色彩能量・個性對照
@@ -608,7 +608,7 @@ for t, d in struct:
 s = slide(); bg(s)
 header(s, "GEOMETRY  &  SYMMETRY", "幾何基礎：對稱與分割")
 pgnum(s, 19)
-txt(s, ML, 1.18, CW, 0.36,
+txt(s, ML, 1.18, CW, 0.54,
     "曼陀羅之美，建立在「等分」之上。先畫出輔助線，在一個扇形設計好圖案，對稱重複即完成。",
     12, color=TAUPE, spacing=1.2)
 _divs_ho = [
@@ -621,12 +621,12 @@ _cw_div4 = (CW - 0.3) / 4   # ≈1.72"
 for _i4, (_n4, _lab4, _note4) in enumerate(_divs_ho):
     _x4 = ML + _i4 * (_cw_div4 + 0.1)
     if os.path.exists(_DIV[_n4]):
-        pic_cover(s, _DIV[_n4], _x4, 1.62, _cw_div4, _cw_div4, border=False)
-    txt(s, _x4, 1.62 + _cw_div4 + 0.06, _cw_div4, 0.34, _lab4, 13,
+        pic_cover(s, _DIV[_n4], _x4, 1.84, _cw_div4, _cw_div4, border=False)
+    txt(s, _x4, 1.84 + _cw_div4 + 0.06, _cw_div4, 0.34, _lab4, 13,
         color=ROSE_DEEP, bold=True, align=PP_ALIGN.CENTER)
-    txt(s, _x4, 1.62 + _cw_div4 + 0.40, _cw_div4, 0.28, _note4, 9.5,
+    txt(s, _x4, 1.84 + _cw_div4 + 0.40, _cw_div4, 0.28, _note4, 9.5,
         color=TAUPE, align=PP_ALIGN.CENTER)
-_bullet_y = 1.62 + _cw_div4 + 0.76
+_bullet_y = 1.84 + _cw_div4 + 0.76
 txt(s, ML, _bullet_y, CW, 1.28,
     "・分割數越多，圖案越繁複細緻。初學常用 8 等分，與八角板的造型相呼應。\n"
     "・先以鉛筆淡淡畫出同心圓與放射線當「輔助線」，再沿線設計，完成後可擦除或覆蓋。\n"
@@ -655,7 +655,7 @@ _ch_el2 = 1.42; _gy_el2 = 0.22; _img_sq = 1.0
 for _i_el, (_t_el, _d_el, _img_el) in enumerate(_elems_ho):
     _row_el, _col_el = divmod(_i_el, 2)
     _x_el = ML + _col_el * (_cw_el2 + 0.22)
-    _y_el = 1.80 + _row_el * (_ch_el2 + _gy_el2)
+    _y_el = 2.00 + _row_el * (_ch_el2 + _gy_el2)
     rect(s, _x_el, _y_el, _cw_el2, _ch_el2, WHITE, line=CREAM_DEEP, lw=1.0,
          shape=MSO_SHAPE.ROUNDED_RECTANGLE)
     _img_path = f"{DIAG}/{_img_el}"
