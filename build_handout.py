@@ -926,7 +926,7 @@ techniques = [
      "表面均勻有光澤，無刷痕、氣泡、結塊或白霧未覆蓋區域；側面與底部也完整覆蓋"),
 ]
 
-def skill_card(s, tech, y_start, card_h=4.84):
+def skill_card(s, tech, y_start, card_h=5.04):
     num, title, desc, steps, review = tech
     rect(s, ML, y_start, CW, card_h, WHITE,
          line=CREAM_DEEP, lw=1.0, shape=MSO_SHAPE.ROUNDED_RECTANGLE)
@@ -949,17 +949,17 @@ def skill_card(s, tech, y_start, card_h=4.84):
     txt(s, ML + 0.22, y_start + 4.08, 1.5, 0.28,
         "審核重點", 9.5, color=GOLD, bold=True)
     rect(s, ML + 1.72, y_start + 4.18, CW - 1.90, 0.02, CREAM_DEEP)
-    txt(s, ML + 0.22, y_start + 4.30, CW - 0.44, 0.50,
+    txt(s, ML + 0.22, y_start + 4.30, CW - 0.44, 0.66,
         review, 11, color=ROSE_DEEP, spacing=1.2)
 
-CARD_H = 4.84; CARD_GAP = 0.22
+CARD_H = 5.04; CARD_GAP = 0.16
 
 # P25  考核技法 01–02
 s = slide(); bg(s)
 header(s, "CERTIFICATION  SKILLS  01–02", "一級講師考核必備技巧")
 pgnum(s, 25)
-skill_card(s, techniques[0], 1.22, CARD_H)
-skill_card(s, techniques[1], 1.22 + CARD_H + CARD_GAP, CARD_H)
+skill_card(s, techniques[0], 1.10, CARD_H)
+skill_card(s, techniques[1], 1.10 + CARD_H + CARD_GAP, CARD_H)
 
 # P26–P29  技法03–10
 for _order_i, page_i in enumerate([1, 2, 3, 4]):
@@ -970,8 +970,8 @@ for _order_i, page_i in enumerate([1, 2, 3, 4]):
     pgnum(s, pg_num)
     t1 = techniques[page_i * 2]
     t2 = techniques[page_i * 2 + 1]
-    skill_card(s, t1, 1.22, CARD_H)
-    skill_card(s, t2, 1.22 + CARD_H + CARD_GAP, CARD_H)
+    skill_card(s, t1, 1.10, CARD_H)
+    skill_card(s, t2, 1.10 + CARD_H + CARD_GAP, CARD_H)
 
 # ============================================================
 # P30  證書考核 + 結業後支持
