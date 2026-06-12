@@ -95,6 +95,7 @@ ML = MR   = 0.55
 CW        = PW - ML - MR  # 7.17"
 FONT      = "微軟正黑體"
 FS        = 1.20           # global font scale (1.20 = all text 20% larger)
+SIZE_DELTA = 0.0           # extra point offset applied to every txt() (set <0 to shrink)
 
 prs = Presentation()
 prs.slide_width  = Emu(int(PW * EMU))
@@ -142,7 +143,7 @@ def txt(s, x, y, w, h, text, size, color=INK, bold=False, align=PP_ALIGN.LEFT,
         p = tf.paragraphs[0] if i == 0 else tf.add_paragraph()
         p.alignment = align; p.line_spacing = spacing
         r = p.add_run(); r.text = ln
-        f = r.font; f.size = Pt(size * FS); f.bold = bold; f.italic = italic
+        f = r.font; f.size = Pt(size * FS + SIZE_DELTA); f.bold = bold; f.italic = italic
         f.name = font; f.color.rgb = color
     return tb
 
@@ -203,6 +204,9 @@ txt(s, ML, PH - 1.0, CW, 0.42,
     "請妥善保存，作為日後教學參考", 13, color=TAUPE, align=PP_ALIGN.CENTER)
 txt(s, ML, PH - 0.50, CW, 0.34,
     "版權所有／翻印必究", 10, color=TAUPE, align=PP_ALIGN.CENTER)
+
+# 第 2~30 頁：所有字體縮小一個號數（封面 P1 維持原大小）
+SIZE_DELTA = -1.0
 
 # ============================================================
 # P2  課程六大收穫
