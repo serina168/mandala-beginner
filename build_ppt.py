@@ -940,7 +940,7 @@ for p in pts:
     rect(s, 0.9, y+0.08, 0.16, 0.16, GOLD, shape=MSO_SHAPE.OVAL)
     txt(s, 1.28, y-0.03, 5.5, 0.55, p, 13.5, color=INK, spacing=1.15)
     y += 0.62
-pic_cover(s, f"{L1}/art_octagon4.jpg", 7.3, 1.75, 5.1, 5.0)
+pic_cover(s, f"{L1}/art_octagon_hq.jpg", 7.3, 1.75, 5.1, 5.0)
 
 s = slide(); bg(s)
 eyebrow(s, 0.9, 0.5, "GRADUATION  WORKS")
