@@ -191,11 +191,17 @@ BG_COVER = f"{L1}/bg_cover.jpg"
 if os.path.exists(BG_COVER):
     p = s.shapes.add_picture(BG_COVER, Inches(0), Inches(0), Inches(PW), Inches(PH))
     p.line.fill.background()
+txt(s, ML, 0.30, CW, 0.40,
+    "財團法人中華綜合發展研究院／文創藝術研究所", 12, color=TAUPE, align=PP_ALIGN.CENTER)
+txt(s, ML, 0.68, CW, 0.36,
+    "心靈藝術美學中心", 13, color=TAUPE, bold=True, align=PP_ALIGN.CENTER)
 txt(s, ML, 3.0,  CW, 0.96, "一級講師培訓課程", 48, color=INK,      bold=True, align=PP_ALIGN.CENTER)
 txt(s, ML, 4.08, CW, 0.68, "曼陀羅色彩藝術",   28, color=ROSE_DEEP, bold=True, align=PP_ALIGN.CENTER)
 txt(s, ML, 4.90, CW, 0.72, "學  員  講  義",   34, color=INK,      bold=True, align=PP_ALIGN.CENTER)
 txt(s, ML, PH - 1.0, CW, 0.42,
     "請妥善保存，作為日後教學參考", 13, color=TAUPE, align=PP_ALIGN.CENTER)
+txt(s, ML, PH - 0.50, CW, 0.34,
+    "版權所有／翻印必究", 10, color=TAUPE, align=PP_ALIGN.CENTER)
 
 # ============================================================
 # P2  課程六大收穫

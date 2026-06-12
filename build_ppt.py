@@ -251,11 +251,17 @@ s = slide()
 s.background.fill.solid(); s.background.fill.fore_color.rgb = CREAM
 _p0 = s.shapes.add_picture(f"{L1}/bg_cover.jpg", Inches(0), Inches(0), Inches(SW), Inches(SH))
 _p0.line.fill.background()
+txt(s, 0.8, 0.18, SW - 1.6, 0.38,
+    "財團法人中華綜合發展研究院／文創藝術研究所", 13, color=TAUPE, align=PP_ALIGN.CENTER)
+txt(s, 0.8, 0.54, SW - 1.6, 0.32,
+    "心靈藝術美學中心", 13, color=TAUPE, bold=True, align=PP_ALIGN.CENTER)
 eyebrow(s, 1.35, 1.72, "MANDALA  ADVANCED  INSTRUCTOR", color=ROSE_DEEP)
 txt(s, 1.0, 2.08, 9.0, 1.55, "曼陀羅心靈彩繪", 66, color=INK, bold=True)
 txt(s, 1.0, 3.68, 9.0, 1.1,  "一級講師課程",   42, color=ROSE_DEEP, bold=True)
 txt(s, 1.35, 4.9, 9.0, 0.55,
     "色彩學　×　曼陀羅設計　×　22 小時兩日密集　×　黃彥蓁老師親授", 16, color=TAUPE)
+txt(s, 1.35, 6.9, 9.0, 0.38,
+    "版權所有／翻印必究", 11, color=TAUPE, align=PP_ALIGN.CENTER)
 
 # ============================================================
 # 2. 講師介紹
