@@ -251,11 +251,11 @@ s = slide()
 s.background.fill.solid(); s.background.fill.fore_color.rgb = CREAM
 _p0 = s.shapes.add_picture(f"{L1}/bg_cover.jpg", Inches(0), Inches(0), Inches(SW), Inches(SH))
 _p0.line.fill.background()
-eyebrow(s, 1.35, 2.45, "MANDALA  ADVANCED  INSTRUCTOR", color=ROSE_DEEP)
-txt(s, 1.32, 2.85, 7.5, 1.4, "曼陀羅心靈彩繪", 50, color=INK, bold=True)
-txt(s, 1.32, 3.95, 7.5, 1.0, "一級講師課程", 30, color=ROSE_DEEP, bold=True)
-txt(s, 1.35, 5.15, 7.5, 0.6,
-    "色彩學　×　曼陀羅設計　×　22 小時兩日密集　×　黃彥蓁老師親授", 15, color=TAUPE)
+eyebrow(s, 1.35, 1.72, "MANDALA  ADVANCED  INSTRUCTOR", color=ROSE_DEEP)
+txt(s, 1.0, 2.08, 9.0, 1.55, "曼陀羅心靈彩繪", 66, color=INK, bold=True)
+txt(s, 1.0, 3.68, 9.0, 1.1,  "一級講師課程",   42, color=ROSE_DEEP, bold=True)
+txt(s, 1.35, 4.9, 9.0, 0.55,
+    "色彩學　×　曼陀羅設計　×　22 小時兩日密集　×　黃彥蓁老師親授", 16, color=TAUPE)
 
 # ============================================================
 # 2. 講師介紹
@@ -457,18 +457,18 @@ tips = [
     ("漸層練習", "同色相由淺到深排出 5 階，是曼陀羅層次感的關鍵基本功。"),
     ("先淺後深", "由淺色鋪底、再疊深色——好修正，畫面也更通透乾淨。"),
 ]
-cw=6.3; ch=1.32; gx=0.0; gy=0.24
+cw=6.3; ch=0.82; gy=0.10
 for i,(t,d) in enumerate(tips):
-    y=1.88+i*(ch+gy)
+    y=1.66+i*(ch+gy)
     rect(s, 0.7, y, cw, ch, WHITE, line=CREAM_DEEP, lw=1.0, shape=MSO_SHAPE.ROUNDED_RECTANGLE)
     rect(s, 0.7, y, 0.12, ch, GOLD)
-    txt(s, 1.0,  y+0.16, 1.9, 0.45, t, 15.5, color=ROSE_DEEP, bold=True)
-    txt(s, 2.95, y+0.04, cw-2.38, ch, d, 12.5, color=TAUPE, spacing=1.1,
+    txt(s, 1.0,  y+0.09, 1.9, 0.36, t, 13.5, color=ROSE_DEEP, bold=True)
+    txt(s, 2.95, y+0.02, cw-2.38, ch, d, 11.5, color=TAUPE, spacing=1.1,
         anchor=MSO_ANCHOR.MIDDLE)
 # 右側：實際調色過程照
-pic_cover(s, f"{L1}/c1/proc1.jpg",     7.35, 1.88, 2.8, 5.38)
-pic_cover(s, f"{L1}/c2/470938_0.jpg",  10.35, 1.88, 2.7, 5.38)
-txt(s, 7.35, 7.32, 5.7, 0.3, "▲ 學員實際調色・分層上色過程", 10.5,
+pic_cover(s, f"{L1}/c1/proc1.jpg",     7.35, 1.66, 2.8, 5.58)
+pic_cover(s, f"{L1}/c2/470938_0.jpg",  10.35, 1.66, 2.7, 5.58)
+txt(s, 7.35, 7.30, 5.7, 0.26, "▲ 學員實際調色・分層上色過程", 10.5,
     color=TAUPE, align=PP_ALIGN.CENTER)
 
 # A5 色彩心理學  ── 8 色詳細說明卡（2×4） + 下方作品
