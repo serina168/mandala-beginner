@@ -740,7 +740,7 @@ for i, (t, d) in enumerate(steps1):
 # P23  第二天 + 大型八角板設計應用（完整說明）
 # ============================================================
 s = slide(); bg(s)
-header(s, "DAY 2  ·  FINISHING  &  TEACHING", "第二天・完成細節・貼鑽・作品解析・教學引導")
+header(s, "DAY 2  ·  FINISHING  &  TEACHING", "第二天・完成細節・貼鑽・作品解析・教學引導", size=18)
 pgnum(s, 23)
 txt(s, ML, 1.18, CW, 0.38, "第二天・完成與教學力", 16, color=ROSE_DEEP, bold=True)
 rect(s, ML, 1.54, CW, 0.055, CREAM_DEEP)
