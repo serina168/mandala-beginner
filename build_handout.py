@@ -290,8 +290,8 @@ for t, d in items_cw:
     txt(s, ML + 0.28, y - 0.02, CW - 0.3, 0.38, t, 14.5, color=ROSE_DEEP, bold=True)
     txt(s, ML + 0.30, y + 0.38, CW - 0.32, 0.6,  d, 12.5, color=TAUPE, spacing=1.2)
     y += 1.1
-color_wheel(s, PW / 2, 8.18, 1.15)
-txt(s, ML, 6.6, CW, 0.36, "十二色相環示意圖", 14, color=ROSE_DEEP, bold=True, align=PP_ALIGN.CENTER)
+txt(s, ML, 5.68, CW, 0.36, "十二色相環示意圖", 14, color=ROSE_DEEP, bold=True, align=PP_ALIGN.CENTER)
+color_wheel(s, PW / 2, 7.88, 1.15)
 
 # ============================================================
 # P6  五種配色法
