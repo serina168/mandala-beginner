@@ -523,9 +523,9 @@ def _ho_color_page(pg, name, col, en, kws, vals, traits, physio, spirit, tip):
     rect(s, ML, y + 0.54, CW, 0.04, CREAM_DEEP)
     txt(s, ML + 0.06, y + 0.64, CW - 0.12, 0.84, spirit, 12, color=TAUPE, spacing=1.30)
     y += 1.58
-    rect(s, ML, y, CW, 0.84, CREAM_DEEP, shape=MSO_SHAPE.ROUNDED_RECTANGLE)
+    rect(s, ML, y, CW, 1.06, CREAM_DEEP, shape=MSO_SHAPE.ROUNDED_RECTANGLE)
     txt(s, ML + 0.18, y + 0.08, CW - 0.36, 0.30, "✦  曼陀羅應用建議", 11, color=GOLD, bold=True)
-    txt(s, ML + 0.18, y + 0.42, CW - 0.36, 0.38, tip, 11, color=TAUPE, spacing=1.2)
+    txt(s, ML + 0.18, y + 0.42, CW - 0.36, 0.56, tip, 11, color=TAUPE, spacing=1.2)
 
 # ============================================================
 # P9  色彩能量・個性對照
@@ -639,7 +639,7 @@ txt(s, ML, _bullet_y, CW, 1.28,
 s = slide(); bg(s)
 header(s, "DESIGN  ELEMENTS", "常見圖案元素")
 pgnum(s, 20)
-txt(s, ML, 1.18, CW, 0.36,
+txt(s, ML, 1.18, CW, 0.54,
     "曼陀羅由幾種基本「語彙」組合而成。熟悉每種元素的畫法，就能靈活搭配、自由創作。",
     12, color=TAUPE, spacing=1.2)
 _elems_ho = [
@@ -655,7 +655,7 @@ _ch_el2 = 1.42; _gy_el2 = 0.22; _img_sq = 1.0
 for _i_el, (_t_el, _d_el, _img_el) in enumerate(_elems_ho):
     _row_el, _col_el = divmod(_i_el, 2)
     _x_el = ML + _col_el * (_cw_el2 + 0.22)
-    _y_el = 1.62 + _row_el * (_ch_el2 + _gy_el2)
+    _y_el = 1.80 + _row_el * (_ch_el2 + _gy_el2)
     rect(s, _x_el, _y_el, _cw_el2, _ch_el2, WHITE, line=CREAM_DEEP, lw=1.0,
          shape=MSO_SHAPE.ROUNDED_RECTANGLE)
     _img_path = f"{DIAG}/{_img_el}"
@@ -765,15 +765,15 @@ steps2_full = [
 ]
 y = 1.68
 for i, (t, d) in enumerate(steps2_full):
-    ch = 1.72
+    ch = 2.00
     rect(s, ML, y, CW, ch, WHITE, line=CREAM_DEEP, lw=1.0, shape=MSO_SHAPE.ROUNDED_RECTANGLE)
     rect(s, ML, y, 0.58, ch, GOLD, shape=MSO_SHAPE.ROUNDED_RECTANGLE)
     rect(s, ML + 0.29, y, 0.29, ch, GOLD)
     txt(s, ML + 0.02, y + (ch - 0.44) / 2, 0.54, 0.44,
         str(i + 1), 20, color=WHITE, bold=True, align=PP_ALIGN.CENTER)
-    txt(s, ML + 0.74, y + 0.14, CW - 0.88, 0.40, t, 14.5, color=ROSE_DEEP, bold=True)
-    txt(s, ML + 0.74, y + 0.57, CW - 0.90, ch - 0.65, d, 11.5, color=TAUPE, spacing=1.22)
-    y += ch + 0.16
+    txt(s, ML + 0.74, y + 0.14, CW - 0.88, 0.42, t, 14.5, color=ROSE_DEEP, bold=True)
+    txt(s, ML + 0.74, y + 0.58, CW - 0.90, ch - 0.66, d, 11.5, color=TAUPE, spacing=1.22)
+    y += ch + 0.13
 
 # ============================================================
 # P24  大型八角板・設計應用（獨立頁）
@@ -781,7 +781,7 @@ for i, (t, d) in enumerate(steps2_full):
 s = slide(); bg(s)
 header(s, "OCTAGON  BOARD  APPLICATION", "大型八角板・設計應用")
 pgnum(s, 24)
-txt(s, ML, 1.18, CW, 0.72,
+txt(s, ML, 1.18, CW, 0.90,
     "一級課程的考核作品，是在「大型八角板」上完成的曼陀羅。"
     "八角的外形與 8 等分的放射結構天然契合，讓設計更顯大器而穩定。"
     "以下是在八角板上設計曼陀羅的五大要點：",
