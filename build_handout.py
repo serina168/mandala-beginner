@@ -681,7 +681,7 @@ steps_six = [
     ("對稱重複", "在一個扇形設計好，再對稱複製到每一等分。"),
     ("配色點綴", "依色彩學配色上色，最後以圓點與鑽飾點睛收尾。"),
 ]
-cw_st = (CW - 0.22) / 2; ch_st = 1.45; gy_st = 0.22
+cw_st = (CW - 0.22) / 2; ch_st = 1.58; gy_st = 0.18
 for i, (t, d) in enumerate(steps_six):
     r, c = divmod(i, 2)
     x = ML + c * (cw_st + 0.22); y = 1.22 + r * (ch_st + gy_st)
@@ -689,14 +689,14 @@ for i, (t, d) in enumerate(steps_six):
     rect(s, x + 0.2, y + 0.34, 0.62, 0.62, GOLD, shape=MSO_SHAPE.OVAL)
     txt(s, x + 0.2, y + 0.40, 0.62, 0.52, str(i + 1), 20, color=WHITE, bold=True, align=PP_ALIGN.CENTER)
     txt(s, x + 1.02, y + 0.18, cw_st - 1.18, 0.44, t, 14.5, color=ROSE_DEEP, bold=True)
-    txt(s, x + 1.04, y + 0.65, cw_st - 1.22, 0.68, d, 12.5, color=TAUPE, spacing=1.1)
+    txt(s, x + 1.04, y + 0.65, cw_st - 1.22, 0.82, d, 12.5, color=TAUPE, spacing=1.1)
 # art image row at bottom
 arts_row = ["art2.jpg", "art5.jpg", "art6.jpg"]
 cw_art = (CW - 0.3) / 3
 for i, a in enumerate(arts_row):
     path = f"{L1}/{a}"
     if os.path.exists(path):
-        pic_cover(s, path, ML + i * (cw_art + 0.15), 6.28, cw_art, 1.88)
+        pic_cover(s, path, ML + i * (cw_art + 0.15), 6.50, cw_art, 1.88)
 
 # ============================================================
 # P22  課程流程總覽 + 第一天
@@ -740,7 +740,7 @@ for i, (t, d) in enumerate(steps1):
 # P23  第二天 + 大型八角板設計應用（完整說明）
 # ============================================================
 s = slide(); bg(s)
-header(s, "DAY 2  ·  FINISHING  &  TEACHING", "第二天・完成細節・貼鑽・作品解析・教學引導", size=18)
+header(s, "DAY 2  ·  FINISHING  &  TEACHING", "第二天・完成細節・貼鑽・作品解析・教學引導", size=16)
 pgnum(s, 23)
 txt(s, ML, 1.18, CW, 0.38, "第二天・完成與教學力", 16, color=ROSE_DEEP, bold=True)
 rect(s, ML, 1.54, CW, 0.055, CREAM_DEEP)
@@ -781,7 +781,7 @@ for i, (t, d) in enumerate(steps2_full):
 s = slide(); bg(s)
 header(s, "OCTAGON  BOARD  APPLICATION", "大型八角板・設計應用")
 pgnum(s, 24)
-txt(s, ML, 1.18, CW, 0.90,
+txt(s, ML, 1.18, CW, 1.00,
     "一級課程的考核作品，是在「大型八角板」上完成的曼陀羅。"
     "八角的外形與 8 等分的放射結構天然契合，讓設計更顯大器而穩定。"
     "以下是在八角板上設計曼陀羅的五大要點：",
@@ -808,9 +808,9 @@ octpts_detail = [
      "鑽飾不宜過密，以每隔幾個圓點點綴為宜，讓光澤自然閃爍。"
      "貼附後作品質感立即提升至展覽及商業販售水準。"),
 ]
-cw_oct = CW; ch_oct = 1.68; gy_oct = 0.18
+cw_oct = CW; ch_oct = 1.72; gy_oct = 0.10
 for i, (t, d) in enumerate(octpts_detail):
-    yo = 2.06 + i * (ch_oct + gy_oct)
+    yo = 2.24 + i * (ch_oct + gy_oct)
     rect(s, ML, yo, cw_oct, ch_oct, WHITE, line=CREAM_DEEP, lw=1.0,
          shape=MSO_SHAPE.ROUNDED_RECTANGLE)
     rect(s, ML, yo, 0.10, ch_oct, GOLD, shape=MSO_SHAPE.ROUNDED_RECTANGLE)
