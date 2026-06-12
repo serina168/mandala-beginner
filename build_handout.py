@@ -94,6 +94,7 @@ PW, PH    = 8.27, 11.69   # A4 portrait inches
 ML = MR   = 0.55
 CW        = PW - ML - MR  # 7.17"
 FONT      = "微軟正黑體"
+FS        = 1.20           # global font scale (1.20 = all text 20% larger)
 
 prs = Presentation()
 prs.slide_width  = Emu(int(PW * EMU))
@@ -141,7 +142,7 @@ def txt(s, x, y, w, h, text, size, color=INK, bold=False, align=PP_ALIGN.LEFT,
         p = tf.paragraphs[0] if i == 0 else tf.add_paragraph()
         p.alignment = align; p.line_spacing = spacing
         r = p.add_run(); r.text = ln
-        f = r.font; f.size = Pt(size); f.bold = bold; f.italic = italic
+        f = r.font; f.size = Pt(size * FS); f.bold = bold; f.italic = italic
         f.name = font; f.color.rgb = color
     return tb
 
