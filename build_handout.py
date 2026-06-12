@@ -951,11 +951,19 @@ def skill_card(s, tech, y_start, card_h=4.84):
     txt(s, ML + 0.22, y_start + 4.30, CW - 0.44, 0.50,
         review, 11, color=ROSE_DEEP, spacing=1.2)
 
-# 技法03-10 先出（P16-P19），01-02 移至P21後面（P22）
 CARD_H = 4.84; CARD_GAP = 0.22
+
+# P25  考核技法 01–02
+s = slide(); bg(s)
+header(s, "CERTIFICATION  SKILLS  01–02", "一級講師考核必備技巧")
+pgnum(s, 25)
+skill_card(s, techniques[0], 1.22, CARD_H)
+skill_card(s, techniques[1], 1.22 + CARD_H + CARD_GAP, CARD_H)
+
+# P26–P29  技法03–10
 for _order_i, page_i in enumerate([1, 2, 3, 4]):
     s = slide(); bg(s)
-    pg_num = 25 + _order_i
+    pg_num = 26 + _order_i
     eb_suffix = f"  {page_i * 2 + 1:02d}–{page_i * 2 + 2:02d}"
     header(s, f"CERTIFICATION  SKILLS{eb_suffix}", "一級講師考核必備技巧")
     pgnum(s, pg_num)
@@ -965,11 +973,11 @@ for _order_i, page_i in enumerate([1, 2, 3, 4]):
     skill_card(s, t2, 1.22 + CARD_H + CARD_GAP, CARD_H)
 
 # ============================================================
-# P29  證書考核 + 結業後支持
+# P30  證書考核 + 結業後支持
 # ============================================================
 s = slide(); bg(s)
 header(s, "CERTIFICATION  &  AFTER  GRADUATION", "證書考核・結業後持續陪伴")
-pgnum(s, 29)
+pgnum(s, 30)
 txt(s, ML, 1.18, CW, 0.38, "一級講師・證書考核流程", 16, color=ROSE_DEEP, bold=True)
 rect(s, ML, 1.54, CW, 0.055, CREAM_DEEP)
 reqs = [
@@ -1012,13 +1020,6 @@ for i, b in enumerate(bens):
     rect(s, x, y, cw_bn, 0.78, WHITE, line=CREAM_DEEP, lw=1.0, shape=MSO_SHAPE.ROUNDED_RECTANGLE)
     rect(s, x + 0.2, y + 0.29, 0.22, 0.22, SAGE, shape=MSO_SHAPE.OVAL)
     txt(s, x + 0.56, y, cw_bn - 0.70, 0.78, b, 11.5, color=INK, anchor=MSO_ANCHOR.MIDDLE)
-
-# P30  考核技法 01-02（移至最後）
-s = slide(); bg(s)
-header(s, "CERTIFICATION  SKILLS  01–02", "一級講師考核必備技巧")
-pgnum(s, 30)
-skill_card(s, techniques[0], 1.22, CARD_H)
-skill_card(s, techniques[1], 1.22 + CARD_H + CARD_GAP, CARD_H)
 
 OUT = "/home/user/mandala/mandala_l1_handout.pptx"
 prs.save(OUT)
