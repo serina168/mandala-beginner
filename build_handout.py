@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""一級講師培訓課程・學員講義 (A4 直式 16 頁)
+"""一級講師培訓課程・學員講義 (A4 直式 21 頁)
    Run:  python build_handout.py
    Out:  mandala_l1_handout.pptx
 """
@@ -609,23 +609,55 @@ for i, (t, d) in enumerate(steps2_full):
     txt(s, ML + 0.74, y + 0.14, CW - 0.88, 0.40, t, 14.5, color=ROSE_DEEP, bold=True)
     txt(s, ML + 0.74, y + 0.57, CW - 0.90, ch - 0.65, d, 11.5, color=TAUPE, spacing=1.22)
     y += ch + 0.16
-txt(s, ML, 8.90, CW, 0.38, "大型八角板・設計應用", 15, color=ROSE_DEEP, bold=True)
-rect(s, ML, 9.26, CW, 0.045, CREAM_DEEP)
-octpts = [
-    "採 8 或 16 等分配置主結構，與八角造型天然契合，設計感大器而穩定",
-    "主視覺集中圓心，各角與邊緣以對應小元素呼應，製造向心力",
-    "以明度漸層由中心向外自然遞變，加強立體感與層次深度",
-    "鄰近色系鋪底＋互補色點睛，突顯焦點、活化整體色彩張力",
-    "最後鑲嵌施華洛世奇鑽飾，大幅提升作品質感與市場價值",
-]
-y = 9.42
-for p in octpts:
-    rect(s, ML, y + 0.06, 0.13, 0.13, GOLD, shape=MSO_SHAPE.OVAL)
-    txt(s, ML + 0.26, y - 0.03, CW - 0.3, 0.42, p, 11.5, color=INK, spacing=1.1)
-    y += 0.50
 
 # ============================================================
-# P15–P19  考核必備技巧（每頁兩項，完整說明）
+# P15  大型八角板・設計應用（獨立頁）
+# ============================================================
+s = slide(); bg(s)
+header(s, "OCTAGON  BOARD  APPLICATION", "大型八角板・設計應用")
+pgnum(s, 15)
+txt(s, ML, 1.18, CW, 0.72,
+    "一級課程的考核作品，是在「大型八角板」上完成的曼陀羅。"
+    "八角的外形與 8 等分的放射結構天然契合，讓設計更顯大器而穩定。"
+    "以下是在八角板上設計曼陀羅的五大要點：",
+    12.5, color=TAUPE, spacing=1.3)
+octpts_detail = [
+    ("採 8 或 16 等分配置主結構",
+     "八角板的造型與 8 等分放射結構天然呼應。初學建議採 8 等分，"
+     "進階可用 16 等分製造更細緻繁複的圖案效果。先以鉛筆輕描放射輔助線，"
+     "確保每個扇形單位完全等分對稱。"),
+    ("主視覺集中圓心，四角與邊緣以小元素呼應",
+     "圓心是整件作品最重要的焦點——主花或主圖案放在中心，"
+     "由內向外層層擴展。八角板的四個角落與八個邊緣，以較小的圖案元素（如葉形、點點）"
+     "做呼應，讓整體設計飽滿而有向心力。"),
+    ("善用明度漸層，製造立體感與層次深度",
+     "從圓心向外，顏色由深到淺（或由淺到深）自然遞變，"
+     "使畫面在視覺上產生立體凸起或向內凹陷的空間感。"
+     "每一圈顏色深淺差需清晰可見，避免各圈顏色過於相近而失去層次。"),
+    ("鄰近色系鋪底，互補色點睛",
+     "主體以鄰近色系（如粉橙黃、藍紫綠）鋪設大面積底色，"
+     "再以少量互補色（如主色為藍則點綴橙色）作為圓點或花心，"
+     "瞬間突顯中心焦點，活化整體色彩張力而不顯雜亂。"),
+    ("最後鑲嵌施華洛世奇鑽飾，大幅提升質感",
+     "作品完成、保護漆乾透後，在圓點中心或圖案焦點逐顆貼附施華洛世奇水晶。"
+     "鑽飾不宜過密，以每隔幾個圓點點綴為宜，讓光澤自然閃爍。"
+     "貼附後作品質感立即提升至展覽及商業販售水準。"),
+]
+cw_oct = CW; ch_oct = 1.68; gy_oct = 0.18
+for i, (t, d) in enumerate(octpts_detail):
+    yo = 2.06 + i * (ch_oct + gy_oct)
+    rect(s, ML, yo, cw_oct, ch_oct, WHITE, line=CREAM_DEEP, lw=1.0,
+         shape=MSO_SHAPE.ROUNDED_RECTANGLE)
+    rect(s, ML, yo, 0.10, ch_oct, GOLD, shape=MSO_SHAPE.ROUNDED_RECTANGLE)
+    rect(s, ML + 0.05, yo, 0.05, ch_oct, GOLD)
+    rect(s, ML + 0.20, yo + 0.14, 0.56, 0.56, GOLD, shape=MSO_SHAPE.OVAL)
+    txt(s, ML + 0.20, yo + 0.18, 0.56, 0.48,
+        str(i + 1), 14, color=WHITE, bold=True, align=PP_ALIGN.CENTER)
+    txt(s, ML + 0.94, yo + 0.14, CW - 1.10, 0.38, t, 13.5, color=ROSE_DEEP, bold=True)
+    txt(s, ML + 0.94, yo + 0.55, CW - 1.10, ch_oct - 0.62, d, 11.5, color=TAUPE, spacing=1.22)
+
+# ============================================================
+# P16–P20  考核必備技巧（每頁兩項，完整說明）
 # ============================================================
 techniques = [
     ("01", "素材全平面打底上色技法",
@@ -759,7 +791,7 @@ def skill_card(s, tech, y_start, card_h=4.84):
 CARD_H = 4.84; CARD_GAP = 0.22
 for page_i in range(5):
     s = slide(); bg(s)
-    pg_num = 15 + page_i
+    pg_num = 16 + page_i
     eb_suffix = f"  {page_i * 2 + 1:02d}–{page_i * 2 + 2:02d}"
     header(s, f"CERTIFICATION  SKILLS{eb_suffix}", "一級講師考核必備技巧")
     pgnum(s, pg_num)
@@ -773,7 +805,7 @@ for page_i in range(5):
 # ============================================================
 s = slide(); bg(s)
 header(s, "CERTIFICATION  &  AFTER  GRADUATION", "證書考核・結業後持續陪伴")
-pgnum(s, 20)
+pgnum(s, 21)
 txt(s, ML, 1.18, CW, 0.38, "一級講師・證書考核流程", 16, color=ROSE_DEEP, bold=True)
 rect(s, ML, 1.54, CW, 0.055, CREAM_DEEP)
 reqs = [
