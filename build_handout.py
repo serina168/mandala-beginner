@@ -191,13 +191,13 @@ BG_COVER = f"{L1}/bg_cover.jpg"
 if os.path.exists(BG_COVER):
     p = s.shapes.add_picture(BG_COVER, Inches(0), Inches(0), Inches(PW), Inches(PH))
     p.line.fill.background()
-txt(s, ML, 0.30, CW, 0.40,
-    "財團法人中華綜合發展研究院／文創藝術研究所", 12, color=TAUPE, align=PP_ALIGN.CENTER)
-txt(s, ML, 0.68, CW, 0.36,
-    "心靈藝術美學中心", 13, color=TAUPE, bold=True, align=PP_ALIGN.CENTER)
-txt(s, ML, 3.0,  CW, 0.96, "一級講師培訓課程", 48, color=INK,      bold=True, align=PP_ALIGN.CENTER)
-txt(s, ML, 4.08, CW, 0.68, "曼陀羅色彩藝術",   28, color=ROSE_DEEP, bold=True, align=PP_ALIGN.CENTER)
-txt(s, ML, 4.90, CW, 0.72, "學  員  講  義",   34, color=INK,      bold=True, align=PP_ALIGN.CENTER)
+txt(s, ML, 2.10, CW, 0.44,
+    "財團法人中華綜合發展研究院／文創藝術研究所", 14, color=TAUPE, align=PP_ALIGN.CENTER)
+txt(s, ML, 2.56, CW, 0.40,
+    "心靈藝術美學中心", 15, color=TAUPE, bold=True, align=PP_ALIGN.CENTER)
+txt(s, ML, 3.12, CW, 0.96, "一級講師培訓課程", 48, color=INK,      bold=True, align=PP_ALIGN.CENTER)
+txt(s, ML, 4.20, CW, 0.68, "曼陀羅色彩藝術",   28, color=ROSE_DEEP, bold=True, align=PP_ALIGN.CENTER)
+txt(s, ML, 5.02, CW, 0.72, "學  員  講  義",   34, color=INK,      bold=True, align=PP_ALIGN.CENTER)
 txt(s, ML, PH - 1.0, CW, 0.42,
     "請妥善保存，作為日後教學參考", 13, color=TAUPE, align=PP_ALIGN.CENTER)
 txt(s, ML, PH - 0.50, CW, 0.34,
@@ -417,6 +417,115 @@ for i, (t, col, kw, d) in enumerate(psy):
     txt(s, x + 0.60, y + 0.10, cw_p - 0.74, 0.36, kw, 11,   color=ROSE_DEEP,   bold=True)
     txt(s, x + 0.60, y + 0.52, cw_p - 0.74, 0.90, d,  10.5, color=TAUPE, spacing=1.22)
 
+# ── 色彩心理學深析資料（P10–P17 用）────────────────────────
+_AXES_HO = ["能量 · 活力", "熱情 · 溫度", "平靜 · 穩定", "社交 · 外向", "靈性 · 直覺"]
+_psy_full = [
+    ("紅", WHEEL[0][1], "RED", ["熱情","能量","行動","勇氣"],
+     [95, 98, 15, 80, 30],
+     ["行動力強，敢於挑戰、突破現狀", "充滿熱情，能感染身邊每一個人",
+      "天生領導氣質，果斷而積極主動", "對生命充滿渴望與旺盛的活力"],
+     "紅色刺激腎上腺素分泌，使心跳加速、呼吸加快，帶來興奮、緊迫與高度專注；\n是波長最長、最能凝聚行動能量的顏色。",
+     "在心靈彩繪中，紅色點燃內在火種，適合需要勇氣、突破與自我肯定的階段，幫助重拾生命熱度。",
+     "以紅作花心或主花瓣，搭配金色輪廓，展現強烈生命力；少量點綴即有畫龍點睛之效。"),
+    ("橙", WHEEL[2][1], "ORANGE", ["溫暖","喜悅","社交","創意"],
+     [85, 88, 35, 95, 35],
+     ["外向開朗，善於人際溝通互動", "感染力強，能帶動整體氛圍",
+      "思維活潑，富有創意與巧思", "情感豐沛，自然地溫暖他人"],
+     "橙色結合紅的能量與黃的溫暖，刺激食慾、提振情緒，\n帶來歡快輕鬆的心情，對低落、退縮的狀態特別有提振作用。",
+     "橙色開啟表達與連結的能量，適合需要打開心房、增進互動與重燃熱情的時刻。",
+     "橙色用於中圈花瓣搭配黃色漸層，溫暖明亮；與藍色互補可大幅增強視覺活力。"),
+    ("黃", WHEEL[4][1], "YELLOW", ["陽光","智慧","希望","自信"],
+     [90, 70, 40, 85, 45],
+     ["思維清晰，邏輯與分析力強", "積極向上，充滿好奇心",
+      "自信從容，樂於表達自我", "散發正能量，帶動希望感"],
+     "黃色是視覺上最明亮的顏色，刺激神經系統、提升思考清晰度與注意力，\n與陽光、希望、輕鬆愉快的感受緊密相連。",
+     "黃色是「永遠向陽」的生命力顏色，適合需要信心、樂觀與重新點亮希望的心靈狀態。",
+     "黃色與金色同頻，常用於花心發光效果；搭配紫色形成最強力的互補配色。"),
+    ("綠", WHEEL[6][1], "GREEN", ["療癒","平衡","安定","自然"],
+     [50, 45, 95, 55, 60],
+     ["穩重踏實，重視內外和諧", "善解人意，體貼而包容",
+      "親近自然，喜愛寧靜的環境", "身心容易取得平衡與安定"],
+     "綠色位於色相環中央，是眼睛最不費力辨識的顏色；\n能降低血壓、放鬆眼部肌肉與神經，是最具療癒能量的波長之一。",
+     "綠色帶來休息與重整的力量，適合疲憊、需要被安撫與回到平衡的階段。",
+     "大面積綠色搭配白色與金色細節，呈現森林療癒感；加入粉紅花朵帶來春天生機。"),
+    ("藍", WHEEL[8][1], "BLUE", ["冷靜","信任","深度","專注"],
+     [45, 30, 90, 40, 70],
+     ["理性分析，思維邏輯清晰", "值得信賴，誠實而穩重",
+      "追求深度，不甘流於表面", "靜心沉澱後能爆發創意"],
+     "藍色降低心跳速率與血壓，幫助神經進入放鬆狀態；\n研究顯示藍色環境能提升專注、效率與被信任感。",
+     "藍色是沉澱心靈最有效的顏色，適合需要冷靜、沉思與回歸理性秩序的時刻。",
+     "深淺藍漸層表現寧靜與深度；搭配橙色互補，讓冷靜中帶有活力的點綴。"),
+    ("紫", WHEEL[10][1], "PURPLE", ["靈性","直覺","神秘","智慧"],
+     [55, 50, 65, 45, 98],
+     ["靈性敏感，直覺力豐富", "想像力強，思維獨特深邃",
+      "追求生命意義，喜愛自省", "散發神秘魅力，引人入勝"],
+     "紫色融合紅的熱情與藍的冷靜，形成獨特而高頻的靈性波長；\n自古與高貴、神秘、智慧相連，能誘發冥想與深層感受。",
+     "紫色連結高層意識與靈感泉源，是冥想與心靈藝術中能量最強的顏色。",
+     "紫色搭配金色展現高貴靈性感；淺到深紫漸層在花心創造神秘而深邃的效果。"),
+    ("粉", RGBColor(0xE6,0xA9,0xC0), "PINK", ["溫柔","愛","包容","呵護"],
+     [55, 75, 70, 70, 60],
+     ["溫柔細膩，善於關懷他人", "情感豐富，易感受他人情緒",
+      "包容體諒，不輕易批判他人", "傳遞溫暖，讓人卸下防備"],
+     "粉色是紅色柔化後的版本，保留愛的能量卻去除攻擊性；\n研究顯示粉色環境能平息激動情緒、降低敵意，帶來安全感。",
+     "粉色開啟自我疼惜與被愛的能量，適合需要溫柔對待自己、修復情感的階段。",
+     "粉色搭配白色與玫瑰金，呈現浪漫溫柔基調；加入少許紫色，可提升靈性層次。"),
+    ("白", TAUPE, "WHITE", ["純淨","開始","留白","整合"],
+     [40, 35, 92, 45, 80],
+     ["追求完美，注重每一個細節", "心靈通透，格局開闊包容",
+      "懂得留白，擅於取捨化簡", "有整合能力，化繁為簡"],
+     "白色涵蓋所有光的波長，象徵完整與純粹；\n在視覺上製造空間與呼吸感，心理上帶來清晰與重新開始的期許。",
+     "白色是「重置」心靈最有效的顏色，適合需要放下、清空與迎接全新開始的時刻。",
+     "白色作底色或高光點，讓其他顏色更透亮；中心留白的設計，給觀者呼吸與冥想的空間。"),
+]
+
+def _ho_color_page(pg, name, col, en, kws, vals, traits, physio, spirit, tip):
+    s = slide(); bg(s)
+    header(s, f"COLOR  PSYCHOLOGY  ·  {en}", f"色彩心理學深度解析・{name}色", size=22)
+    pgnum(s, pg)
+    # Full-width color block
+    rect(s, ML, 1.18, CW, 1.12, col, shape=MSO_SHAPE.ROUNDED_RECTANGLE)
+    txt(s, ML + 0.20, 1.22, 1.6, 1.0, name, 52, color=WHITE, bold=True, anchor=MSO_ANCHOR.MIDDLE)
+    txt(s, ML + 1.90, 1.28, CW - 2.10, 0.46, en, 18, color=WHITE, bold=True)
+    txt(s, ML + 1.90, 1.76, CW - 2.10, 0.40, "  ·  ".join(kws), 12, color=WHITE, bold=True)
+    # Left: bar chart  Right: traits
+    LW = CW * 0.455   # ≈ 3.26"
+    RX = ML + LW + 0.24
+    RW = CW - LW - 0.24
+    txt(s, ML, 2.44, LW, 0.34, "能量 · 個性指數", 12, color=ROSE_DEEP, bold=True)
+    rect(s, ML, 2.78, LW, 0.04, CREAM_DEEP)
+    cy0 = 2.88
+    for i, (ax, v) in enumerate(zip(_AXES_HO, vals)):
+        by = cy0 + i * 0.53
+        txt(s, ML, by - 0.04, 1.26, 0.32, ax, 10, color=TAUPE)
+        bx = ML + 1.30; bmax = LW - 1.30
+        rect(s, bx, by, bmax, 0.26, CREAM_DEEP, shape=MSO_SHAPE.ROUNDED_RECTANGLE)
+        rect(s, bx, by, max(bmax * v / 100.0, 0.18), 0.26, col,
+             shape=MSO_SHAPE.ROUNDED_RECTANGLE)
+        txt(s, bx + bmax - 0.54, by - 0.03, 0.50, 0.28, str(v), 10,
+            color=TAUPE, bold=True, align=PP_ALIGN.RIGHT)
+    txt(s, RX, 2.44, RW, 0.34, "個 性 特 質", 12, color=ROSE_DEEP, bold=True)
+    rect(s, RX, 2.78, RW, 0.04, CREAM_DEEP)
+    ty = 2.88
+    for tr in traits:
+        rect(s, RX + 0.04, ty + 0.09, 0.12, 0.12, col, shape=MSO_SHAPE.OVAL)
+        txt(s, RX + 0.24, ty, RW - 0.28, 0.34, tr, 11, color=INK)
+        ty += 0.44
+    # Full-width sections (bars end at cy0 + 5*0.53 = 5.53)
+    y = 5.62
+    rect(s, ML, y, 0.10, 0.50, col)
+    txt(s, ML + 0.24, y + 0.04, CW - 0.30, 0.36, "生理 · 心理影響", 13, color=col, bold=True)
+    rect(s, ML, y + 0.54, CW, 0.04, CREAM_DEEP)
+    txt(s, ML + 0.06, y + 0.64, CW - 0.12, 1.10, physio, 12, color=TAUPE, spacing=1.30)
+    y += 1.84
+    rect(s, ML, y, 0.10, 0.50, col)
+    txt(s, ML + 0.24, y + 0.04, CW - 0.30, 0.36, "心 靈 意 義", 13, color=col, bold=True)
+    rect(s, ML, y + 0.54, CW, 0.04, CREAM_DEEP)
+    txt(s, ML + 0.06, y + 0.64, CW - 0.12, 0.84, spirit, 12, color=TAUPE, spacing=1.30)
+    y += 1.58
+    rect(s, ML, y, CW, 0.84, CREAM_DEEP, shape=MSO_SHAPE.ROUNDED_RECTANGLE)
+    txt(s, ML + 0.18, y + 0.08, CW - 0.36, 0.30, "✦  曼陀羅應用建議", 11, color=GOLD, bold=True)
+    txt(s, ML + 0.18, y + 0.42, CW - 0.36, 0.38, tip, 11, color=TAUPE, spacing=1.2)
+
 # ============================================================
 # P9  色彩能量・個性對照
 # ============================================================
@@ -447,11 +556,17 @@ for i, (name, col, energy_kw, personality) in enumerate(energy):
     txt(s, x + 0.96, y + 0.76, cw_e - 1.12, ch_e - 0.95, personality, 11, color=TAUPE, spacing=1.35)
 
 # ============================================================
-# P10  曼陀羅意涵起源 + 四大結構
+# P10–P17  色彩心理學深度解析（每色一頁）
+# ============================================================
+for _psy_i, _psy_c in enumerate(_psy_full):
+    _ho_color_page(10 + _psy_i, *_psy_c)
+
+# ============================================================
+# P18  曼陀羅意涵起源 + 四大結構
 # ============================================================
 s = slide(); bg(s)
 header(s, "MANDALA  ·  MEANING  &  STRUCTURE", "曼陀羅的意涵・起源與結構")
-pgnum(s, 10)
+pgnum(s, 18)
 txt(s, ML, 1.18, CW, 1.35,
     "「Mandala」源自古印度梵語，原義為「圓」與「中心」，是宇宙、圓滿與內在完整的象徵。"
     "在藏傳佛教中，曼陀羅是宇宙地圖，也是修行者凝神入定的工具。"
@@ -487,55 +602,76 @@ for t, d in struct:
     y += 1.22
 
 # ============================================================
-# P11  幾何基礎 + 常見圖案元素
+# P19  幾何基礎：對稱與分割（含示意圖）
 # ============================================================
 s = slide(); bg(s)
-header(s, "GEOMETRY  &  DESIGN  ELEMENTS", "幾何基礎・常見圖案元素")
-pgnum(s, 11)
+header(s, "GEOMETRY  &  SYMMETRY", "幾何基礎：對稱與分割")
+pgnum(s, 19)
 txt(s, ML, 1.18, CW, 0.36,
     "曼陀羅之美，建立在「等分」之上。先畫出輔助線，在一個扇形設計好圖案，對稱重複即完成。",
     12, color=TAUPE, spacing=1.2)
-divs_info = [
-    ("4 等分",  "簡潔十字構圖"),
-    ("6 等分",  "柔和花型"),
-    ("8 等分",  "最常用，與八角板契合"),
-    ("12 等分", "細緻繁複，進階挑戰"),
+_divs_ho = [
+    (4,  "4 等分",  "簡潔十字構圖"),
+    (6,  "6 等分",  "柔和花型"),
+    (8,  "8 等分",  "最常用，與八角板契合"),
+    (12, "12 等分", "細緻繁複，進階挑戰"),
 ]
-cw_div = (CW - 0.3) / 4
-for i, (lab, note) in enumerate(divs_info):
-    x = ML + i * (cw_div + 0.1)
-    rect(s, x, 1.62, cw_div, 0.85, WHITE, line=CREAM_DEEP, lw=1.0, shape=MSO_SHAPE.ROUNDED_RECTANGLE)
-    txt(s, x + 0.08, 1.68, cw_div - 0.16, 0.38, lab, 14,  color=ROSE_DEEP, bold=True, align=PP_ALIGN.CENTER)
-    txt(s, x + 0.06, 2.08, cw_div - 0.12, 0.32, note, 9.5, color=TAUPE, align=PP_ALIGN.CENTER)
-txt(s, ML, 2.72, CW, 1.28,
+_cw_div4 = (CW - 0.3) / 4   # ≈1.72"
+for _i4, (_n4, _lab4, _note4) in enumerate(_divs_ho):
+    _x4 = ML + _i4 * (_cw_div4 + 0.1)
+    if os.path.exists(_DIV[_n4]):
+        pic_cover(s, _DIV[_n4], _x4, 1.62, _cw_div4, _cw_div4, border=False)
+    txt(s, _x4, 1.62 + _cw_div4 + 0.06, _cw_div4, 0.34, _lab4, 13,
+        color=ROSE_DEEP, bold=True, align=PP_ALIGN.CENTER)
+    txt(s, _x4, 1.62 + _cw_div4 + 0.40, _cw_div4, 0.28, _note4, 9.5,
+        color=TAUPE, align=PP_ALIGN.CENTER)
+_bullet_y = 1.62 + _cw_div4 + 0.76
+txt(s, ML, _bullet_y, CW, 1.28,
     "・分割數越多，圖案越繁複細緻。初學常用 8 等分，與八角板的造型相呼應。\n"
     "・先以鉛筆淡淡畫出同心圓與放射線當「輔助線」，再沿線設計，完成後可擦除或覆蓋。\n"
     "・只要在一個扇形區塊設計好圖案，再依對稱重複到每一等分，整體就會自然和諧。",
     12.5, color=INK, spacing=1.4)
-txt(s, ML, 4.18, CW, 0.40, "常見圖案元素", 16, color=ROSE_DEEP, bold=True)
-rect(s, ML, 4.56, CW, 0.055, CREAM_DEEP)
-elems = [
-    ("圓點 Dots",     "由大到小排列出律動感，是最基本也最萬用的元素。"),
-    ("花瓣 Petals",   "水滴形、橢圓形組合成花朵，是最常見的主視覺元素。"),
-    ("葉形 Leaves",   "尖葉、羽葉穿插花朵之間，增添自然生氣與流動感。"),
-    ("水滴 Teardrop", "一頭圓一頭尖，可放射、可串連，變化萬千。"),
-    ("線條 Lines",    "直線、波浪線、卷草串起各層，引導視線流動。"),
-    ("幾何 Shapes",   "三角、菱形、弧形構成骨架，穩定整體結構。"),
-]
-cw_el = (CW - 0.22) / 2; ch_el = 1.08; gy_el = 0.18
-for i, (t, d) in enumerate(elems):
-    r, c = divmod(i, 2)
-    x = ML + c * (cw_el + 0.22); y = 4.72 + r * (ch_el + gy_el)
-    rect(s, x, y, cw_el, ch_el, WHITE, line=CREAM_DEEP, lw=1.0, shape=MSO_SHAPE.ROUNDED_RECTANGLE)
-    txt(s, x + 0.2, y + 0.10, cw_el - 0.32, 0.40, t, 13.5, color=ROSE_DEEP, bold=True)
-    txt(s, x + 0.2, y + 0.55, cw_el - 0.32, 0.46, d, 11.5, color=TAUPE, spacing=1.2)
 
 # ============================================================
-# P12  曼陀羅設計六步驟
+# P20  常見圖案元素（含示意圖）
+# ============================================================
+s = slide(); bg(s)
+header(s, "DESIGN  ELEMENTS", "常見圖案元素")
+pgnum(s, 20)
+txt(s, ML, 1.18, CW, 0.36,
+    "曼陀羅由幾種基本「語彙」組合而成。熟悉每種元素的畫法，就能靈活搭配、自由創作。",
+    12, color=TAUPE, spacing=1.2)
+_elems_ho = [
+    ("圓點 Dots",     "由大到小排列出律動感，是最基本也最萬用的元素。",   "el_dots.png"),
+    ("花瓣 Petals",   "水滴形、橢圓形組合成花朵，是最常見的主視覺元素。", "el_petals.png"),
+    ("葉形 Leaves",   "尖葉、羽葉穿插花朵之間，增添自然生氣與流動感。",   "el_leaves.png"),
+    ("水滴 Teardrop", "一頭圓一頭尖，可放射、可串連，變化萬千。",         "el_teardrop.png"),
+    ("線條 Lines",    "直線、波浪線、卷草串起各層，引導視線流動。",        "el_lines.png"),
+    ("幾何 Shapes",   "三角、菱形、弧形構成骨架，穩定整體結構。",          "el_geometry.png"),
+]
+_cw_el2 = (CW - 0.22) / 2   # ≈3.475"
+_ch_el2 = 1.42; _gy_el2 = 0.22; _img_sq = 1.0
+for _i_el, (_t_el, _d_el, _img_el) in enumerate(_elems_ho):
+    _row_el, _col_el = divmod(_i_el, 2)
+    _x_el = ML + _col_el * (_cw_el2 + 0.22)
+    _y_el = 1.62 + _row_el * (_ch_el2 + _gy_el2)
+    rect(s, _x_el, _y_el, _cw_el2, _ch_el2, WHITE, line=CREAM_DEEP, lw=1.0,
+         shape=MSO_SHAPE.ROUNDED_RECTANGLE)
+    _img_path = f"{DIAG}/{_img_el}"
+    if os.path.exists(_img_path):
+        _img_offset_y = _y_el + (_ch_el2 - _img_sq) / 2
+        pic_cover(s, _img_path, _x_el + 0.06, _img_offset_y, _img_sq, _img_sq, border=False)
+    _tx_el = _x_el + _img_sq + 0.18
+    _tw_el = _cw_el2 - _img_sq - 0.24
+    txt(s, _tx_el, _y_el + 0.10, _tw_el, 0.42, _t_el, 13.5, color=ROSE_DEEP, bold=True)
+    txt(s, _tx_el, _y_el + 0.58, _tw_el, 0.76, _d_el, 11.5, color=TAUPE, spacing=1.2)
+
+# ============================================================
+# P21  曼陀羅設計六步驟
 # ============================================================
 s = slide(); bg(s)
 header(s, "STEP  BY  STEP", "曼陀羅設計六步驟")
-pgnum(s, 12)
+pgnum(s, 21)
 steps_six = [
     ("定圓心",   "在板面正中央定出圓心，這是整個曼陀羅的核心。"),
     ("畫輔助線", "以鉛筆淡淡畫出同心圓與放射對稱線，建立骨架。"),
@@ -562,11 +698,11 @@ for i, a in enumerate(arts_row):
         pic_cover(s, path, ML + i * (cw_art + 0.15), 6.28, cw_art, 1.88)
 
 # ============================================================
-# P13  課程流程總覽 + 第一天
+# P22  課程流程總覽 + 第一天
 # ============================================================
 s = slide(); bg(s)
 header(s, "COURSE  FLOW  ·  DAY 1", "課程流程總覽・第一天")
-pgnum(s, 13)
+pgnum(s, 22)
 txt(s, ML, 1.18, CW, 0.58,
     "連續兩天密集班——從進階色彩學、設計規劃，到大型八角板創作與貼鑽完成，"
     "最後進入作品解析與教學技巧引導。從「會畫」到「能教」，一次到位。",
@@ -600,11 +736,11 @@ for i, (t, d) in enumerate(steps1):
     y += 1.28
 
 # ============================================================
-# P14  第二天 + 大型八角板設計應用（完整說明）
+# P23  第二天 + 大型八角板設計應用（完整說明）
 # ============================================================
 s = slide(); bg(s)
 header(s, "DAY 2  ·  FINISHING  &  TEACHING", "第二天・完成細節・貼鑽・作品解析・教學引導")
-pgnum(s, 14)
+pgnum(s, 23)
 txt(s, ML, 1.18, CW, 0.38, "第二天・完成與教學力", 16, color=ROSE_DEEP, bold=True)
 rect(s, ML, 1.54, CW, 0.055, CREAM_DEEP)
 steps2_full = [
@@ -639,11 +775,11 @@ for i, (t, d) in enumerate(steps2_full):
     y += ch + 0.16
 
 # ============================================================
-# P15  大型八角板・設計應用（獨立頁）
+# P24  大型八角板・設計應用（獨立頁）
 # ============================================================
 s = slide(); bg(s)
 header(s, "OCTAGON  BOARD  APPLICATION", "大型八角板・設計應用")
-pgnum(s, 15)
+pgnum(s, 24)
 txt(s, ML, 1.18, CW, 0.72,
     "一級課程的考核作品，是在「大型八角板」上完成的曼陀羅。"
     "八角的外形與 8 等分的放射結構天然契合，讓設計更顯大器而穩定。"
@@ -819,7 +955,7 @@ def skill_card(s, tech, y_start, card_h=4.84):
 CARD_H = 4.84; CARD_GAP = 0.22
 for _order_i, page_i in enumerate([1, 2, 3, 4]):
     s = slide(); bg(s)
-    pg_num = 16 + _order_i
+    pg_num = 25 + _order_i
     eb_suffix = f"  {page_i * 2 + 1:02d}–{page_i * 2 + 2:02d}"
     header(s, f"CERTIFICATION  SKILLS{eb_suffix}", "一級講師考核必備技巧")
     pgnum(s, pg_num)
@@ -829,11 +965,11 @@ for _order_i, page_i in enumerate([1, 2, 3, 4]):
     skill_card(s, t2, 1.22 + CARD_H + CARD_GAP, CARD_H)
 
 # ============================================================
-# P20  證書考核 + 結業後支持
+# P29  證書考核 + 結業後支持
 # ============================================================
 s = slide(); bg(s)
 header(s, "CERTIFICATION  &  AFTER  GRADUATION", "證書考核・結業後持續陪伴")
-pgnum(s, 20)
+pgnum(s, 29)
 txt(s, ML, 1.18, CW, 0.38, "一級講師・證書考核流程", 16, color=ROSE_DEEP, bold=True)
 rect(s, ML, 1.54, CW, 0.055, CREAM_DEEP)
 reqs = [
@@ -877,10 +1013,10 @@ for i, b in enumerate(bens):
     rect(s, x + 0.2, y + 0.29, 0.22, 0.22, SAGE, shape=MSO_SHAPE.OVAL)
     txt(s, x + 0.56, y, cw_bn - 0.70, 0.78, b, 11.5, color=INK, anchor=MSO_ANCHOR.MIDDLE)
 
-# P21  考核技法 01-02（移至最後）
+# P30  考核技法 01-02（移至最後）
 s = slide(); bg(s)
 header(s, "CERTIFICATION  SKILLS  01–02", "一級講師考核必備技巧")
-pgnum(s, 21)
+pgnum(s, 30)
 skill_card(s, techniques[0], 1.22, CARD_H)
 skill_card(s, techniques[1], 1.22 + CARD_H + CARD_GAP, CARD_H)
 
