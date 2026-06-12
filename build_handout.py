@@ -1,0 +1,705 @@
+# -*- coding: utf-8 -*-
+"""一級講師培訓課程・學員講義 (A4 直式 16 頁)
+   Run:  python build_handout.py
+   Out:  mandala_l1_handout.pptx
+"""
+import os, math, base64
+
+def _fix_img(path):
+    try:
+        with open(path, 'rb') as f:
+            b = f.read(1)
+        if b and b[0] < 0x80:
+            with open(path, 'r') as f:
+                data = f.read().strip()
+            missing = len(data) % 4
+            if missing:
+                data += '=' * (4 - missing)
+            decoded = base64.b64decode(data)
+            with open(path, 'wb') as f:
+                f.write(decoded)
+    except Exception:
+        pass
+
+from pptx import Presentation
+from pptx.util import Inches, Pt, Emu
+from pptx.dml.color import RGBColor
+from pptx.enum.text import PP_ALIGN, MSO_ANCHOR
+from pptx.enum.shapes import MSO_SHAPE
+from pptx.oxml.ns import qn
+from PIL import Image
+
+L1 = "/home/user/mandala/l1"
+
+for _img in [
+    f"{L1}/bg_ending.jpg", f"{L1}/bg_watercolor.jpg",
+    f"{L1}/art1.jpg", f"{L1}/art2.jpg", f"{L1}/art3.jpg",
+    f"{L1}/art4.jpg", f"{L1}/art5.jpg", f"{L1}/art6.jpg",
+    f"{L1}/art_octagon4.jpg",
+]:
+    if os.path.exists(_img):
+        _fix_img(_img)
+
+# ── 色系 ─────────────────────────────────────────────────────
+CREAM      = RGBColor(0xFB, 0xF6, 0xEF)
+CREAM_DEEP = RGBColor(0xF3, 0xE7, 0xD8)
+ROSE       = RGBColor(0xC9, 0x7B, 0x84)
+ROSE_DEEP  = RGBColor(0xA9, 0x5C, 0x66)
+GOLD       = RGBColor(0xC9, 0xA9, 0x6E)
+TAUPE      = RGBColor(0x8A, 0x7A, 0x6A)
+INK        = RGBColor(0x4A, 0x40, 0x3A)
+SAGE       = RGBColor(0x9C, 0xA9, 0x8C)
+WHITE      = RGBColor(0xFF, 0xFF, 0xFF)
+
+WHEEL = [
+    ("紅",   RGBColor(0xE8, 0x43, 0x4B)),
+    ("紅橙", RGBColor(0xE8, 0x6A, 0x3A)),
+    ("橙",   RGBColor(0xE8, 0x9A, 0x3A)),
+    ("黃橙", RGBColor(0xE8, 0xC2, 0x4A)),
+    ("黃",   RGBColor(0xE6, 0xDA, 0x55)),
+    ("黃綠", RGBColor(0xA8, 0xC8, 0x4A)),
+    ("綠",   RGBColor(0x5A, 0xA8, 0x5A)),
+    ("藍綠", RGBColor(0x4A, 0xA8, 0x9A)),
+    ("藍",   RGBColor(0x4A, 0x7A, 0xC8)),
+    ("藍紫", RGBColor(0x6A, 0x5A, 0xB8)),
+    ("紫",   RGBColor(0x9A, 0x5A, 0xB8)),
+    ("紅紫", RGBColor(0xC8, 0x4A, 0x8A)),
+]
+
+EMU       = 914400
+PW, PH    = 8.27, 11.69   # A4 portrait inches
+ML = MR   = 0.55
+CW        = PW - ML - MR  # 7.17"
+FONT      = "微軟正黑體"
+
+prs = Presentation()
+prs.slide_width  = Emu(int(PW * EMU))
+prs.slide_height = Emu(int(PH * EMU))
+BLANK = prs.slide_layouts[6]
+
+BG_IMG  = f"{L1}/bg_watercolor.jpg"
+_HAS_BG = os.path.exists(BG_IMG)
+
+def slide():
+    return prs.slides.add_slide(BLANK)
+
+def bg(s, color=CREAM):
+    s.background.fill.solid()
+    s.background.fill.fore_color.rgb = color
+    if color == CREAM and _HAS_BG:
+        p = s.shapes.add_picture(BG_IMG, Inches(0), Inches(0), Inches(PW), Inches(PH))
+        p.line.fill.background()
+        ov = s.shapes.add_shape(MSO_SHAPE.RECTANGLE, Inches(0), Inches(0), Inches(PW), Inches(PH))
+        ov.fill.solid(); ov.fill.fore_color.rgb = CREAM; ov.line.fill.background()
+        ov.shadow.inherit = False
+        set_alpha(ov, 80)
+
+def rect(s, x, y, w, h, color, line=None, lw=1.0, shape=MSO_SHAPE.RECTANGLE):
+    sp = s.shapes.add_shape(shape, Inches(x), Inches(y), Inches(w), Inches(h))
+    sp.fill.solid(); sp.fill.fore_color.rgb = color
+    if line is None:
+        sp.line.fill.background()
+    else:
+        sp.line.color.rgb = line; sp.line.width = Pt(lw)
+    sp.shadow.inherit = False
+    return sp
+
+def set_alpha(shape, alpha_pct):
+    sp = shape.fill._xPr.find(qn('a:solidFill'))
+    srgb = sp.find(qn('a:srgbClr'))
+    a = srgb.makeelement(qn('a:alpha'), {'val': str(int(alpha_pct * 1000))})
+    srgb.append(a)
+
+def txt(s, x, y, w, h, text, size, color=INK, bold=False, align=PP_ALIGN.LEFT,
+        anchor=MSO_ANCHOR.TOP, font=FONT, spacing=1.0, italic=False):
+    tb = s.shapes.add_textbox(Inches(x), Inches(y), Inches(w), Inches(h))
+    tf = tb.text_frame; tf.word_wrap = True; tf.vertical_anchor = anchor
+    for i, ln in enumerate(text.split("\n")):
+        p = tf.paragraphs[0] if i == 0 else tf.add_paragraph()
+        p.alignment = align; p.line_spacing = spacing
+        r = p.add_run(); r.text = ln
+        f = r.font; f.size = Pt(size); f.bold = bold; f.italic = italic
+        f.name = font; f.color.rgb = color
+    return tb
+
+def pic_cover(s, path, x, y, w, h, border=True):
+    iw, ih = Image.open(path).size
+    tw, th  = w * EMU, h * EMU
+    sr, ir  = tw / th, iw / ih
+    if ir > sr:
+        cw_img = int(ih * sr); off = (iw - cw_img) // 2
+        crop = (off / iw, 0, (off + cw_img) / iw, 1)
+    else:
+        ch_img = int(iw / sr); off = (ih - ch_img) // 2
+        crop = (0, off / ih, 1, (off + ch_img) / ih)
+    p = s.shapes.add_picture(path, Inches(x), Inches(y), Inches(w), Inches(h))
+    p.crop_left, p.crop_top   = crop[0], crop[1]
+    p.crop_right, p.crop_bottom = 1 - crop[2], 1 - crop[3]
+    if border:
+        p.line.color.rgb = WHITE; p.line.width = Pt(2.0)
+    else:
+        p.line.fill.background()
+    return p
+
+def color_wheel(s, cx, cy, r, dot=0.42):
+    for i, (name, col) in enumerate(WHEEL):
+        ang = math.radians(-90 + i * 30)
+        px = cx + r * math.cos(ang) - dot / 2
+        py = cy + r * math.sin(ang) - dot / 2
+        rect(s, px, py, dot, dot, col, line=WHITE, lw=1.2, shape=MSO_SHAPE.OVAL)
+        lx = cx + (r + 0.52) * math.cos(ang) - 0.33
+        ly = cy + (r + 0.52) * math.sin(ang) - 0.14
+        txt(s, lx, ly, 0.66, 0.28, name, 9, color=TAUPE, align=PP_ALIGN.CENTER)
+
+def header(s, eb, title, size=22):
+    rect(s, 0, 0, PW, 1.08, CREAM_DEEP)
+    txt(s, ML, 0.20, CW, 0.32, eb, 10, color=GOLD, bold=True)
+    txt(s, ML, 0.52, CW, 0.54, title, size, color=INK, bold=True)
+
+def pgnum(s, n):
+    txt(s, 0, PH - 0.34, PW, 0.28, f"— {n} —", 9, color=TAUPE, align=PP_ALIGN.CENTER)
+
+# ============================================================
+# P1  封面
+# ============================================================
+s = slide()
+s.background.fill.solid(); s.background.fill.fore_color.rgb = INK
+BG_END = f"{L1}/bg_ending.jpg"
+if os.path.exists(BG_END):
+    p = s.shapes.add_picture(BG_END, Inches(0), Inches(0), Inches(PW), Inches(PH))
+    p.line.fill.background()
+ov = rect(s, 0, 0, PW, PH, INK); set_alpha(ov, 48)
+rect(s, ML, 4.05, CW, 0.055, GOLD)
+txt(s, ML, 2.9,  CW, 0.65,  "一級講師培訓課程", 30, color=WHITE, bold=True, align=PP_ALIGN.CENTER)
+txt(s, ML, 3.58, CW, 0.45,  "曼陀羅色彩藝術", 18, color=GOLD,  bold=True, align=PP_ALIGN.CENTER)
+txt(s, ML, 4.2,  CW, 0.55,  "學  員  講  義", 22, color=WHITE, bold=True, align=PP_ALIGN.CENTER)
+txt(s, ML, PH - 1.2, CW, 0.45,
+    "請妥善保存，作為日後教學參考", 12, color=CREAM, align=PP_ALIGN.CENTER)
+
+# ============================================================
+# P2  課程六大收穫
+# ============================================================
+s = slide(); bg(s)
+header(s, "COURSE  HIGHLIGHTS", "一級講師課程・六大收穫")
+pgnum(s, 2)
+goals = [
+    ("01", "進階色彩學",    "色相、明度、彩度、色彩心理學，從理解到精準運用"),
+    ("02", "深化理解與應用","作品解析力，洞察色彩背後的情感與內在狀態"),
+    ("03", "大型木器創作",  "在大型八角板木器上完成一件精緻曼陀羅作品"),
+    ("04", "高級鑽飾裝飾",  "施華洛世奇水晶鑽飾貼附，提升作品至展覽水準"),
+    ("05", "立體畫法",      "進階筆法與層次技巧，讓圖案呈現真實立體質感"),
+    ("06", "教學引導訓練",  "實際演練教學流程，從「會畫」躍升為「能教」"),
+]
+cw_g = (CW - 0.22) / 2; ch_g = 1.58; gy_g = 0.22
+for i, (n, t, d) in enumerate(goals):
+    r, c = divmod(i, 2)
+    x = ML + c * (cw_g + 0.22); y = 1.25 + r * (ch_g + gy_g)
+    rect(s, x, y, cw_g, ch_g, WHITE, line=CREAM_DEEP, lw=1.0, shape=MSO_SHAPE.ROUNDED_RECTANGLE)
+    rect(s, x, y, cw_g, 0.42, CREAM_DEEP, shape=MSO_SHAPE.ROUNDED_RECTANGLE)
+    rect(s, x + 0.15, y + 0.04, cw_g - 0.15, 0.38, CREAM_DEEP)
+    txt(s, x + 0.14, y + 0.07, 0.4, 0.3, n, 11, color=ROSE_DEEP, bold=True)
+    txt(s, x + 0.6,  y + 0.06, cw_g - 0.75, 0.34, t, 13.5, color=ROSE_DEEP, bold=True)
+    txt(s, x + 0.22, y + 0.56, cw_g - 0.38, 0.92, d, 12, color=TAUPE, spacing=1.25)
+
+# ============================================================
+# P3  課程提供材料
+# ============================================================
+s = slide(); bg(s)
+header(s, "MATERIALS  PROVIDED", "課程提供材料")
+pgnum(s, 3)
+mats = [
+    ("考核用大型八角板木器 ×1", "符合條件者可升級為八角折疊桌"),
+    ("上課用木器 ×1",          "全程使用，課後帶回"),
+    ("施華洛世奇鑽飾套組",      "珠寶膠、沾珠筆等專業工具"),
+    ("高級貂毛筆套組",          "橢圓筆、斜筆、勾線筆各一支"),
+    ("個人繪畫工具",            "顏料、畫筆、調色紙、調色刀等"),
+    ("筆記本與書寫工具",         "課程講義一份"),
+]
+cw_m = (CW - 0.22) / 2; ch_m = 1.22; gy_m = 0.22
+for i, (title, sub) in enumerate(mats):
+    r, c = divmod(i, 2)
+    x = ML + c * (cw_m + 0.22); y = 1.25 + r * (ch_m + gy_m)
+    rect(s, x, y, cw_m, ch_m, WHITE, line=CREAM_DEEP, lw=1.0, shape=MSO_SHAPE.ROUNDED_RECTANGLE)
+    rect(s, x, y, 0.1, ch_m, GOLD)
+    txt(s, x + 0.26, y + 0.12, cw_m - 0.4,  0.48, title, 14,   color=ROSE_DEEP, bold=True)
+    txt(s, x + 0.28, y + 0.64, cw_m - 0.42, 0.48, sub,   12.5, color=TAUPE)
+
+# ============================================================
+# P4  色彩三大屬性
+# ============================================================
+s = slide(); bg(s)
+header(s, "COLOR  FUNDAMENTALS", "色彩的三大屬性")
+pgnum(s, 4)
+txt(s, ML, 1.18, CW, 0.36,
+    "任何顏色都能用三個維度描述。掌握它們，就能精準調出腦中想像的每一種色。",
+    12, color=TAUPE, spacing=1.2)
+attrs = [
+    ("色相 Hue",    "顏色的「相貌」",
+     "紅橙黃綠藍紫——\n區分顏色種類的名稱，\n對應色相環上的位置。",
+     [WHEEL[0][1], WHEEL[2][1], WHEEL[4][1], WHEEL[6][1], WHEEL[8][1], WHEEL[10][1]], None),
+    ("明度 Value",  "顏色的明暗",
+     "加白色→顏色漸亮；\n加黑色→顏色漸暗。\n明度差創造畫面的層次感。",
+     [RGBColor(0xFF,0xFF,0xFF), RGBColor(0xCC,0xCC,0xCC), RGBColor(0x99,0x99,0x99),
+      RGBColor(0x66,0x66,0x66), RGBColor(0x33,0x33,0x33), RGBColor(0x00,0x00,0x00)], None),
+    ("彩度 Chroma", "顏色的鮮濁",
+     "加灰或互補色後，\n色彩從鮮豔→混濁，\n整體氛圍更柔和耐看。",
+     [RGBColor(0xE8,0x43,0x4B), RGBColor(0xE8,0x9A,0x3A), RGBColor(0xE6,0xDA,0x55),
+      RGBColor(0x5A,0xA8,0x5A), RGBColor(0x4A,0x7A,0xC8), RGBColor(0x9A,0x5A,0xB8)],
+     [RGBColor(0xBC,0x6A,0x6D), RGBColor(0xBC,0x95,0x65), RGBColor(0xBB,0xB5,0x73),
+      RGBColor(0x75,0x9C,0x75), RGBColor(0x6D,0x85,0xAC), RGBColor(0x95,0x75,0xA4)]),
+]
+cw_a = (CW - 0.3) / 3  # ~2.29"
+for i, (t, sub, d, sw1, sw2) in enumerate(attrs):
+    x = ML + i * (cw_a + 0.15)
+    card_h = 5.5 if sw2 is not None else 5.1
+    rect(s, x, 1.62, cw_a, card_h, WHITE, line=CREAM_DEEP, lw=1.0, shape=MSO_SHAPE.ROUNDED_RECTANGLE)
+    txt(s, x + 0.16, 1.80, cw_a - 0.32, 0.44, t,   14,   color=ROSE_DEEP, bold=True)
+    txt(s, x + 0.16, 2.28, cw_a - 0.32, 0.30, sub, 10.5, color=GOLD, bold=True)
+    sww = (cw_a - 0.32) / 6
+    sw_line = RGBColor(0xBB, 0xBB, 0xBB) if t.startswith("明度") else None
+    if sw2 is None:
+        for j, c in enumerate(sw1):
+            rect(s, x + 0.16 + j * sww, 2.68, sww, 0.40, c, line=sw_line, lw=0.5)
+        txt(s, x + 0.16, 3.18, cw_a - 0.32, 3.8, d, 12, color=TAUPE, spacing=1.38)
+    else:
+        txt(s, x + 0.16, 2.64, cw_a - 0.32, 0.25, "高彩度  鮮豔", 8.5, color=ROSE_DEEP, bold=True)
+        for j, c in enumerate(sw1):
+            rect(s, x + 0.16 + j * sww, 2.92, sww, 0.38, c)
+        txt(s, x + 0.16, 3.34, cw_a - 0.32, 0.25, "低彩度  混濁", 8.5, color=TAUPE, bold=True)
+        for j, c in enumerate(sw2):
+            rect(s, x + 0.16 + j * sww, 3.62, sww, 0.38, c)
+        txt(s, x + 0.16, 4.10, cw_a - 0.32, 3.3, d, 12, color=TAUPE, spacing=1.38)
+
+# ============================================================
+# P5  十二色相環
+# ============================================================
+s = slide(); bg(s)
+header(s, "COLOR  WHEEL", "十二色相環")
+pgnum(s, 5)
+items_cw = [
+    ("三原色（原色）",
+     "紅・黃・藍——無法由其他顏色調出，是一切色彩的源頭。"),
+    ("三間色（二次色）",
+     "橙（紅+黃）、綠（黃+藍）、紫（藍+紅）——兩原色等量相混。"),
+    ("複色（三次色）",
+     "原色與相鄰間色相混，如紅橙、黃綠，使色相環更細緻。"),
+    ("冷暖之分",
+     "紅橙黃為暖色、藍綠紫為冷色；暖色前進、冷色後退，影響空間感。"),
+]
+y = 1.25
+for t, d in items_cw:
+    rect(s, ML, y + 0.08, 0.12, 0.12, GOLD, shape=MSO_SHAPE.OVAL)
+    txt(s, ML + 0.28, y - 0.02, CW - 0.3, 0.38, t, 14.5, color=ROSE_DEEP, bold=True)
+    txt(s, ML + 0.30, y + 0.38, CW - 0.32, 0.6,  d, 12.5, color=TAUPE, spacing=1.2)
+    y += 1.1
+color_wheel(s, PW / 2, 8.18, 1.15)
+txt(s, ML, 6.6, CW, 0.36, "十二色相環示意圖", 14, color=ROSE_DEEP, bold=True, align=PP_ALIGN.CENTER)
+
+# ============================================================
+# P6  五種配色法
+# ============================================================
+s = slide(); bg(s)
+header(s, "COLOR  SCHEMES", "五種經典配色法")
+pgnum(s, 6)
+schemes = [
+    ("同類配色", "同色相・不同明彩度", [0, 0, 0],  "和諧內斂，統一氛圍",
+     "整體感強，適合寧靜冥想主題；以不同明度製造層次，避免過於單調。"),
+    ("鄰近配色", "相鄰 2–3 色",       [8, 9, 10], "自然柔和，過渡流暢",
+     "視覺舒適，是最常見的配色方式；顏色過渡自然，適合初學者嘗試。"),
+    ("互補配色", "色環對角兩色",       [0, 6],     "強烈對比，最具張力",
+     "視覺衝擊力強；一色為主、互補色為點綴，避免兩色等量使畫面緊張。"),
+    ("分裂互補", "一色＋互補兩側",     [0, 7, 5],  "有對比又不刺眼",
+     "保有互補的張力，卻因主色兩側分裂而柔和許多，是最安全的對比配色。"),
+    ("三角配色", "等距三色",           [0, 4, 8],  "活潑均衡，色彩豐富",
+     "三色均衡搭配，畫面活潑；以一色為主調，其餘二色輔助，保持視覺平衡。"),
+]
+ch_sch = 1.72; gy_sch = 0.2
+for i, (t, sub, idx, note, desc) in enumerate(schemes):
+    y = 1.22 + i * (ch_sch + gy_sch)
+    rect(s, ML, y, CW, ch_sch, WHITE, line=CREAM_DEEP, lw=1.0, shape=MSO_SHAPE.ROUNDED_RECTANGLE)
+    if t == "同類配色":
+        cols = [RGBColor(0xF0, 0xC8, 0xCC), RGBColor(0xC9, 0x7B, 0x84), RGBColor(0x8E, 0x44, 0x4D)]
+    else:
+        cols = [WHEEL[k][1] for k in idx]
+    sw_w = 0.48
+    for j, col in enumerate(cols):
+        rect(s, ML + 0.18 + j * (sw_w + 0.1), y + 0.6, sw_w, sw_w,
+             col, line=WHITE, lw=1.2, shape=MSO_SHAPE.OVAL)
+    txt(s, ML + 0.22, y + 0.1,  2.6,      0.42, t,    15,   color=ROSE_DEEP, bold=True)
+    txt(s, ML + 2.92, y + 0.12, CW - 3.1, 0.36, sub,  10.5, color=TAUPE)
+    txt(s, ML + 2.3,  y + 0.55, CW - 2.5, 1.08, desc, 11.5, color=INK, spacing=1.2)
+    txt(s, ML + 0.22, y + 1.35, 2.2,      0.3,  note, 11,   color=GOLD, bold=True)
+
+# ============================================================
+# P7  實用調色技巧
+# ============================================================
+s = slide(); bg(s)
+header(s, "MIXING  SKILLS", "實用調色技巧")
+pgnum(s, 7)
+tips = [
+    ("提高明度", "加入白色——顏色變亮、變粉嫩，適合花瓣高光與漸層。"),
+    ("降低明度", "加入少量黑或深褐——加深陰影，黑色易濁，宜少量多次。"),
+    ("降低彩度", "加灰或加一點互補色——讓過於鮮豔的色變柔和耐看。"),
+    ("調出高級灰", "互補色相混可中和成有層次的「高級灰」，勝過直接用黑灰。"),
+    ("漸層練習",   "同色相由淺到深排出 5 階，是曼陀羅層次感的關鍵基本功。"),
+    ("先淺後深",   "由淺色鋪底、再疊深色——好修正，畫面也更通透乾淨。"),
+]
+ch_tip = 1.35; gy_tip = 0.22
+for i, (t, d) in enumerate(tips):
+    y = 1.22 + i * (ch_tip + gy_tip)
+    rect(s, ML, y, CW, ch_tip, WHITE, line=CREAM_DEEP, lw=1.0, shape=MSO_SHAPE.ROUNDED_RECTANGLE)
+    rect(s, ML, y, 0.1, ch_tip, GOLD)
+    txt(s, ML + 0.28, y + 0.14, 2.1,      0.45, t, 15,   color=ROSE_DEEP, bold=True)
+    txt(s, ML + 2.45, y + 0.04, CW - 2.6, ch_tip, d, 13, color=TAUPE, spacing=1.1,
+        anchor=MSO_ANCHOR.MIDDLE)
+
+# ============================================================
+# P8  色彩心理學
+# ============================================================
+s = slide(); bg(s)
+header(s, "COLOR  PSYCHOLOGY", "色彩心理學")
+pgnum(s, 8)
+txt(s, ML, 1.18, CW, 0.36,
+    "顏色會說話。理解色彩傳遞的情緒，讓曼陀羅不只好看，更能呼應內在。",
+    12, color=TAUPE, spacing=1.2)
+psy = [
+    ("紅",  WHEEL[0][1],           "熱情・能量・行動力",
+     "激發動能、提振精神。象徵勇氣與強烈的生命力，使人感到興奮與躍躍欲試。"),
+    ("橙",  WHEEL[2][1],           "溫暖・喜悅・社交",
+     "帶來歡快、開朗的氛圍。有助增進人際溝通，讓人感受到溫度與活力。"),
+    ("黃",  WHEEL[4][1],           "陽光・希望・自信",
+     "象徵光明與樂觀的心境。激發創意與好奇心，讓人充滿希望感與正能量。"),
+    ("綠",  WHEEL[6][1],           "療癒・平衡・安定",
+     "自然界最和諧的色彩。緩解壓力、平衡身心，帶來放鬆、平靜的療癒感。"),
+    ("藍",  WHEEL[8][1],           "冷靜・信任・沉澱",
+     "讓思緒沉澱、回歸理性。傳遞誠信與穩重，適合需要靜心專注的狀態。"),
+    ("紫",  WHEEL[10][1],          "靈性・直覺・想像",
+     "連結內在深層意識。象徵智慧與神秘，喚起靈感、直覺與靈性感受。"),
+    ("粉",  RGBColor(0xE6,0xA9,0xC0), "溫柔・愛・包容",
+     "傳遞溫柔與無條件的愛。讓人放下防備、敞開心房，感受被呵護與接納的溫暖。"),
+    ("白",  RGBColor(0xF0,0xEC,0xE4), "純淨・開始・留白",
+     "象徵清白與全新的起點。在畫面中製造「留白」，讓其他色彩更顯呼吸與空間感。"),
+]
+cw_p = (CW - 0.22) / 2; ch_p = 1.52; gy_p = 0.18
+for i, (t, col, kw, d) in enumerate(psy):
+    r, c = divmod(i, 2)
+    x = ML + c * (cw_p + 0.22); y = 1.62 + r * (ch_p + gy_p)
+    rect(s, x, y, cw_p, ch_p, WHITE, line=CREAM_DEEP, lw=1.0, shape=MSO_SHAPE.ROUNDED_RECTANGLE)
+    rect(s, x, y, 0.46, ch_p, col, shape=MSO_SHAPE.ROUNDED_RECTANGLE)
+    rect(s, x + 0.23, y, 0.23, ch_p, col)
+    txt(s, x + 0.04, y + (ch_p - 0.42) / 2, 0.38, 0.42, t,  16, color=WHITE,    bold=True, align=PP_ALIGN.CENTER)
+    txt(s, x + 0.60, y + 0.10, cw_p - 0.74, 0.36, kw, 11,   color=ROSE_DEEP,   bold=True)
+    txt(s, x + 0.60, y + 0.52, cw_p - 0.74, 0.90, d,  10.5, color=TAUPE, spacing=1.22)
+
+# ============================================================
+# P9  色彩能量・個性對照
+# ============================================================
+s = slide(); bg(s)
+header(s, "COLOR  ENERGY  &  PERSONALITY", "色彩能量・個性對照表")
+pgnum(s, 9)
+energy = [
+    ("紅", WHEEL[0][1],           "行動 · 能量 · 熱情", "行動力強  充滿幹勁\n勇氣十足  領導氣質"),
+    ("橙", WHEEL[2][1],           "溫暖 · 社交 · 喜悅", "外向開朗  善於溝通\n活潑感染  暖化人心"),
+    ("黃", WHEEL[4][1],           "陽光 · 智慧 · 希望", "積極樂觀  創意豐富\n自信滿滿  活力四射"),
+    ("綠", WHEEL[6][1],           "療癒 · 平衡 · 安定", "穩重踏實  善解人意\n身心放鬆  平靜舒緩"),
+    ("藍", WHEEL[8][1],           "冷靜 · 信任 · 深度", "理性分析  邏輯清晰\n值得信賴  追求深度"),
+    ("紫", WHEEL[10][1],          "靈性 · 直覺 · 神秘", "富想象力  靈性敏感\n神秘獨特  直覺敏銳"),
+    ("粉", RGBColor(0xE6,0xA9,0xC0), "溫柔 · 愛 · 包容",  "溫柔細膩  善於關懷\n情感豐富  包容體貼"),
+    ("白", RGBColor(0xCC,0xCC,0xC0), "純淨 · 開始 · 留白", "簡約純粹  追求完美\n心靈通透  全新起點"),
+]
+cw_e = (CW - 0.22) / 2; ch_e = 2.32; gy_e = 0.18
+for i, (name, col, energy_kw, personality) in enumerate(energy):
+    r_e, c_e = divmod(i, 2)
+    x = ML + c_e * (cw_e + 0.22); y = 1.22 + r_e * (ch_e + gy_e)
+    rect(s, x, y, cw_e, ch_e, WHITE, line=col, lw=2.0, shape=MSO_SHAPE.ROUNDED_RECTANGLE)
+    rect(s, x, y, 0.78, ch_e, col, shape=MSO_SHAPE.ROUNDED_RECTANGLE)
+    rect(s, x + 0.39, y, 0.39, ch_e, col)
+    txt(s, x + 0.02, y + (ch_e - 0.5) / 2, 0.74, 0.5,
+        name, 20, color=WHITE, bold=True, align=PP_ALIGN.CENTER)
+    txt(s, x + 0.96, y + 0.16, cw_e - 1.12, 0.46, energy_kw,  11, color=col, bold=True, spacing=1.1)
+    rect(s, x + 0.96, y + 0.66, cw_e - 1.22, 0.03, CREAM_DEEP)
+    txt(s, x + 0.96, y + 0.76, cw_e - 1.12, ch_e - 0.95, personality, 11, color=TAUPE, spacing=1.35)
+
+# ============================================================
+# P10  曼陀羅意涵起源 + 四大結構
+# ============================================================
+s = slide(); bg(s)
+header(s, "MANDALA  ·  MEANING  &  STRUCTURE", "曼陀羅的意涵・起源與結構")
+pgnum(s, 10)
+txt(s, ML, 1.18, CW, 1.35,
+    "「Mandala」源自古印度梵語，原義為「圓」與「中心」，是宇宙、圓滿與內在完整的象徵。"
+    "在藏傳佛教中，曼陀羅是宇宙地圖，也是修行者凝神入定的工具。"
+    "在現代心靈藝術中，繪製曼陀羅是「專注當下」的靜心歷程——"
+    "由圓心出發，一筆一畫安放自己的心，每一件作品都是創作者內在的鏡子。",
+    12.5, color=TAUPE, spacing=1.4)
+origins = [
+    ("圓滿・完整", "從圓心向外，象徵生命由核心向外擴展的力量。"),
+    ("秩序・和諧", "等分對稱讓視覺平衡，呼應內在對秩序的渴望。"),
+    ("靜心・療癒", "創作過程即冥想，讓雜念沉澱、專注回歸當下。"),
+]
+y = 2.65
+for t, d in origins:
+    rect(s, ML, y, 0.1, 0.52, ROSE)
+    txt(s, ML + 0.24, y + 0.02, 2.4,       0.34, t, 13,   color=ROSE_DEEP, bold=True)
+    txt(s, ML + 0.26, y + 0.36, CW - 0.3,  0.28, d, 11.5, color=TAUPE)
+    y += 0.65
+txt(s, ML, 4.70, CW, 0.40, "曼陀羅的四大結構", 16, color=ROSE_DEEP, bold=True)
+rect(s, ML, 5.08, CW, 0.055, CREAM_DEEP)
+struct = [
+    ("圓心 Center",   "一切的起點，視覺與能量的核心。所有圖案由此向外生長。"),
+    ("放射 Radial",   "圖案由圓心向外發散，如光芒、花瓣，引導視線流動。"),
+    ("對稱 Symmetry", "以對稱軸重複，產生穩定有秩序之美；常見 8／12 等分。"),
+    ("層次 Layers",   "由內而外一圈圈堆疊，節奏感與豐富度同步提升。"),
+]
+y = 5.24
+for t, d in struct:
+    rect(s, ML, y, CW, 1.08, WHITE, line=CREAM_DEEP, lw=1.0, shape=MSO_SHAPE.ROUNDED_RECTANGLE)
+    rect(s, ML, y, 0.1, 1.08, ROSE)
+    txt(s, ML + 0.24, y + 0.12, 2.2,      0.46, t, 13.5, color=ROSE_DEEP, bold=True)
+    txt(s, ML + 2.55, y + 0.04, CW - 2.72, 1.0, d, 12.5,
+        color=TAUPE, anchor=MSO_ANCHOR.MIDDLE, spacing=1.2)
+    y += 1.22
+
+# ============================================================
+# P11  幾何基礎 + 常見圖案元素
+# ============================================================
+s = slide(); bg(s)
+header(s, "GEOMETRY  &  DESIGN  ELEMENTS", "幾何基礎・常見圖案元素")
+pgnum(s, 11)
+txt(s, ML, 1.18, CW, 0.36,
+    "曼陀羅之美，建立在「等分」之上。先畫出輔助線，在一個扇形設計好圖案，對稱重複即完成。",
+    12, color=TAUPE, spacing=1.2)
+divs_info = [
+    ("4 等分",  "簡潔十字構圖"),
+    ("6 等分",  "柔和花型"),
+    ("8 等分",  "最常用，與八角板契合"),
+    ("12 等分", "細緻繁複，進階挑戰"),
+]
+cw_div = (CW - 0.3) / 4
+for i, (lab, note) in enumerate(divs_info):
+    x = ML + i * (cw_div + 0.1)
+    rect(s, x, 1.62, cw_div, 0.85, WHITE, line=CREAM_DEEP, lw=1.0, shape=MSO_SHAPE.ROUNDED_RECTANGLE)
+    txt(s, x + 0.08, 1.68, cw_div - 0.16, 0.38, lab, 14,  color=ROSE_DEEP, bold=True, align=PP_ALIGN.CENTER)
+    txt(s, x + 0.06, 2.08, cw_div - 0.12, 0.32, note, 9.5, color=TAUPE, align=PP_ALIGN.CENTER)
+txt(s, ML, 2.72, CW, 1.28,
+    "・分割數越多，圖案越繁複細緻。初學常用 8 等分，與八角板的造型相呼應。\n"
+    "・先以鉛筆淡淡畫出同心圓與放射線當「輔助線」，再沿線設計，完成後可擦除或覆蓋。\n"
+    "・只要在一個扇形區塊設計好圖案，再依對稱重複到每一等分，整體就會自然和諧。",
+    12.5, color=INK, spacing=1.4)
+txt(s, ML, 4.18, CW, 0.40, "常見圖案元素", 16, color=ROSE_DEEP, bold=True)
+rect(s, ML, 4.56, CW, 0.055, CREAM_DEEP)
+elems = [
+    ("圓點 Dots",     "由大到小排列出律動感，是最基本也最萬用的元素。"),
+    ("花瓣 Petals",   "水滴形、橢圓形組合成花朵，是最常見的主視覺元素。"),
+    ("葉形 Leaves",   "尖葉、羽葉穿插花朵之間，增添自然生氣與流動感。"),
+    ("水滴 Teardrop", "一頭圓一頭尖，可放射、可串連，變化萬千。"),
+    ("線條 Lines",    "直線、波浪線、卷草串起各層，引導視線流動。"),
+    ("幾何 Shapes",   "三角、菱形、弧形構成骨架，穩定整體結構。"),
+]
+cw_el = (CW - 0.22) / 2; ch_el = 1.08; gy_el = 0.18
+for i, (t, d) in enumerate(elems):
+    r, c = divmod(i, 2)
+    x = ML + c * (cw_el + 0.22); y = 4.72 + r * (ch_el + gy_el)
+    rect(s, x, y, cw_el, ch_el, WHITE, line=CREAM_DEEP, lw=1.0, shape=MSO_SHAPE.ROUNDED_RECTANGLE)
+    txt(s, x + 0.2, y + 0.10, cw_el - 0.32, 0.40, t, 13.5, color=ROSE_DEEP, bold=True)
+    txt(s, x + 0.2, y + 0.55, cw_el - 0.32, 0.46, d, 11.5, color=TAUPE, spacing=1.2)
+
+# ============================================================
+# P12  曼陀羅設計六步驟
+# ============================================================
+s = slide(); bg(s)
+header(s, "STEP  BY  STEP", "曼陀羅設計六步驟")
+pgnum(s, 12)
+steps_six = [
+    ("定圓心",   "在板面正中央定出圓心，這是整個曼陀羅的核心。"),
+    ("畫輔助線", "以鉛筆淡淡畫出同心圓與放射對稱線，建立骨架。"),
+    ("設計核心", "從圓心開始設計第一層主圖（如花心），奠定主題。"),
+    ("由內而外", "一層一層向外擴展，注意每層的大小與間距節奏。"),
+    ("對稱重複", "在一個扇形設計好，再對稱複製到每一等分。"),
+    ("配色點綴", "依色彩學配色上色，最後以圓點與鑽飾點睛收尾。"),
+]
+cw_st = (CW - 0.22) / 2; ch_st = 1.45; gy_st = 0.22
+for i, (t, d) in enumerate(steps_six):
+    r, c = divmod(i, 2)
+    x = ML + c * (cw_st + 0.22); y = 1.22 + r * (ch_st + gy_st)
+    rect(s, x, y, cw_st, ch_st, WHITE, line=CREAM_DEEP, lw=1.0, shape=MSO_SHAPE.ROUNDED_RECTANGLE)
+    rect(s, x + 0.2, y + 0.34, 0.62, 0.62, GOLD, shape=MSO_SHAPE.OVAL)
+    txt(s, x + 0.2, y + 0.40, 0.62, 0.52, str(i + 1), 20, color=WHITE, bold=True, align=PP_ALIGN.CENTER)
+    txt(s, x + 1.02, y + 0.18, cw_st - 1.18, 0.44, t, 14.5, color=ROSE_DEEP, bold=True)
+    txt(s, x + 1.04, y + 0.65, cw_st - 1.22, 0.68, d, 12.5, color=TAUPE, spacing=1.1)
+# art image row at bottom
+arts_row = ["art2.jpg", "art5.jpg", "art6.jpg"]
+cw_art = (CW - 0.3) / 3
+for i, a in enumerate(arts_row):
+    path = f"{L1}/{a}"
+    if os.path.exists(path):
+        pic_cover(s, path, ML + i * (cw_art + 0.15), 6.28, cw_art, 1.88)
+
+# ============================================================
+# P13  課程流程總覽 + 第一天
+# ============================================================
+s = slide(); bg(s)
+header(s, "COURSE  FLOW  ·  DAY 1", "課程流程總覽・第一天")
+pgnum(s, 13)
+txt(s, ML, 1.18, CW, 0.58,
+    "連續兩天密集班——從進階色彩學、設計規劃，到大型八角板創作與貼鑽完成，"
+    "最後進入作品解析與教學技巧引導。從「會畫」到「能教」，一次到位。",
+    12.5, color=TAUPE, spacing=1.3)
+cards = [
+    ("22", "小時", "兩日密集實作"),
+    ("2",  "天",   "色彩×設計×教學"),
+    ("≤10","人",   "小班精緻教學"),
+    ("3",  "年",   "免費無限複訓"),
+]
+cw_c = (CW - 0.3) / 4
+for i, (n, u, d) in enumerate(cards):
+    x = ML + i * (cw_c + 0.1)
+    rect(s, x, 1.88, cw_c, 2.05, WHITE, line=GOLD, lw=1.0, shape=MSO_SHAPE.ROUNDED_RECTANGLE)
+    txt(s, x, 2.18, cw_c, 0.78, n, 34, color=ROSE, bold=True, align=PP_ALIGN.CENTER)
+    txt(s, x, 3.02, cw_c, 0.36, u, 13, color=GOLD, bold=True, align=PP_ALIGN.CENTER)
+    txt(s, x, 3.42, cw_c, 0.42, d, 10, color=TAUPE, align=PP_ALIGN.CENTER)
+txt(s, ML, 4.20, CW, 0.40, "第一天・打底與色彩", 16, color=ROSE_DEEP, bold=True)
+rect(s, ML, 4.58, CW, 0.055, CREAM_DEEP)
+steps1 = [
+    ("進階色彩學", "複習並深化調色、配色原理，導入色彩心理學，建立自己的用色語言。"),
+    ("構圖與設計", "規劃曼陀羅對稱結構與層次，於大型八角板上完成精準底稿。"),
+    ("分層上色",   "由底色到主視覺逐層堆疊，掌握漸層、暈染與層次處理。"),
+]
+y = 4.74
+for i, (t, d) in enumerate(steps1):
+    rect(s, ML, y, 0.6, 0.6, ROSE, shape=MSO_SHAPE.OVAL)
+    txt(s, ML, y + 0.06, 0.6, 0.5, str(i + 1), 20, color=WHITE, bold=True, align=PP_ALIGN.CENTER)
+    txt(s, ML + 0.82, y - 0.02, CW - 0.9, 0.42, t, 15, color=ROSE_DEEP, bold=True)
+    txt(s, ML + 0.84, y + 0.42, CW - 0.92, 0.7, d, 12.5, color=TAUPE, spacing=1.15)
+    y += 1.28
+
+# ============================================================
+# P14  第二天 + 大型八角板設計應用
+# ============================================================
+s = slide(); bg(s)
+header(s, "DAY 2  &  OCTAGON  APPLICATION", "第二天・完成與教學力・八角板應用")
+pgnum(s, 14)
+txt(s, ML, 1.18, CW, 0.38, "第二天・完成與教學力", 16, color=ROSE_DEEP, bold=True)
+rect(s, ML, 1.54, CW, 0.055, CREAM_DEEP)
+steps2 = [
+    ("立體畫法與完成", "以立體畫法強化層次張力，細修細節，邁向完成。"),
+    ("施華洛世奇貼鑽", "以珠寶膠、沾珠筆鑲嵌鑽飾，質感提升至參展水準。"),
+    ("作品解析",       "解析 15 件作品範例，培養對色彩與內在狀態的洞察力。"),
+    ("教學引導訓練",   "團體創作演練與教學引導，為開班授課做足準備。"),
+]
+y = 1.68
+for i, (t, d) in enumerate(steps2):
+    rect(s, ML, y, 0.58, 0.58, GOLD, shape=MSO_SHAPE.OVAL)
+    txt(s, ML, y + 0.04, 0.58, 0.5, str(i + 1), 18, color=WHITE, bold=True, align=PP_ALIGN.CENTER)
+    txt(s, ML + 0.78, y - 0.02, CW - 0.88, 0.44, t, 15,   color=ROSE_DEEP, bold=True)
+    txt(s, ML + 0.80, y + 0.42, CW - 0.90, 0.62, d, 12.5, color=TAUPE, spacing=1.1)
+    y += 1.18
+txt(s, ML, 6.56, CW, 0.40, "大型八角板・設計應用", 16, color=ROSE_DEEP, bold=True)
+rect(s, ML, 6.94, CW, 0.055, CREAM_DEEP)
+txt(s, ML, 7.08, CW, 0.60,
+    "一級課程的考核作品，是在「大型八角板」上完成的曼陀羅。"
+    "八角的外形與 8 等分的放射結構天然契合，讓設計更顯大器。",
+    12, color=TAUPE, spacing=1.3)
+pts = [
+    "依八角造型，採 8 或 16 等分配置主結構",
+    "主視覺集中於中心，四角與邊緣以小元素呼應",
+    "善用明度漸層，讓中心向外自然遞變、富立體感",
+    "鄰近色鋪底＋互補色點睛，凸顯中心焦點",
+    "最後鑲嵌施華洛世奇鑽飾，提升質感與光澤",
+]
+y = 7.78
+for p in pts:
+    rect(s, ML, y + 0.06, 0.14, 0.14, GOLD, shape=MSO_SHAPE.OVAL)
+    txt(s, ML + 0.28, y - 0.03, CW - 0.32, 0.48, p, 12.5, color=INK, spacing=1.1)
+    y += 0.6
+
+# ============================================================
+# P15  考核必備技巧
+# ============================================================
+s = slide(); bg(s)
+header(s, "CERTIFICATION  SKILLS", "一級講師考核必備技巧")
+pgnum(s, 15)
+skills = [
+    ("01", "素材全平面打底上色技法", "整塊素材以平塗方式均勻上色，色層飽和、不露白底。"),
+    ("02", "原創設計構圖",           "自行設計曼陀羅構圖，展示個人創作能力與設計思維。"),
+    ("03", "圖案設計平塗打底技法",   "在圖案色塊內以平塗技法完整打底（位置不限，需出現）。"),
+    ("04", "大的平頭筆圓點技法",     "使用平頭筆製作大圓點，點型要圓潤飽滿、大小一致。"),
+    ("05", "大圓點上方重疊技法",     "在大圓點上疊加其他圖案或多色，展現豐富層次感。"),
+    ("06", "圓珠筆由大到小圓點",     "以圓珠筆排列由大到小漸變圓點，間距均勻、過渡自然。"),
+    ("07", "圓珠筆均勻圓點技法",     "以圓珠筆點出大小一致、排列整齊的均勻圓點。"),
+    ("08", "圓珠筆逗點技法",         "以圓珠筆拉出頭圓尾尖的逗點形狀，方向一致。"),
+    ("09", "長線筆逗點技法",         "以長線筆拉出修長優雅的逗點線條，流暢不斷。"),
+    ("10", "保護漆平塗技法",         "作品完成後均勻塗抹保護漆，不留筆痕、全面覆蓋。"),
+]
+cw_sk = (CW - 0.22) / 2; ch_sk = 1.5; gy_sk = 0.22
+for i, (n, t, d) in enumerate(skills):
+    r, c = divmod(i, 2)
+    x = ML + c * (cw_sk + 0.22); y = 1.22 + r * (ch_sk + gy_sk)
+    rect(s, x, y, cw_sk, ch_sk, WHITE, line=CREAM_DEEP, lw=0.8, shape=MSO_SHAPE.ROUNDED_RECTANGLE)
+    rect(s, x, y, 0.42, ch_sk, CREAM_DEEP, shape=MSO_SHAPE.ROUNDED_RECTANGLE)
+    rect(s, x + 0.21, y, 0.21, ch_sk, CREAM_DEEP)
+    txt(s, x + 0.03, y + (ch_sk - 0.44) / 2, 0.38, 0.44,
+        n, 11, color=ROSE_DEEP, bold=True, align=PP_ALIGN.CENTER)
+    txt(s, x + 0.54, y + 0.12, cw_sk - 0.68, 0.42, t, 13, color=ROSE_DEEP, bold=True)
+    txt(s, x + 0.56, y + 0.60, cw_sk - 0.72, 0.80, d, 11, color=TAUPE, spacing=1.15)
+# 底部考核說明 bar
+rect(s, ML, 9.88, CW, 1.12, CREAM_DEEP, shape=MSO_SHAPE.ROUNDED_RECTANGLE)
+txt(s, ML + 0.2, 9.93, CW - 0.4, 1.04,
+    "考核規定：上課結束當天起三個月內完成考核作品\n"
+    "照片：素色背景，提供正面、側面、中央側面特寫三個角度\n"
+    "證書費用：三個月內繳交 NT$3,500　　逾期繳交 NT$4,200",
+    12, color=INK, spacing=1.4)
+
+# ============================================================
+# P16  證書考核 + 結業後支持
+# ============================================================
+s = slide(); bg(s)
+header(s, "CERTIFICATION  &  AFTER  GRADUATION", "證書考核・結業後持續陪伴")
+pgnum(s, 16)
+txt(s, ML, 1.18, CW, 0.38, "一級講師・證書考核流程", 16, color=ROSE_DEEP, bold=True)
+rect(s, ML, 1.54, CW, 0.055, CREAM_DEEP)
+reqs = [
+    ("完成課程", "完成 22 小時完整課程訓練"),
+    ("提交作品", "提交一幅考核作品（大型八角板，需包含 10 大必備技法）"),
+    ("通過考核", "作品經評核通過，取得一級講師資格證書"),
+]
+y_req = 1.68
+for i, (t, d) in enumerate(reqs):
+    rect(s, ML, y_req, CW, 0.98, WHITE, line=GOLD, lw=1.0, shape=MSO_SHAPE.ROUNDED_RECTANGLE)
+    rect(s, ML + 0.2, y_req + 0.26, 0.52, 0.52, ROSE, shape=MSO_SHAPE.OVAL)
+    txt(s, ML + 0.2, y_req + 0.31, 0.52, 0.44, str(i + 1), 17, color=WHITE, bold=True, align=PP_ALIGN.CENTER)
+    txt(s, ML + 0.95, y_req + 0.14, CW - 1.12, 0.42, t, 15,   color=ROSE_DEEP, bold=True)
+    txt(s, ML + 0.95, y_req + 0.56, CW - 1.12, 0.35, d, 11.5, color=TAUPE)
+    y_req += 1.12
+rect(s, ML, 5.12, CW, 1.35, CREAM_DEEP, shape=MSO_SHAPE.ROUNDED_RECTANGLE)
+txt(s, ML + 0.2, 5.17, CW - 0.4, 1.25,
+    "考核細則\n"
+    "・上課結束當天起三個月內完成考核作品\n"
+    "・照片：素色背景，提供正面、側面、中央側面特寫三個角度\n"
+    "・三個月內繳交：NT$3,500　　逾期繳交：NT$4,200",
+    12, color=INK, spacing=1.38)
+txt(s, ML, 6.66, CW, 0.40, "結業後・持續陪伴", 16, color=ROSE_DEEP, bold=True)
+rect(s, ML, 7.04, CW, 0.055, CREAM_DEEP)
+bens = [
+    "免費教學輔導，陪你站穩講台",
+    "以講師價進貨材料，適用教學販售",
+    "三年內免學費複訓（僅收場地材料餐費）",
+    "教學助教機會，累積實戰經驗",
+    "專屬師資群組即時支援",
+    "一級升級考核通過，可教授二級講師培訓課程",
+    "課程已納入公務人員終身學習認證",
+    "年度師生成果展，增加曝光與資歷",
+]
+cw_bn = (CW - 0.22) / 2
+y_bn = 7.22
+for i, b in enumerate(bens):
+    c_bn = i % 2; r_bn = i // 2
+    x = ML + c_bn * (cw_bn + 0.22); y = y_bn + r_bn * 0.92
+    rect(s, x, y, cw_bn, 0.78, WHITE, line=CREAM_DEEP, lw=1.0, shape=MSO_SHAPE.ROUNDED_RECTANGLE)
+    rect(s, x + 0.2, y + 0.29, 0.22, 0.22, SAGE, shape=MSO_SHAPE.OVAL)
+    txt(s, x + 0.56, y, cw_bn - 0.70, 0.78, b, 11.5, color=INK, anchor=MSO_ANCHOR.MIDDLE)
+
+OUT = "/home/user/mandala/mandala_l1_handout.pptx"
+prs.save(OUT)
+print(f"Saved  {OUT}")
+print(f"Slides {len(prs.slides)}")
