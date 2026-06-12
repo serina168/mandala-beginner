@@ -222,10 +222,10 @@ goals = [
     ("5.", "立體畫法",      "進階筆法與層次技巧，讓圖案呈現真實立體質感"),
     ("6.", "教學引導訓練",  "實際演練教學流程，從「會畫」躍升為「能教」"),
 ]
-cw_g = (CW - 0.22) / 2; ch_g = 1.58; gy_g = 0.22
+cw_g = (CW - 0.22) / 2; ch_g = 1.58; gy_g = 0.78
 for i, (n, t, d) in enumerate(goals):
     r, c = divmod(i, 2)
-    x = ML + c * (cw_g + 0.22); y = 1.25 + r * (ch_g + gy_g)
+    x = ML + c * (cw_g + 0.22); y = 1.85 + r * (ch_g + gy_g)
     rect(s, x, y, cw_g, ch_g, WHITE, line=CREAM_DEEP, lw=1.0, shape=MSO_SHAPE.ROUNDED_RECTANGLE)
     rect(s, x, y, cw_g, 0.42, CREAM_DEEP, shape=MSO_SHAPE.ROUNDED_RECTANGLE)
     rect(s, x + 0.15, y + 0.04, cw_g - 0.15, 0.38, CREAM_DEEP)
@@ -246,10 +246,10 @@ mats = [
     ("高級貂毛筆套組",          "橢圓筆、斜筆、勾線筆各一支"),
     ("筆記本與書寫工具",         "課程講義一份"),
 ]
-cw_m = (CW - 0.22) / 2; ch_m = 1.22; gy_m = 0.22
+cw_m = (CW - 0.22) / 2; ch_m = 1.40; gy_m = 0.95
 for i, (title, sub) in enumerate(mats):
     r, c = divmod(i, 2)
-    x = ML + c * (cw_m + 0.22); y = 1.25 + r * (ch_m + gy_m)
+    x = ML + c * (cw_m + 0.22); y = 1.85 + r * (ch_m + gy_m)
     rect(s, x, y, cw_m, ch_m, WHITE, line=CREAM_DEEP, lw=1.0, shape=MSO_SHAPE.ROUNDED_RECTANGLE)
     rect(s, x, y, 0.1, ch_m, GOLD)
     txt(s, x + 0.26, y + 0.12, cw_m - 0.4,  0.48, title, 14,   color=ROSE_DEEP, bold=True)
@@ -317,12 +317,12 @@ items_cw = [
     ("冷暖之分",
      "紅橙黃為暖色、藍綠紫為冷色；暖色前進、冷色後退，影響空間感。"),
 ]
-y = 1.25
+y = 1.55
 for t, d in items_cw:
     rect(s, ML, y + 0.08, 0.12, 0.12, GOLD, shape=MSO_SHAPE.OVAL)
     txt(s, ML + 0.28, y - 0.02, CW - 0.3, 0.38, t, 14.5, color=ROSE_DEEP, bold=True)
     txt(s, ML + 0.30, y + 0.38, CW - 0.32, 0.6,  d, 12.5, color=TAUPE, spacing=1.2)
-    y += 1.1
+    y += 1.02
 txt(s, ML, 5.68, CW, 0.36, "十二色相環示意圖", 14, color=ROSE_DEEP, bold=True, align=PP_ALIGN.CENTER)
 color_wheel(s, PW / 2, 7.88, 1.15)
 
@@ -344,9 +344,9 @@ schemes = [
     ("三角配色", "等距三色",           [0, 4, 8],  "活潑均衡，色彩豐富",
      "三色均衡搭配，畫面活潑；以一色為主調，其餘二色輔助，保持視覺平衡。"),
 ]
-ch_sch = 1.72; gy_sch = 0.2
+ch_sch = 1.72; gy_sch = 0.24
 for i, (t, sub, idx, note, desc) in enumerate(schemes):
-    y = 1.22 + i * (ch_sch + gy_sch)
+    y = 1.40 + i * (ch_sch + gy_sch)
     rect(s, ML, y, CW, ch_sch, WHITE, line=CREAM_DEEP, lw=1.0, shape=MSO_SHAPE.ROUNDED_RECTANGLE)
     if t == "同類配色":
         cols = [RGBColor(0xF0, 0xC8, 0xCC), RGBColor(0xC9, 0x7B, 0x84), RGBColor(0x8E, 0x44, 0x4D)]
@@ -375,9 +375,9 @@ tips = [
     ("漸層練習",   "同色相由淺到深排出 5 階，是曼陀羅層次感的關鍵基本功。"),
     ("先淺後深",   "由淺色鋪底、再疊深色——好修正，畫面也更通透乾淨。"),
 ]
-ch_tip = 1.35; gy_tip = 0.22
+ch_tip = 1.35; gy_tip = 0.30
 for i, (t, d) in enumerate(tips):
-    y = 1.22 + i * (ch_tip + gy_tip)
+    y = 1.42 + i * (ch_tip + gy_tip)
     rect(s, ML, y, CW, ch_tip, WHITE, line=CREAM_DEEP, lw=1.0, shape=MSO_SHAPE.ROUNDED_RECTANGLE)
     rect(s, ML, y, 0.1, ch_tip, GOLD)
     txt(s, ML + 0.28, y + 0.14, 2.1,      0.45, t, 15,   color=ROSE_DEEP, bold=True)
@@ -411,10 +411,10 @@ psy = [
     ("白",  RGBColor(0xF0,0xEC,0xE4), "純淨・開始・留白",
      "象徵清白與全新的起點。在畫面中製造「留白」，讓其他色彩更顯呼吸與空間感。"),
 ]
-cw_p = (CW - 0.22) / 2; ch_p = 1.52; gy_p = 0.18
+cw_p = (CW - 0.22) / 2; ch_p = 1.52; gy_p = 0.46
 for i, (t, col, kw, d) in enumerate(psy):
     r, c = divmod(i, 2)
-    x = ML + c * (cw_p + 0.22); y = 1.62 + r * (ch_p + gy_p)
+    x = ML + c * (cw_p + 0.22); y = 1.80 + r * (ch_p + gy_p)
     rect(s, x, y, cw_p, ch_p, WHITE, line=CREAM_DEEP, lw=1.0, shape=MSO_SHAPE.ROUNDED_RECTANGLE)
     rect(s, x, y, 0.46, ch_p, col, shape=MSO_SHAPE.ROUNDED_RECTANGLE)
     rect(s, x + 0.23, y, 0.23, ch_p, col)
