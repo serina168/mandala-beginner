@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>我的生命花園｜16週兒童藝術生命教育課程・參考圖</title>
+<style>
+  body{font-family:"Microsoft JhengHei","PingFang TC","Noto Sans TC",sans-serif;
+       margin:0;background:#FFFBF2;color:#5a4426;}
+  header{background:#E5732B;color:#fff;padding:28px 20px;text-align:center;}
+  header h1{margin:0 0 6px;font-size:1.7rem;}
+  header p{margin:0;opacity:.92;font-size:.95rem;}
+  .wrap{max-width:1100px;margin:0 auto;padding:24px 16px 60px;}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:22px;}
+  figure{margin:0;background:#fff;border-radius:18px;overflow:hidden;
+          box-shadow:0 6px 18px rgba(0,0,0,.08);}
+  figure img{width:100%;display:block;}
+  figcaption{padding:12px 16px 18px;font-size:.9rem;line-height:1.5;color:#7a5a1e;}
+  .note{background:#FFF1D6;border-radius:14px;padding:16px 20px;margin:0 0 26px;font-size:.92rem;line-height:1.7;}
+  a.doc{display:inline-block;margin-top:8px;color:#E5732B;font-weight:bold;text-decoration:none;}
+</style>
+</head>
+<body>
+<header>
+  <h1>🌱 我的生命花園</h1>
+  <p>16 週兒童藝術 × 生命教育課程｜國小一、二年級｜8 件作品・每件 2 堂課 4 小時</p>
+</header>
+<div class="wrap">
+  <div class="note">
+    這些是 8 件作品的「成品參考示意圖」，協助老師與孩子預想完成的樣子。實際作品鼓勵孩子自由發揮，<b>沒有標準答案、沒有失敗</b>。
+    完整教案（含每堂流程、生命連結、講師備忘錄、材料清單）請見：
+    <a class="doc" href="16週兒童藝術生命教育課程教案.md">📄 16週兒童藝術生命教育課程教案.md</a>
+  </div>
+  <div class="grid" id="grid"></div>
+</div>
+<script>
+const works=[
+ ["01","作品1｜我的心情小太陽","兒童繪畫・W1–W2｜情緒覺察・自我肯定"],
+ ["02","作品2｜種子寶寶的家","紙黏土＋押花・W3–W4｜生命的起點・等待與成長"],
+ ["03","作品3｜手牽手好朋友","拼貼・W5–W6｜友誼・合作・接納不同"],
+ ["04","作品4｜我的溫暖小屋","紙黏土＋多媒材・W7–W8｜家・愛與歸屬・安全感"],
+ ["05","作品5｜大自然的禮物書籤","押花＋繪畫・W9–W10｜感恩・珍惜當下・四季"],
+ ["06","作品6｜海底好朋友","紙黏土＋繪畫・W11–W12｜愛護環境・保護生命・責任"],
+ ["07","作品7｜毛毛蟲變蝴蝶","拼貼＋押花・W13–W14｜成長蛻變・勇氣・希望"],
+ ["08","作品8｜我的生命樹","全混合媒材・W15–W16｜統整・感恩・夢想・圓滿"],
+];
+const g=document.getElementById('grid');
+for(const [n,t,c] of works){
+  g.insertAdjacentHTML('beforeend',
+   `<figure><img src="images/ref-work-${n}.png" alt="${t}"><figcaption><b>${t}</b><br>${c}</figcaption></figure>`);
+}
+</script>
+</body>
+</html>
