@@ -184,16 +184,18 @@ def _vlen(s):
 
 # 微軟正黑體 real line box ≈ 1.32 em; conservative width/height usage so text
 # truly fits inside the box when opened in PowerPoint (not just the LO preview).
-FONT_LH = 1.38
+FONT_LH = 1.46
 def fit_size(shape, max_pt, min_pt, ls, sa_pt=4):
-    """largest integer pt (max..min) at which the text fits inside the shape box."""
+    """largest integer pt (max..min) at which the text fits inside the shape box.
+    Deliberately conservative so wrapped CJK text keeps clear margin to the box
+    edge (the LibreOffice fallback font renders wider than 微軟正黑體)."""
     tf=shape.text_frame
     w=Emu(shape.width).inches - Emu(tf.margin_left).inches - Emu(tf.margin_right).inches
     h=Emu(shape.height).inches - Emu(tf.margin_top).inches - Emu(tf.margin_bottom).inches
     paras=[p.text for p in tf.paragraphs]
     if w<=0.3 or h<=0.2: return min_pt
     for S in range(int(max_pt), int(min_pt)-1, -1):
-        cpl=max(1.0, (w*72.0/S)*0.90)          # assume wider effective advance
+        cpl=max(1.0, (w*72.0/S)*0.84)          # assume wider effective advance
         lines=0
         for pt in paras:
             # \x0b / \n inside a paragraph are soft line breaks -> own line(s)
@@ -201,7 +203,7 @@ def fit_size(shape, max_pt, min_pt, ls, sa_pt=4):
                 lines += max(1, math.ceil(_vlen(seg)/cpl))
         line_h = S*max(ls,1.0)*FONT_LH/72.0    # real CJK line height
         total = lines*line_h + len(paras)*(sa_pt/72.0)
-        if total <= h*0.90:
+        if total <= h*0.84:
             return S
     return int(min_pt)
 
@@ -329,8 +331,8 @@ def enhance_two_column(slide, idx, img):
         t.left=IN(0.62); t.top=IN(0.34); t.width=IN(12.1); t.height=IN(1.05)
     title_header(slide)
     # ---- geometry ----
-    bx,by,bw,bh = 0.55,1.58,8.40,5.42
-    ix,iy,iw,ih = 9.18,1.58,3.58,5.42
+    bx,by,bw,bh = 0.55,1.50,8.40,5.52
+    ix,iy,iw,ih = 9.18,1.50,3.58,5.52
     # body panel
     add_panel(slide, bx,by,bw,bh, fill=WHITE, alpha=96, line=PBORD, lw=1.0)
     # body text shape -> reposition into panel, strip its own fill
@@ -346,7 +348,7 @@ def enhance_two_column(slide, idx, img):
         style_runs(tf, color=INK)
         set_line_spacing(tf, 1.05, 3)
         # explicit size that truly fits, + normAutofit as a safety net
-        apply_size(tf, fit_size(body, 18, 9, 1.05, sa_pt=3))
+        apply_size(tf, fit_size(body, 17, 8, 1.05, sa_pt=3))
         set_autofit(tf, 'norm')
     # right image — show the WHOLE picture (no crop), scaled to fit & centered
     place_image(slide, img, ix,iy,iw,ih, rounded=True, border=True, bcolor=WHITE, bw=3,
@@ -495,8 +497,11 @@ apply_rewrites(prs)
 
 for i, slide in enumerate(prs.slides, start=1):
     if i == TITLE_SLIDE:
-        add_bg(slide, 'bg_title.png')
-        CREAMTX = RGBColor(0xF3,0xEE,0xE2)
+        add_bg(slide, 'bg_title_light.png')
+        # dark, warm text colours for the new light/elegant background
+        COVER_TITLE = RGBColor(0x55,0x42,0x36)   # deep cocoa brown
+        GOLDD       = RGBColor(0x93,0x77,0x40)   # readable muted gold on cream
+        SLIDE_CX    = 13.333/2.0
         def _coverbox(text, x,y,w,h, size, color, bold, align=PP_ALIGN.LEFT, ls=1.12, spc=None):
             tb=slide.shapes.add_textbox(IN(x),IN(y),IN(w),IN(h)); tf=tb.text_frame; tf.word_wrap=True
             pp=tf.paragraphs[0]; pp.alignment=align; pp.line_spacing=ls
@@ -505,37 +510,36 @@ for i, slide in enumerate(prs.slides, start=1):
             if spc is not None: r._r.get_or_add_rPr().set('spc', str(spc))
             return tb
         # top decorative accent + 工作室名稱
-        add_motif(slide, 'motif_ring_gold.png', 1.02, 0.55, 0.82, 0.82)
-        _coverbox("點鏡藝術工作室", 1.05, 1.46, 6.5, 0.5, 18, GOLDL, True, spc=300)
-        add_rule(slide, 1.05, 2.02, 1.7, color=GOLDL, h=0.045)
+        add_motif(slide, 'motif_ring_gold.png', 1.02, 0.60, 0.76, 0.76)
+        _coverbox("點鏡藝術工作室", 1.05, 1.48, 6.5, 0.5, 18, GOLDD, True, spc=300)
+        add_rule(slide, 1.05, 2.04, 1.7, color=GOLDD, h=0.045)
         # big title
         t = find_title(slide)
         if t:
-            t.left=IN(1.02); t.top=IN(2.22); t.width=IN(7.9); t.height=IN(2.05)
+            t.left=IN(1.02); t.top=IN(2.26); t.width=IN(8.3); t.height=IN(2.0)
             # clean embedded soft-breaks/blank lines into tidy lines
             lines=[seg for seg in re.split('[\x0b\n]', t.text_frame.text) if seg.strip()]
             tf=t.text_frame; tf.clear(); tf.word_wrap=True
             for k,seg in enumerate(lines):
                 pr = tf.paragraphs[0] if k==0 else tf.add_paragraph()
                 pr.add_run().text=seg
-            style_runs(tf, color=CREAMTX, size=46, bold=True)
+            style_runs(tf, color=COVER_TITLE, size=46, bold=True)
             for p in tf.paragraphs: p.line_spacing=1.12; p.alignment=PP_ALIGN.LEFT
             apply_size(tf, fit_size(t, 46, 28, 1.12, sa_pt=0)); set_autofit(tf,'none')
         # 工作室標語
-        _coverbox("一點一滴，照見自己。", 1.05, 4.42, 7.2, 0.66, 22, GOLDL, False, spc=200)
-        # divider rule + subtitle card with vertical accent bar
-        add_rule(slide, 1.05, 5.18, 3.0, color=GOLDL, h=0.05)
-        add_rule(slide, 1.05, 5.46, 0.07, color=ROSE, h=0.62)   # vertical accent bar
+        _coverbox("一點一滴，照見自己。", 1.05, 4.5, 7.2, 0.66, 22, ROSE, False, spc=200)
+        # 主講 — centred focal point, enlarged
+        add_rule(slide, SLIDE_CX-0.85, 5.98, 1.7, color=GOLDD, h=0.05)
         sub=None
         for sh in slide.shapes:
             if sh.has_text_frame and ('副標' in sh.name):
                 sub=sh; break
         if sub:
-            sub.left=IN(1.34); sub.top=IN(5.45); sub.width=IN(7.0); sub.height=IN(0.9)
+            sub.left=IN(0.0); sub.top=IN(6.16); sub.width=IN(13.333); sub.height=IN(0.86)
             sf=sub.text_frame; sf.clear(); sf.word_wrap=True
             sf.paragraphs[0].add_run().text="主講：張婉愉老師"
-            style_runs(sf, color=CREAMTX, size=29, bold=True)
-            for p in sf.paragraphs: p.alignment=PP_ALIGN.LEFT; p.line_spacing=1.1
+            style_runs(sf, color=INK, size=32, bold=True)
+            for p in sf.paragraphs: p.alignment=PP_ALIGN.CENTER; p.line_spacing=1.05
             set_autofit(sf,'none')
         # 封面僅使用曼陀羅作品（已在背景呈現），不放人物照
         continue
