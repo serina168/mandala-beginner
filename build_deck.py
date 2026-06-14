@@ -511,8 +511,8 @@ space_paragraphs(prs)
 
 for i, slide in enumerate(prs.slides, start=1):
     if i == TITLE_SLIDE:
-        add_bg(slide, 'bg_title_light.png')
-        # dark, warm text colours for the new light/elegant background
+        add_bg(slide, 'bg_title_custom.jpg')
+        # dark, warm text colours for the light/elegant background
         COVER_TITLE = RGBColor(0x55,0x42,0x36)   # deep cocoa brown
         GOLDD       = RGBColor(0x93,0x77,0x40)   # readable muted gold on cream
         SLIDE_CX    = 13.333/2.0
@@ -523,8 +523,7 @@ for i, slide in enumerate(prs.slides, start=1):
             r.font.name="微軟正黑體"; _set_ea_font(r,"微軟正黑體"); r.font.color.rgb=color
             if spc is not None: r._r.get_or_add_rPr().set('spc', str(spc))
             return tb
-        # top decorative accent + 工作室名稱
-        add_motif(slide, 'motif_ring_gold.png', 1.02, 0.60, 0.76, 0.76)
+        # 工作室名稱 (背景四角已有金色曼陀羅，封面不再額外放圓環)
         _coverbox("點鏡藝術工作室", 1.05, 1.48, 6.5, 0.5, 18, GOLDD, True, spc=300)
         add_rule(slide, 1.05, 2.04, 1.7, color=GOLDD, h=0.045)
         # big title
