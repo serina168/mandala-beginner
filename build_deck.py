@@ -305,7 +305,8 @@ TWOCOL = {        # slide -> image (作者本人創作照 + 純作品圖)
  26:'_assets/m_grid.jpg', 28:'_assets/sunset.jpg',
 }
 SECTION_BG = {2,10}
-BIG_BODY = {5,6,7,9,14,15,17,18,19}   # 內文字體放大一級的頁面
+BIG_BODY  = {18}                          # 內文放大一級
+BIG_BODY2 = {5,6,7,8,9,14,15,17,19}       # 內文放大兩級（更大）
 TITLE_SLIDE = 1
 IMAGE_SLIDES = {11,12,13,20,21,22,23,24,25,27,29,30,31,32,33,34,35}
 
@@ -347,13 +348,18 @@ def enhance_two_column(slide, idx, img):
         set_insets(body, 0.16,0.16,0.10,0.10)
         tf=body.text_frame
         style_runs(tf, color=INK)
-        set_line_spacing(tf, 1.05, 3)
         # explicit size that truly fits, + normAutofit as a safety net.
-        # 指定頁面字體放大一級（放寬容許邊距，仍以不出框為前提）
-        if idx in BIG_BODY:
-            sz = fit_size(body, 19, 9, 1.05, sa_pt=3, hfac=0.90, cplfac=0.90)
+        # 指定頁面字體放大（放寬容許邊距、收緊行距換取字級，仍以不出框為前提）
+        if idx in BIG_BODY2:
+            ls_m, sa = 1.0, 2
+            sz = fit_size(body, 20, 9, ls_m, sa_pt=sa, hfac=0.965, cplfac=0.94)
+        elif idx in BIG_BODY:
+            ls_m, sa = 1.05, 3
+            sz = fit_size(body, 19, 9, ls_m, sa_pt=sa, hfac=0.90, cplfac=0.90)
         else:
-            sz = fit_size(body, 17, 8, 1.05, sa_pt=3)
+            ls_m, sa = 1.05, 3
+            sz = fit_size(body, 17, 8, ls_m, sa_pt=sa)
+        set_line_spacing(tf, ls_m, sa)
         apply_size(tf, sz)
         set_autofit(tf, 'norm')
     # right image — show the WHOLE picture (no crop), scaled to fit & centered
