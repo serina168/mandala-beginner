@@ -14,16 +14,18 @@ SRC = "original.pptx"
 OUT = "繽紛五感體驗曼陀羅書籤畫_課程大綱.pptx"
 A = "_assets/"
 
-# ---- palette ----
-INK   = RGBColor(0x3A,0x33,0x40)
-SUBINK= RGBColor(0x6A,0x64,0x72)
-DEEP  = RGBColor(0x3E,0x32,0x66)
-GOLD  = RGBColor(0xB0,0x88,0x2C)
-GOLDL = RGBColor(0xC9,0xA2,0x27)
-ROSE  = RGBColor(0xB0,0x56,0x44)
-TEAL  = RGBColor(0x2E,0x7E,0x7B)
-CREAM = RGBColor(0xFA,0xF6,0xEE)
-WHITE = RGBColor(0xFF,0xFF,0xFF)
+# ---- palette (Morandi: muted, warm, dusty tones) ----
+INK   = RGBColor(0x4B,0x46,0x41)   # warm charcoal (body)
+SUBINK= RGBColor(0x8A,0x81,0x78)   # muted greige
+DEEP  = RGBColor(0x57,0x6B,0x67)   # muted teal-grey (titles)
+GOLD  = RGBColor(0xAB,0x90,0x55)   # muted ochre / brass (rules)
+GOLDL = RGBColor(0xC0,0xA6,0x6B)   # light muted ochre
+ROSE  = RGBColor(0xB0,0x89,0x7A)   # dusty rose (secondary accent)
+TEAL  = RGBColor(0x7C,0x8C,0x84)   # muted sage-teal
+CREAM = RGBColor(0xEF,0xE9,0xDF)   # warm greige background
+PANEL = RGBColor(0xFB,0xF8,0xF1)   # soft warm white panel
+PBORD = RGBColor(0xD9,0xD0,0xC2)   # panel border
+WHITE = PANEL                       # use warm white instead of pure white
 
 prs = Presentation(SRC)
 SW, SH = prs.slide_width, prs.slide_height
@@ -233,10 +235,10 @@ def add_footer(slide, idx, dark=False):
 #  per-slide configuration
 # =====================================================================
 TWOCOL = {        # slide -> image (dense + medium text, two-column)
- 2:'artwork-05.jpg', 3:'artwork-04.jpg', 4:'artwork-01.jpg', 5:'artwork-06.jpg',
- 6:'showcase-01.jpg', 7:'showcase-06.jpg', 8:'artwork-03.jpg', 9:'artwork-07.jpg',
+ 2:'artwork-05.jpg', 3:'artwork-04.jpg', 4:'artwork-06.jpg', 5:'artwork-07.jpg',
+ 6:'showcase-01.jpg', 7:'showcase-06.jpg', 8:'artwork-03.jpg', 9:'_assets/m_grid.jpg',
  10:'showcase-04.jpg', 14:'artwork-02.jpg', 15:'showcase-08.jpg', 16:'showcase-09.jpg',
- 17:'showcase-07.jpg', 18:'showcase-05.jpg', 19:'showcase-11.jpg', 26:'showcase-12.jpg',
+ 17:'showcase-07.jpg', 18:'showcase-05.jpg', 19:'_assets/m_bookmark.jpg', 26:'showcase-12.jpg',
  28:'_assets/sunset.jpg',
 }
 SECTION_BG = {2,10}
@@ -269,7 +271,7 @@ def enhance_two_column(slide, idx, img):
     bx,by,bw,bh = 0.55,1.66,8.40,5.15
     ix,iy,iw,ih = 9.18,1.66,3.58,5.15
     # body panel
-    add_panel(slide, bx,by,bw,bh, fill=WHITE, alpha=96, line=RGBColor(0xE6,0xDC,0xC8), lw=1.0)
+    add_panel(slide, bx,by,bw,bh, fill=WHITE, alpha=96, line=PBORD, lw=1.0)
     # body text shape -> reposition into panel, strip its own fill
     if body is not None:
         body.left=IN(bx+0.10); body.top=IN(by+0.06); body.width=IN(bw-0.20); body.height=IN(bh-0.12)
@@ -316,7 +318,7 @@ def enhance_image_slide(slide, idx):
             x=Emu(sh.left).inches; y=Emu(sh.top).inches
             w=Emu(sh.width).inches; h=Emu(sh.height).inches
             add_panel(slide, x-0.14, y-0.14, w+0.28, h+0.28, fill=WHITE, alpha=96,
-                      line=RGBColor(0xE6,0xDC,0xC8), lw=1.0)
+                      line=PBORD, lw=1.0)
             set_insets(sh, 0.20,0.20,0.14,0.14)
             style_runs(sh.text_frame, color=INK); set_line_spacing(sh.text_frame, 1.16, 6)
         else:                                    # caption
@@ -333,8 +335,8 @@ def enhance_image_slide(slide, idx):
 
 # explicit fills for empty placeholders / blank slides
 FILL_MAP = {
- 11:['artwork-05.jpg','artwork-06.jpg'],
- 12:['artwork-03.jpg','showcase-02.jpg'],
+ 11:['showcase-02.jpg','showcase-03.jpg'],
+ 12:['_assets/m_round1.jpg','_assets/m_tree.jpg'],
  13:['_assets/singingbowl.jpg'],
  29:['_assets/autumn.jpg','_assets/sunset.jpg'],
 }
@@ -345,24 +347,29 @@ FILL_MAP = {
 for i, slide in enumerate(prs.slides, start=1):
     if i == TITLE_SLIDE:
         add_bg(slide, 'bg_title.png')
+        CREAMTX = RGBColor(0xF3,0xEE,0xE2)
+        # top decorative accent
+        add_motif(slide, 'motif_ring_gold.png', 1.02, 0.62, 0.92, 0.92)
+        add_rule(slide, 1.05, 1.78, 1.7, color=GOLDL, h=0.045)
+        # big title
         t = find_title(slide)
         if t:
-            t.left=IN(0.95); t.top=IN(2.25); t.width=IN(7.3); t.height=IN(2.0)
+            t.left=IN(1.02); t.top=IN(2.0); t.width=IN(7.9); t.height=IN(2.7)
             tf=t.text_frame; tf.word_wrap=True
-            style_runs(tf, color=WHITE, size=38, bold=True)
-            for p in tf.paragraphs: p.line_spacing=1.12; p.alignment=PP_ALIGN.LEFT
-        add_rule(slide, 1.0, 4.32, 2.6, color=GOLDL, h=0.05)
-        # subtitle
+            style_runs(tf, color=CREAMTX, size=46, bold=True)
+            for p in tf.paragraphs: p.line_spacing=1.14; p.alignment=PP_ALIGN.LEFT
+        # divider rule + subtitle card with vertical accent bar
+        add_rule(slide, 1.05, 4.78, 3.0, color=GOLDL, h=0.05)
+        add_rule(slide, 1.05, 5.12, 0.07, color=ROSE, h=1.05)   # vertical accent bar
         sub=None
         for sh in slide.shapes:
             if sh.has_text_frame and ('副標' in sh.name):
                 sub=sh; break
         if sub:
-            sub.left=IN(1.0); sub.top=IN(4.55); sub.width=IN(7.0); sub.height=IN(2.0)
+            sub.left=IN(1.32); sub.top=IN(5.08); sub.width=IN(7.0); sub.height=IN(1.6)
             sf=sub.text_frame; sf.word_wrap=True
-            style_runs(sf, color=RGBColor(0xEC,0xE2,0xCE), size=19, bold=False)
-            for p in sf.paragraphs: p.alignment=PP_ALIGN.LEFT; p.line_spacing=1.15
-        add_motif(slide, 'motif_ring_gold.png', 0.95, 0.9, 1.0, 1.0)
+            style_runs(sf, color=CREAMTX, size=22, bold=False)
+            for p in sf.paragraphs: p.alignment=PP_ALIGN.LEFT; p.line_spacing=1.25
         continue
 
     bg = 'bg_section.png' if i in SECTION_BG else 'bg_content.png'
