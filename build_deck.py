@@ -443,8 +443,10 @@ REWRITE_TITLE = {
 }
 REWRITE_BODY = {
  4: """一、藝術輔療的定義、目標與專業角色
+
 二、探討其在日常生活與各種場域的應用範圍
 特別著重於如何透過藝術媒介促進每個人的情緒表達、認知刺激與社交互動。
+
 三、曼陀羅從最初的「宗教宇宙觀」，演變為今日在身心調適、心理諮商中廣泛應用的「心靈自癒工具」。""",
  7: """（1）認知刺激與大腦活化
 a、激活大腦神經：繪畫時挑選顏色、構圖、抓握畫筆，需要同時動用視覺、空間感與微細肌肉運動，能有效刺激大腦神經網絡。
@@ -516,7 +518,7 @@ def apply_rewrites(prs):
         if ttl is not None: _set_text(ttl, t)
 
 # 這些頁面空間充足：段落之間各空一行，避免擁擠
-SPACE_PARAS = {4,14,15,16,17,18,19,26,28}
+SPACE_PARAS = {14,15,16,17,18,19,26,28}   # 第4頁的空行已寫入 REWRITE_BODY[4]（只隔主要段落）
 def space_paragraphs(prs):
     for idx in SPACE_PARAS:
         body=classify(prs.slides[idx-1])[1]
