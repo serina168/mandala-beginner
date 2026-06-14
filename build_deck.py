@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Enhance the mandala course deck: cohesive design, backgrounds, framed images.
 Text content is preserved verbatim; only styling/layout/imagery is added."""
-import copy, math
+import copy, math, re
 from pptx import Presentation
 from pptx.util import Emu, Pt, Inches
 from pptx.dml.color import RGBColor
@@ -190,7 +190,9 @@ def fit_size(shape, max_pt, min_pt, ls, sa_pt=4):
         cpl=max(1.0, (w*72.0/S)*0.90)          # assume wider effective advance
         lines=0
         for pt in paras:
-            lines += max(1, math.ceil(_vlen(pt)/cpl))
+            # \x0b / \n inside a paragraph are soft line breaks -> own line(s)
+            for seg in re.split('[\x0b\n]', pt):
+                lines += max(1, math.ceil(_vlen(seg)/cpl))
         line_h = S*max(ls,1.0)*FONT_LH/72.0    # real CJK line height
         total = lines*line_h + len(paras)*(sa_pt/72.0)
         if total <= h*0.90:
@@ -274,7 +276,7 @@ def add_footer(slide, idx, dark=False):
     tb = slide.shapes.add_textbox(IN(0.55), IN(7.06), IN(9.5), IN(0.34))
     tf=tb.text_frame; tf.word_wrap=False
     p=tf.paragraphs[0]; r=p.add_run()
-    r.text="心語能量美學 ‧ 曼陀羅心靈彩繪"
+    r.text="點鏡藝術工作室　‧　一點一滴，照見自己。"
     r.font.size=Pt(9); r.font.name="微軟正黑體"; _set_ea_font(r,"微軟正黑體")
     r.font.color.rgb = (CREAM if dark else SUBINK)
     # page number
@@ -401,30 +403,45 @@ for i, slide in enumerate(prs.slides, start=1):
     if i == TITLE_SLIDE:
         add_bg(slide, 'bg_title.png')
         CREAMTX = RGBColor(0xF3,0xEE,0xE2)
-        # top decorative accent
-        add_motif(slide, 'motif_ring_gold.png', 1.02, 0.62, 0.92, 0.92)
-        add_rule(slide, 1.05, 1.78, 1.7, color=GOLDL, h=0.045)
+        def _coverbox(text, x,y,w,h, size, color, bold, align=PP_ALIGN.LEFT, ls=1.12, spc=None):
+            tb=slide.shapes.add_textbox(IN(x),IN(y),IN(w),IN(h)); tf=tb.text_frame; tf.word_wrap=True
+            pp=tf.paragraphs[0]; pp.alignment=align; pp.line_spacing=ls
+            r=pp.add_run(); r.text=text; r.font.size=Pt(size); r.font.bold=bold
+            r.font.name="微軟正黑體"; _set_ea_font(r,"微軟正黑體"); r.font.color.rgb=color
+            if spc is not None: r._r.get_or_add_rPr().set('spc', str(spc))
+            return tb
+        # top decorative accent + 工作室名稱
+        add_motif(slide, 'motif_ring_gold.png', 1.02, 0.55, 0.82, 0.82)
+        _coverbox("點鏡藝術工作室", 1.05, 1.46, 6.5, 0.5, 18, GOLDL, True, spc=300)
+        add_rule(slide, 1.05, 2.02, 1.7, color=GOLDL, h=0.045)
         # big title
         t = find_title(slide)
         if t:
-            t.left=IN(1.02); t.top=IN(2.0); t.width=IN(7.9); t.height=IN(2.7)
-            tf=t.text_frame; tf.word_wrap=True
+            t.left=IN(1.02); t.top=IN(2.22); t.width=IN(7.9); t.height=IN(2.05)
+            # clean embedded soft-breaks/blank lines into tidy lines
+            lines=[seg for seg in re.split('[\x0b\n]', t.text_frame.text) if seg.strip()]
+            tf=t.text_frame; tf.clear(); tf.word_wrap=True
+            for k,seg in enumerate(lines):
+                pr = tf.paragraphs[0] if k==0 else tf.add_paragraph()
+                pr.add_run().text=seg
             style_runs(tf, color=CREAMTX, size=46, bold=True)
-            for p in tf.paragraphs: p.line_spacing=1.14; p.alignment=PP_ALIGN.LEFT
-            apply_size(tf, fit_size(t, 46, 28, 1.14, sa_pt=0)); set_autofit(tf,'none')
+            for p in tf.paragraphs: p.line_spacing=1.12; p.alignment=PP_ALIGN.LEFT
+            apply_size(tf, fit_size(t, 46, 28, 1.12, sa_pt=0)); set_autofit(tf,'none')
+        # 工作室標語
+        _coverbox("一點一滴，照見自己。", 1.05, 4.42, 7.2, 0.66, 22, GOLDL, False, spc=200)
         # divider rule + subtitle card with vertical accent bar
-        add_rule(slide, 1.05, 4.78, 3.0, color=GOLDL, h=0.05)
-        add_rule(slide, 1.05, 5.12, 0.07, color=ROSE, h=1.05)   # vertical accent bar
+        add_rule(slide, 1.05, 5.18, 3.0, color=GOLDL, h=0.05)
+        add_rule(slide, 1.05, 5.52, 0.07, color=ROSE, h=1.0)   # vertical accent bar
         sub=None
         for sh in slide.shapes:
             if sh.has_text_frame and ('副標' in sh.name):
                 sub=sh; break
         if sub:
-            sub.left=IN(1.32); sub.top=IN(5.05); sub.width=IN(7.0); sub.height=IN(1.9)
+            sub.left=IN(1.32); sub.top=IN(5.45); sub.width=IN(7.0); sub.height=IN(1.7)
             sf=sub.text_frame; sf.word_wrap=True
             style_runs(sf, color=CREAMTX, size=22, bold=False)
             for p in sf.paragraphs: p.alignment=PP_ALIGN.LEFT; p.line_spacing=1.2
-            apply_size(sf, fit_size(sub, 22, 13, 1.2, sa_pt=0)); set_autofit(sf,'none')
+            apply_size(sf, fit_size(sub, 20, 13, 1.2, sa_pt=0)); set_autofit(sf,'none')
         # 封面僅使用曼陀羅作品（已在背景呈現），不放人物照
         continue
 
