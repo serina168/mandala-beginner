@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Enhance the mandala course deck: cohesive design, backgrounds, framed images.
 Text content is preserved verbatim; only styling/layout/imagery is added."""
-import copy
+import copy, math
 from pptx import Presentation
 from pptx.util import Emu, Pt, Inches
 from pptx.dml.color import RGBColor
@@ -143,15 +143,48 @@ def set_line_spacing(tf, mult=1.12, space_after=6):
         p.line_spacing = mult
         p.space_after = Pt(space_after)
 
-def shrink_fit(tf, scale=88, ln=10):
-    """write normAutofit so text shrinks to fit shape (content unchanged)."""
+def _clear_autofit(tf):
     bodyPr = tf._txBody.find(qn('a:bodyPr'))
     for t in ('a:normAutofit','a:spAutoFit','a:noAutofit'):
         e=bodyPr.find(qn(t))
         if e is not None: bodyPr.remove(e)
-    na = bodyPr.makeelement(qn('a:normAutofit'),
-        {'fontScale':str(scale*1000),'lnSpcReduction':str(ln*1000)})
-    bodyPr.append(na)
+    return bodyPr
+
+def set_autofit(tf, mode='norm'):
+    """mode 'norm' = shrink-text-to-fit (safety net); 'none' = no autofit (no grow)."""
+    bodyPr=_clear_autofit(tf)
+    tag = 'a:normAutofit' if mode=='norm' else 'a:noAutofit'
+    bodyPr.append(bodyPr.makeelement(qn(tag), {}))
+
+def _vlen(s):
+    """visual length: CJK/full-width = 1.0, latin/space = 0.55."""
+    t=0.0
+    for ch in s:
+        if ch=='\n': continue
+        t += 1.0 if ord(ch) > 0x2000 else 0.55
+    return t
+
+def fit_size(shape, max_pt, min_pt, ls, sa_pt=4):
+    """largest integer pt (max..min) at which the text fits inside the shape box."""
+    tf=shape.text_frame
+    w=Emu(shape.width).inches - Emu(tf.margin_left).inches - Emu(tf.margin_right).inches
+    h=Emu(shape.height).inches - Emu(tf.margin_top).inches - Emu(tf.margin_bottom).inches
+    paras=[p.text for p in tf.paragraphs]
+    if w<=0.3 or h<=0.2: return min_pt
+    for S in range(int(max_pt), int(min_pt)-1, -1):
+        cpl=max(1.0, (w*72.0/S)*0.96)
+        lines=0
+        for pt in paras:
+            lines += max(1, math.ceil(_vlen(pt)/cpl))
+        total = lines*(S*ls/72.0) + len(paras)*(sa_pt/72.0)
+        if total <= h*0.96:
+            return S
+    return int(min_pt)
+
+def apply_size(tf, size):
+    for p in tf.paragraphs:
+        for r in p.runs:
+            r.font.size = Pt(size)
 
 def set_insets(shape, l=0.18,r=0.18,t=0.14,b=0.14):
     tf=shape.text_frame
@@ -214,6 +247,10 @@ def style_title_content(slide, color=DEEP, size=None, rulew=None):
         p.line_spacing=1.04
         if not vertical: p.alignment=PP_ALIGN.LEFT
     tf.word_wrap=True
+    if not vertical:                       # shrink long titles to stay inside the box
+        fs = fit_size(t, sz, 14, 1.04, sa_pt=0)
+        if fs < sz: apply_size(tf, fs)
+        set_autofit(tf, 'none')            # never auto-grow over the body
     return t
 
 # ---------- footer ----------
@@ -234,12 +271,12 @@ def add_footer(slide, idx, dark=False):
 # =====================================================================
 #  per-slide configuration
 # =====================================================================
-TWOCOL = {        # slide -> image (dense + medium text, two-column)
+TWOCOL = {        # slide -> image (artwork = pure works; teach = teaching-activity scenes)
  2:'artwork-05.jpg', 3:'artwork-04.jpg', 4:'artwork-06.jpg', 5:'artwork-07.jpg',
- 6:'showcase-01.jpg', 7:'showcase-06.jpg', 8:'artwork-03.jpg', 9:'_assets/m_grid.jpg',
- 10:'showcase-04.jpg', 14:'artwork-02.jpg', 15:'showcase-08.jpg', 16:'showcase-09.jpg',
- 17:'showcase-07.jpg', 18:'showcase-05.jpg', 19:'_assets/m_bookmark.jpg', 26:'showcase-12.jpg',
- 28:'_assets/sunset.jpg',
+ 6:'_assets/teach_demo.jpg', 7:'_assets/teach_paint1.jpg', 8:'artwork-03.jpg', 9:'_assets/m_grid.jpg',
+ 10:'_assets/teach_paint2.jpg', 14:'artwork-02.jpg', 15:'artwork-01.jpg', 16:'_assets/teach_group.jpg',
+ 17:'_assets/teach_paint3.jpg', 18:'_assets/teach_paint4.jpg', 19:'_assets/m_bookmark.jpg',
+ 26:'_assets/m_tree.jpg', 28:'_assets/sunset.jpg',
 }
 SECTION_BG = {2,10}
 TITLE_SLIDE = 1
@@ -284,11 +321,9 @@ def enhance_two_column(slide, idx, img):
         tf=body.text_frame
         style_runs(tf, color=INK)
         set_line_spacing(tf, 1.12, 4)
-        n=len(tf.text)
-        if   n>430: shrink_fit(tf, 78, 12)
-        elif n>330: shrink_fit(tf, 84, 10)
-        elif n>240: shrink_fit(tf, 90, 8)
-        elif n>150: shrink_fit(tf, 96, 6)
+        # explicit size that fits, + normAutofit as a safety net
+        apply_size(tf, fit_size(body, 18, 10, 1.12, sa_pt=4))
+        set_autofit(tf, 'norm')
     # right image
     p = img if img.startswith('_assets/') else img
     place_image(slide, p, ix,iy,iw,ih, rounded=True, border=True, bcolor=WHITE, bw=3,
@@ -321,6 +356,8 @@ def enhance_image_slide(slide, idx):
                       line=PBORD, lw=1.0)
             set_insets(sh, 0.20,0.20,0.14,0.14)
             style_runs(sh.text_frame, color=INK); set_line_spacing(sh.text_frame, 1.16, 6)
+            apply_size(sh.text_frame, fit_size(sh, 20, 11, 1.16, sa_pt=6))
+            set_autofit(sh.text_frame, 'norm')
         else:                                    # caption
             style_runs(sh.text_frame, color=DEEP, bold=True)
             for p in sh.text_frame.paragraphs: p.alignment=PP_ALIGN.CENTER
@@ -335,8 +372,8 @@ def enhance_image_slide(slide, idx):
 
 # explicit fills for empty placeholders / blank slides
 FILL_MAP = {
- 11:['showcase-02.jpg','showcase-03.jpg'],
- 12:['_assets/m_round1.jpg','_assets/m_tree.jpg'],
+ 11:['_assets/m_round1.jpg','_assets/m_img5.jpg'],
+ 12:['_assets/m_owl.jpg','_assets/m_grid.jpg'],
  13:['_assets/singingbowl.jpg'],
  29:['_assets/autumn.jpg','_assets/sunset.jpg'],
 }
