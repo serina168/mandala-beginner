@@ -185,17 +185,17 @@ def _vlen(s):
 # 微軟正黑體 real line box ≈ 1.32 em; conservative width/height usage so text
 # truly fits inside the box when opened in PowerPoint (not just the LO preview).
 FONT_LH = 1.46
-def fit_size(shape, max_pt, min_pt, ls, sa_pt=4):
+def fit_size(shape, max_pt, min_pt, ls, sa_pt=4, hfac=0.84, cplfac=0.84):
     """largest integer pt (max..min) at which the text fits inside the shape box.
-    Deliberately conservative so wrapped CJK text keeps clear margin to the box
-    edge (the LibreOffice fallback font renders wider than 微軟正黑體)."""
+    hfac/cplfac = fraction of box height / line-width we allow text to use
+    (lower = more conservative margin to the box edge)."""
     tf=shape.text_frame
     w=Emu(shape.width).inches - Emu(tf.margin_left).inches - Emu(tf.margin_right).inches
     h=Emu(shape.height).inches - Emu(tf.margin_top).inches - Emu(tf.margin_bottom).inches
     paras=[p.text for p in tf.paragraphs]
     if w<=0.3 or h<=0.2: return min_pt
     for S in range(int(max_pt), int(min_pt)-1, -1):
-        cpl=max(1.0, (w*72.0/S)*0.84)          # assume wider effective advance
+        cpl=max(1.0, (w*72.0/S)*cplfac)        # assume wider effective advance
         lines=0
         for pt in paras:
             # \x0b / \n inside a paragraph are soft line breaks -> own line(s)
@@ -203,7 +203,7 @@ def fit_size(shape, max_pt, min_pt, ls, sa_pt=4):
                 lines += max(1, math.ceil(_vlen(seg)/cpl))
         line_h = S*max(ls,1.0)*FONT_LH/72.0    # real CJK line height
         total = lines*line_h + len(paras)*(sa_pt/72.0)
-        if total <= h*0.84:
+        if total <= h*hfac:
             return S
     return int(min_pt)
 
@@ -305,6 +305,7 @@ TWOCOL = {        # slide -> image (作者本人創作照 + 純作品圖)
  26:'_assets/m_grid.jpg', 28:'_assets/sunset.jpg',
 }
 SECTION_BG = {2,10}
+BIG_BODY = {5,6,7,9,14,15,17,18,19}   # 內文字體放大一級的頁面
 TITLE_SLIDE = 1
 IMAGE_SLIDES = {11,12,13,20,21,22,23,24,25,27,29,30,31,32,33,34,35}
 
@@ -347,8 +348,13 @@ def enhance_two_column(slide, idx, img):
         tf=body.text_frame
         style_runs(tf, color=INK)
         set_line_spacing(tf, 1.05, 3)
-        # explicit size that truly fits, + normAutofit as a safety net
-        apply_size(tf, fit_size(body, 17, 8, 1.05, sa_pt=3))
+        # explicit size that truly fits, + normAutofit as a safety net.
+        # 指定頁面字體放大一級（放寬容許邊距，仍以不出框為前提）
+        if idx in BIG_BODY:
+            sz = fit_size(body, 19, 9, 1.05, sa_pt=3, hfac=0.90, cplfac=0.90)
+        else:
+            sz = fit_size(body, 17, 8, 1.05, sa_pt=3)
+        apply_size(tf, sz)
         set_autofit(tf, 'norm')
     # right image — show the WHOLE picture (no crop), scaled to fit & centered
     place_image(slide, img, ix,iy,iw,ih, rounded=True, border=True, bcolor=WHITE, bw=3,
@@ -523,13 +529,14 @@ for i, slide in enumerate(prs.slides, start=1):
             r.font.name="微軟正黑體"; _set_ea_font(r,"微軟正黑體"); r.font.color.rgb=color
             if spc is not None: r._r.get_or_add_rPr().set('spc', str(spc))
             return tb
-        # 工作室名稱 (背景四角已有金色曼陀羅，封面不再額外放圓環)
-        _coverbox("點鏡藝術工作室", 1.05, 1.48, 6.5, 0.5, 18, GOLDD, True, spc=300)
-        add_rule(slide, 1.05, 2.04, 1.7, color=GOLDD, h=0.045)
-        # big title
+        # 工作室名稱 (置中；背景四角已有金色曼陀羅，封面不再額外放圓環)
+        _coverbox("點鏡藝術工作室", 0.0, 1.42, 13.333, 0.5, 18, GOLDD, True,
+                  align=PP_ALIGN.CENTER, spc=300)
+        add_rule(slide, SLIDE_CX-0.85, 1.96, 1.7, color=GOLDD, h=0.045)
+        # big title (置中)
         t = find_title(slide)
         if t:
-            t.left=IN(1.02); t.top=IN(2.26); t.width=IN(8.3); t.height=IN(2.0)
+            t.left=IN(0.0); t.top=IN(2.2); t.width=IN(13.333); t.height=IN(2.0)
             # clean embedded soft-breaks/blank lines into tidy lines
             lines=[seg for seg in re.split('[\x0b\n]', t.text_frame.text) if seg.strip()]
             tf=t.text_frame; tf.clear(); tf.word_wrap=True
@@ -537,10 +544,11 @@ for i, slide in enumerate(prs.slides, start=1):
                 pr = tf.paragraphs[0] if k==0 else tf.add_paragraph()
                 pr.add_run().text=seg
             style_runs(tf, color=COVER_TITLE, size=46, bold=True)
-            for p in tf.paragraphs: p.line_spacing=1.12; p.alignment=PP_ALIGN.LEFT
+            for p in tf.paragraphs: p.line_spacing=1.12; p.alignment=PP_ALIGN.CENTER
             apply_size(tf, fit_size(t, 46, 28, 1.12, sa_pt=0)); set_autofit(tf,'none')
-        # 工作室標語
-        _coverbox("一點一滴，照見自己。", 1.05, 4.5, 7.2, 0.66, 22, ROSE, False, spc=200)
+        # 工作室標語 (置中)
+        _coverbox("一點一滴，照見自己。", 0.0, 4.5, 13.333, 0.66, 22, ROSE, False,
+                  align=PP_ALIGN.CENTER, spc=200)
         # 主講 — centred focal point, enlarged
         add_rule(slide, SLIDE_CX-0.85, 5.98, 1.7, color=GOLDD, h=0.05)
         sub=None
