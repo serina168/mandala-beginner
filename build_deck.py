@@ -74,8 +74,19 @@ def add_bg(slide, img):
     return pic
 
 # ---------- cover-crop image placement ----------
+def set_geom(pic, prst, radius=0.05):
+    spPr = pic._element.spPr
+    for g in spPr.findall(qn('a:prstGeom')): spPr.remove(g)
+    geom = spPr.makeelement(qn('a:prstGeom'), {'prst':prst})
+    av = geom.makeelement(qn('a:avLst'), {})
+    if prst=='roundRect':
+        gd = av.makeelement(qn('a:gd'), {'name':'adj','fmla':'val %d'%int(radius*100000)})
+        av.append(gd)
+    geom.append(av)
+    spPr.find(qn('a:xfrm')).addnext(geom)
+
 def place_image(slide, path, x, y, w, h, rounded=True, border=True,
-                bcolor=WHITE, bw=2.2, shadow=True, radius=0.05):
+                bcolor=WHITE, bw=2.2, shadow=True, radius=0.05, circle=False):
     im = Image.open(path); iw, ih = im.size
     box_ar = w/h; src_ar = iw/ih
     cl=cr=ct=cb=0.0
@@ -85,7 +96,8 @@ def place_image(slide, path, x, y, w, h, rounded=True, border=True,
         new = src_ar/box_ar; ct=cb=(1-new)/2
     pic = slide.shapes.add_picture(path, IN(x), IN(y), IN(w), IN(h))
     pic.crop_left=cl; pic.crop_right=cr; pic.crop_top=ct; pic.crop_bottom=cb
-    if rounded: round_corners(pic, radius)
+    if circle:    set_geom(pic, 'ellipse')
+    elif rounded: set_geom(pic, 'roundRect', radius)
     if border: pic_border(pic, bcolor, bw)
     if shadow: set_subpix_shadow(pic)
     return pic
@@ -271,12 +283,12 @@ def add_footer(slide, idx, dark=False):
 # =====================================================================
 #  per-slide configuration
 # =====================================================================
-TWOCOL = {        # slide -> image (artwork = pure works; teach = teaching-activity scenes)
+TWOCOL = {        # slide -> image (作者本人創作照 + 純作品圖)
  2:'artwork-05.jpg', 3:'artwork-04.jpg', 4:'artwork-06.jpg', 5:'artwork-07.jpg',
- 6:'_assets/teach_demo.jpg', 7:'_assets/teach_paint1.jpg', 8:'artwork-03.jpg', 9:'_assets/m_grid.jpg',
- 10:'_assets/teach_paint2.jpg', 14:'artwork-02.jpg', 15:'artwork-01.jpg', 16:'_assets/teach_group.jpg',
- 17:'_assets/teach_paint3.jpg', 18:'_assets/teach_paint4.jpg', 19:'_assets/m_bookmark.jpg',
- 26:'_assets/m_tree.jpg', 28:'_assets/sunset.jpg',
+ 6:'_assets/teacher_studio2.jpg', 7:'artwork-03.jpg', 8:'_assets/m_grid.jpg', 9:'artwork-01.jpg',
+ 10:'_assets/teacher_studio1.jpg', 14:'artwork-02.jpg', 15:'_assets/m_owl.jpg', 16:'_assets/m_tree.jpg',
+ 17:'_assets/m_round1.jpg', 18:'_assets/m_img5.jpg', 19:'_assets/m_bookmark.jpg',
+ 26:'_assets/m_grid.jpg', 28:'_assets/sunset.jpg',
 }
 SECTION_BG = {2,10}
 TITLE_SLIDE = 1
@@ -372,8 +384,8 @@ def enhance_image_slide(slide, idx):
 
 # explicit fills for empty placeholders / blank slides
 FILL_MAP = {
- 11:['_assets/m_round1.jpg','_assets/m_img5.jpg'],
- 12:['_assets/m_owl.jpg','_assets/m_grid.jpg'],
+ 11:['artwork-02.jpg','artwork-05.jpg'],
+ 12:['_assets/m_owl.jpg','_assets/m_tree.jpg'],
  13:['_assets/singingbowl.jpg'],
  29:['_assets/autumn.jpg','_assets/sunset.jpg'],
 }
@@ -407,6 +419,7 @@ for i, slide in enumerate(prs.slides, start=1):
             sf=sub.text_frame; sf.word_wrap=True
             style_runs(sf, color=CREAMTX, size=22, bold=False)
             for p in sf.paragraphs: p.alignment=PP_ALIGN.LEFT; p.line_spacing=1.25
+        # 封面僅使用曼陀羅作品（已在背景呈現），不放人物照
         continue
 
     bg = 'bg_section.png' if i in SECTION_BG else 'bg_content.png'
