@@ -332,9 +332,13 @@ def enhance_two_column(slide, idx, img):
     if t:
         t.left=IN(0.62); t.top=IN(0.34); t.width=IN(12.1); t.height=IN(1.05)
     title_header(slide)
-    # ---- geometry ----
-    bx,by,bw,bh = 0.55,1.50,8.40,5.52
-    ix,iy,iw,ih = 9.18,1.50,3.58,5.52
+    # ---- geometry ---- (放大頁面用較寬的內文框、較窄的配圖，減少換行以容納更大字級)
+    if idx in BIG_BODY2:
+        bx,by,bw,bh = 0.50,1.46,9.05,5.58
+        ix,iy,iw,ih = 9.66,1.46,3.20,5.58
+    else:
+        bx,by,bw,bh = 0.55,1.50,8.40,5.52
+        ix,iy,iw,ih = 9.18,1.50,3.58,5.52
     # body panel
     add_panel(slide, bx,by,bw,bh, fill=WHITE, alpha=96, line=PBORD, lw=1.0)
     # body text shape -> reposition into panel, strip its own fill
@@ -345,14 +349,18 @@ def enhance_two_column(slide, idx, img):
         try: body.line.fill.background()
         except: pass
         body.shadow.inherit=False
-        set_insets(body, 0.16,0.16,0.10,0.10)
+        # 放大頁面用較小內距，爭取更大字級空間
+        if idx in BIG_BODY2:
+            set_insets(body, 0.10,0.10,0.06,0.06)
+        else:
+            set_insets(body, 0.16,0.16,0.10,0.10)
         tf=body.text_frame
         style_runs(tf, color=INK)
         # explicit size that truly fits, + normAutofit as a safety net.
         # 指定頁面字體放大（放寬容許邊距、收緊行距換取字級，仍以不出框為前提）
         if idx in BIG_BODY2:
-            ls_m, sa = 1.0, 2
-            sz = fit_size(body, 20, 9, ls_m, sa_pt=sa, hfac=0.965, cplfac=0.94)
+            ls_m, sa = 1.0, 1
+            sz = fit_size(body, 22, 9, ls_m, sa_pt=sa, hfac=0.95, cplfac=0.95)
         elif idx in BIG_BODY:
             ls_m, sa = 1.05, 3
             sz = fit_size(body, 19, 9, ls_m, sa_pt=sa, hfac=0.90, cplfac=0.90)
@@ -508,7 +516,7 @@ def apply_rewrites(prs):
         if ttl is not None: _set_text(ttl, t)
 
 # 這些頁面空間充足：段落之間各空一行，避免擁擠
-SPACE_PARAS = {14,15,16,17,18,19,26,28}
+SPACE_PARAS = {4,14,15,16,17,18,19,26,28}
 def space_paragraphs(prs):
     for idx in SPACE_PARAS:
         body=classify(prs.slides[idx-1])[1]
