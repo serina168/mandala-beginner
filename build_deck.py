@@ -176,6 +176,9 @@ def _vlen(s):
         t += 1.0 if ord(ch) > 0x2000 else 0.55
     return t
 
+# 微軟正黑體 real line box ≈ 1.32 em; conservative width/height usage so text
+# truly fits inside the box when opened in PowerPoint (not just the LO preview).
+FONT_LH = 1.38
 def fit_size(shape, max_pt, min_pt, ls, sa_pt=4):
     """largest integer pt (max..min) at which the text fits inside the shape box."""
     tf=shape.text_frame
@@ -184,12 +187,13 @@ def fit_size(shape, max_pt, min_pt, ls, sa_pt=4):
     paras=[p.text for p in tf.paragraphs]
     if w<=0.3 or h<=0.2: return min_pt
     for S in range(int(max_pt), int(min_pt)-1, -1):
-        cpl=max(1.0, (w*72.0/S)*0.96)
+        cpl=max(1.0, (w*72.0/S)*0.90)          # assume wider effective advance
         lines=0
         for pt in paras:
             lines += max(1, math.ceil(_vlen(pt)/cpl))
-        total = lines*(S*ls/72.0) + len(paras)*(sa_pt/72.0)
-        if total <= h*0.96:
+        line_h = S*max(ls,1.0)*FONT_LH/72.0    # real CJK line height
+        total = lines*line_h + len(paras)*(sa_pt/72.0)
+        if total <= h*0.90:
             return S
     return int(min_pt)
 
@@ -260,7 +264,7 @@ def style_title_content(slide, color=DEEP, size=None, rulew=None):
         if not vertical: p.alignment=PP_ALIGN.LEFT
     tf.word_wrap=True
     if not vertical:                       # shrink long titles to stay inside the box
-        fs = fit_size(t, sz, 14, 1.04, sa_pt=0)
+        fs = fit_size(t, sz, 13, 1.04, sa_pt=0)
         if fs < sz: apply_size(tf, fs)
         set_autofit(tf, 'none')            # never auto-grow over the body
     return t
@@ -317,8 +321,8 @@ def enhance_two_column(slide, idx, img):
         t.left=IN(0.62); t.top=IN(0.34); t.width=IN(12.1); t.height=IN(1.05)
     title_header(slide)
     # ---- geometry ----
-    bx,by,bw,bh = 0.55,1.66,8.40,5.15
-    ix,iy,iw,ih = 9.18,1.66,3.58,5.15
+    bx,by,bw,bh = 0.55,1.58,8.40,5.42
+    ix,iy,iw,ih = 9.18,1.58,3.58,5.42
     # body panel
     add_panel(slide, bx,by,bw,bh, fill=WHITE, alpha=96, line=PBORD, lw=1.0)
     # body text shape -> reposition into panel, strip its own fill
@@ -329,12 +333,12 @@ def enhance_two_column(slide, idx, img):
         try: body.line.fill.background()
         except: pass
         body.shadow.inherit=False
-        set_insets(body, 0.18,0.18,0.12,0.12)
+        set_insets(body, 0.16,0.16,0.10,0.10)
         tf=body.text_frame
         style_runs(tf, color=INK)
-        set_line_spacing(tf, 1.12, 4)
-        # explicit size that fits, + normAutofit as a safety net
-        apply_size(tf, fit_size(body, 18, 10, 1.12, sa_pt=4))
+        set_line_spacing(tf, 1.05, 3)
+        # explicit size that truly fits, + normAutofit as a safety net
+        apply_size(tf, fit_size(body, 18, 9, 1.05, sa_pt=3))
         set_autofit(tf, 'norm')
     # right image
     p = img if img.startswith('_assets/') else img
@@ -366,9 +370,9 @@ def enhance_image_slide(slide, idx):
             w=Emu(sh.width).inches; h=Emu(sh.height).inches
             add_panel(slide, x-0.14, y-0.14, w+0.28, h+0.28, fill=WHITE, alpha=96,
                       line=PBORD, lw=1.0)
-            set_insets(sh, 0.20,0.20,0.14,0.14)
-            style_runs(sh.text_frame, color=INK); set_line_spacing(sh.text_frame, 1.16, 6)
-            apply_size(sh.text_frame, fit_size(sh, 20, 11, 1.16, sa_pt=6))
+            set_insets(sh, 0.18,0.18,0.12,0.12)
+            style_runs(sh.text_frame, color=INK); set_line_spacing(sh.text_frame, 1.08, 4)
+            apply_size(sh.text_frame, fit_size(sh, 18, 10, 1.08, sa_pt=4))
             set_autofit(sh.text_frame, 'norm')
         else:                                    # caption
             style_runs(sh.text_frame, color=DEEP, bold=True)
@@ -407,6 +411,7 @@ for i, slide in enumerate(prs.slides, start=1):
             tf=t.text_frame; tf.word_wrap=True
             style_runs(tf, color=CREAMTX, size=46, bold=True)
             for p in tf.paragraphs: p.line_spacing=1.14; p.alignment=PP_ALIGN.LEFT
+            apply_size(tf, fit_size(t, 46, 28, 1.14, sa_pt=0)); set_autofit(tf,'none')
         # divider rule + subtitle card with vertical accent bar
         add_rule(slide, 1.05, 4.78, 3.0, color=GOLDL, h=0.05)
         add_rule(slide, 1.05, 5.12, 0.07, color=ROSE, h=1.05)   # vertical accent bar
@@ -415,10 +420,11 @@ for i, slide in enumerate(prs.slides, start=1):
             if sh.has_text_frame and ('副標' in sh.name):
                 sub=sh; break
         if sub:
-            sub.left=IN(1.32); sub.top=IN(5.08); sub.width=IN(7.0); sub.height=IN(1.6)
+            sub.left=IN(1.32); sub.top=IN(5.05); sub.width=IN(7.0); sub.height=IN(1.9)
             sf=sub.text_frame; sf.word_wrap=True
             style_runs(sf, color=CREAMTX, size=22, bold=False)
-            for p in sf.paragraphs: p.alignment=PP_ALIGN.LEFT; p.line_spacing=1.25
+            for p in sf.paragraphs: p.alignment=PP_ALIGN.LEFT; p.line_spacing=1.2
+            apply_size(sf, fit_size(sub, 22, 13, 1.2, sa_pt=0)); set_autofit(sf,'none')
         # 封面僅使用曼陀羅作品（已在背景呈現），不放人物照
         continue
 
