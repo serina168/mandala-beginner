@@ -437,8 +437,12 @@ a、重塑生命故事：引導繪畫家鄉、童年或生命中重要的時刻�
 b、重拾成就與掌控感：在畫紙上，每個人都能全權決定色彩與圖案，重新獲得成就感與自我價值。
 （4）社交互動與減少孤獨
 a、團體創作促進交流：透過集體繪畫或作品分享，能讓彼此互相欣賞、讚美，建立人際連結並降低孤獨感。""",
- 10: """透過
-1、視覺色彩選擇 2、聽覺音樂引導 3、嗅覺精油輔助 以及 4、心感的內在覺察 5、觸覺引領，帶領學員進入專注創作的流動狀態。
+ 10: """透過五感引導，帶領學員進入專注創作的流動狀態：
+1、視覺　色彩選擇
+2、聽覺　音樂引導
+3、嗅覺　精油輔助
+4、心感　內在覺察
+5、觸覺　觸感引領
 學員將完成個人化的曼陀羅書籤作品，並學習如何將此技法應用於生活的各種情境中，提升身心安頓與生活福祉。""",
  14: """嗅覺是唯一不經過視丘、直接刺激大腦邊緣系統（情緒與記憶中心）的感官，能為每個人帶來立竿見影的效益。
 對「自己」的好處
@@ -491,9 +495,19 @@ def apply_rewrites(prs):
         ttl=find_title(prs.slides[idx-1])
         if ttl is not None: _set_text(ttl, t)
 
+# 這些頁面空間充足：段落之間各空一行，避免擁擠
+SPACE_PARAS = {14,15,16,17,18,19,26,28}
+def space_paragraphs(prs):
+    for idx in SPACE_PARAS:
+        body=classify(prs.slides[idx-1])[1]
+        if body is None: continue
+        texts=[p.text for p in body.text_frame.paragraphs if p.text.strip()]
+        _set_text(body, "\n\n".join(texts))
+
 # 用語調整：治療 -> 輔療；其餘零星長照用語
 print("replaced terms:", replace_terms(prs, {'治療':'輔療', '對長輩而言':'對某些人而言'}))
 apply_rewrites(prs)
+space_paragraphs(prs)
 
 for i, slide in enumerate(prs.slides, start=1):
     if i == TITLE_SLIDE:
