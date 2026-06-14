@@ -299,7 +299,7 @@ def add_footer(slide, idx, dark=False):
 # =====================================================================
 TWOCOL = {        # slide -> image (作者本人創作照 + 純作品圖)
  2:'artwork-05.jpg', 3:'artwork-04.jpg', 4:'artwork-06.jpg', 5:'artwork-07.jpg',
- 6:'_assets/teacher_studio2.jpg', 7:'artwork-03.jpg', 8:'_assets/m_grid.jpg', 9:'artwork-01.jpg',
+ 6:'_assets/teacher_studio2.jpg', 7:'artwork-03.jpg', 8:'_assets/color_wheel_a.png', 9:'_assets/color_wheel_b.png',
  10:'_assets/practice_paint.jpg', 14:'artwork-02.jpg', 15:'_assets/m_owl.jpg', 16:'_assets/m_tree.jpg',
  17:'_assets/m_round1.jpg', 18:'_assets/m_img5.jpg', 19:'_assets/m_bookmark.jpg',
  26:'_assets/m_grid.jpg', 28:'_assets/sunset.jpg',
