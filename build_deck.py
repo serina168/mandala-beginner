@@ -86,16 +86,22 @@ def set_geom(pic, prst, radius=0.05):
     spPr.find(qn('a:xfrm')).addnext(geom)
 
 def place_image(slide, path, x, y, w, h, rounded=True, border=True,
-                bcolor=WHITE, bw=2.2, shadow=True, radius=0.05, circle=False):
+                bcolor=WHITE, bw=2.2, shadow=True, radius=0.05, circle=False,
+                contain=False):
     im = Image.open(path); iw, ih = im.size
     box_ar = w/h; src_ar = iw/ih
-    cl=cr=ct=cb=0.0
-    if src_ar > box_ar:   # too wide -> crop sides
-        new = box_ar/src_ar; cl=cr=(1-new)/2
-    else:                 # too tall -> crop top/bottom
-        new = src_ar/box_ar; ct=cb=(1-new)/2
-    pic = slide.shapes.add_picture(path, IN(x), IN(y), IN(w), IN(h))
-    pic.crop_left=cl; pic.crop_right=cr; pic.crop_top=ct; pic.crop_bottom=cb
+    if contain and not circle:
+        # show the WHOLE image (no crop): scale to fit, center in the region
+        if src_ar > box_ar: nw=w; nh=w/src_ar
+        else:               nh=h; nw=h*src_ar
+        x=x+(w-nw)/2.0; y=y+(h-nh)/2.0; w=nw; h=nh
+        pic = slide.shapes.add_picture(path, IN(x), IN(y), IN(w), IN(h))
+    else:
+        cl=cr=ct=cb=0.0
+        if src_ar > box_ar:   cl=cr=(1-(box_ar/src_ar))/2
+        else:                 ct=cb=(1-(src_ar/box_ar))/2
+        pic = slide.shapes.add_picture(path, IN(x), IN(y), IN(w), IN(h))
+        pic.crop_left=cl; pic.crop_right=cr; pic.crop_top=ct; pic.crop_bottom=cb
     if circle:    set_geom(pic, 'ellipse')
     elif rounded: set_geom(pic, 'roundRect', radius)
     if border: pic_border(pic, bcolor, bw)
@@ -342,12 +348,9 @@ def enhance_two_column(slide, idx, img):
         # explicit size that truly fits, + normAutofit as a safety net
         apply_size(tf, fit_size(body, 18, 9, 1.05, sa_pt=3))
         set_autofit(tf, 'norm')
-    # right image
-    p = img if img.startswith('_assets/') else img
-    place_image(slide, p, ix,iy,iw,ih, rounded=True, border=True, bcolor=WHITE, bw=3,
-                shadow=True, radius=0.05)
-    # gold corner accent over image top
-    add_rule(slide, ix, iy-0.02, iw, color=GOLD, h=0.06)
+    # right image — show the WHOLE picture (no crop), scaled to fit & centered
+    place_image(slide, img, ix,iy,iw,ih, rounded=True, border=True, bcolor=WHITE, bw=3,
+                shadow=True, radius=0.05, contain=True)
     add_footer(slide, idx)
 
 def frame_existing_pictures(slide):
@@ -385,7 +388,7 @@ def enhance_image_slide(slide, idx):
     for ph,(imgpath,) in zip(eps, [(f,) for f in fills]):
         x=Emu(ph.left).inches; y=Emu(ph.top).inches
         w=Emu(ph.width).inches; h=Emu(ph.height).inches
-        place_image(slide, imgpath, x,y,w,h, rounded=True, border=True, bcolor=WHITE, bw=3)
+        place_image(slide, imgpath, x,y,w,h, rounded=True, border=True, bcolor=WHITE, bw=3, contain=True)
     add_footer(slide, idx)
 
 # explicit fills for empty placeholders / blank slides
@@ -399,6 +402,21 @@ FILL_MAP = {
 # =====================================================================
 #  main loop
 # =====================================================================
+def replace_terms(prs, mapping):
+    n=0
+    for s in prs.slides:
+        for sh in s.shapes:
+            if not sh.has_text_frame: continue
+            for p in sh.text_frame.paragraphs:
+                for r in p.runs:
+                    for a,b in mapping.items():
+                        if a in r.text:
+                            r.text=r.text.replace(a,b); n+=1
+    return n
+
+# 用語調整：治療 -> 輔療
+print("replaced terms:", replace_terms(prs, {'治療':'輔療'}))
+
 for i, slide in enumerate(prs.slides, start=1):
     if i == TITLE_SLIDE:
         add_bg(slide, 'bg_title.png')
