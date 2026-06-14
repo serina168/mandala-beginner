@@ -307,6 +307,8 @@ TWOCOL = {        # slide -> image (作者本人創作照 + 純作品圖)
 SECTION_BG = {2,10}
 BIG_BODY  = {18}                          # 內文放大一級
 BIG_BODY2 = {5,6,7,8,9,14,15,17,19}       # 內文放大兩級（更大）
+# 配圖位置：未列出者預設在右側；交錯左右以增加設計變化
+IMG_SIDE = {4:'left', 5:'right', 7:'left', 8:'right', 9:'left'}
 TITLE_SLIDE = 1
 IMAGE_SLIDES = {11,12,13,20,21,22,23,24,25,27,29,30,31,32,33,34,35}
 
@@ -333,12 +335,17 @@ def enhance_two_column(slide, idx, img):
         t.left=IN(0.62); t.top=IN(0.34); t.width=IN(12.1); t.height=IN(1.05)
     title_header(slide)
     # ---- geometry ---- (放大頁面用較寬的內文框、較窄的配圖，減少換行以容納更大字級)
+    # 配圖可放左或右，避免每頁都在右側、增加版面變化
+    side = IMG_SIDE.get(idx, 'right')
     if idx in BIG_BODY2:
-        bx,by,bw,bh = 0.50,1.46,9.05,5.58
-        ix,iy,iw,ih = 9.66,1.46,3.20,5.58
+        bw,bh, iw,ih, top, gap, mg = 9.05,5.58, 3.20,5.58, 1.46, 0.16, 0.50
     else:
-        bx,by,bw,bh = 0.55,1.50,8.40,5.52
-        ix,iy,iw,ih = 9.18,1.50,3.58,5.52
+        bw,bh, iw,ih, top, gap, mg = 8.40,5.52, 3.58,5.52, 1.50, 0.18, 0.55
+    by=iy=top
+    if side=='left':
+        ix=mg; bx=mg+iw+gap
+    else:
+        bx=mg; ix=mg+bw+gap
     # body panel
     add_panel(slide, bx,by,bw,bh, fill=WHITE, alpha=96, line=PBORD, lw=1.0)
     # body text shape -> reposition into panel, strip its own fill
