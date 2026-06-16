@@ -26,6 +26,7 @@
     width:210mm; min-height:297mm; background:var(--cream);
     margin:8mm auto; padding:20mm 18mm 16mm; position:relative;
     box-shadow:0 4px 24px rgba(0,0,0,.18); overflow:hidden;
+    display:flex; flex-direction:column;
   }
   @page{ size:A4; margin:0; }
   @media print{
@@ -78,10 +79,10 @@
 
   /* ---------- Footer ---------- */
   .foot{
-    position:absolute; left:18mm; right:18mm; bottom:10mm;
+    margin-top:auto; padding-top:3mm;
     display:flex; justify-content:space-between; align-items:center;
     font-size:8.5pt; color:var(--gold-mid); letter-spacing:.08em;
-    border-top:1px solid var(--line); padding-top:2.5mm;
+    border-top:1px solid var(--line);
   }
   .foot .en{ letter-spacing:.18em; }
 
