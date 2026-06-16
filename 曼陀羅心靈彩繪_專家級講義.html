@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>曼陀羅心靈彩繪・專家級師資培訓講義</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;500;600;700&family=Noto+Sans+TC:wght@300;400;500;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#211c16; --ink-soft:#4a4137; --gold:#C9A96E; --gold-deep:#876538;
+    --gold-mid:#9B7A45; --cream:#FDFAF5; --card:#F9F3E6; --card2:#F2E8D3;
+    --line:#E4D8C2; --rose:#c97a5c;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{ -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  body{
+    font-family:'Noto Serif TC',serif; color:var(--ink);
+    background:#cfc7ba; line-height:1.85; font-size:11pt;
+  }
+  .en{ font-family:'Cormorant Garamond',serif; }
+
+  /* ---------- Page frame ---------- */
+  .page{
+    width:210mm; min-height:297mm; background:var(--cream);
+    margin:8mm auto; padding:20mm 18mm 16mm; position:relative;
+    box-shadow:0 4px 24px rgba(0,0,0,.18); overflow:hidden;
+  }
+  @page{ size:A4; margin:0; }
+  @media print{
+    body{ background:#fff; }
+    .page{ margin:0; box-shadow:none; page-break-after:always; }
+    .no-print{ display:none !important; }
+  }
+
+  /* ---------- Header ---------- */
+  .head{ margin-bottom:9mm; }
+  .head .kicker{
+    font-family:'Cormorant Garamond',serif; font-size:13pt; letter-spacing:.42em;
+    color:var(--gold-deep); text-transform:uppercase; font-weight:600;
+  }
+  .head h2{
+    font-size:21pt; font-weight:700; margin-top:2mm; letter-spacing:.04em;
+    display:flex; align-items:baseline; gap:.5em;
+  }
+  .head h2 .star{ color:var(--gold); font-size:14pt; }
+  .head .rule{ height:2px; width:100%; margin-top:4mm;
+    background:linear-gradient(90deg,var(--gold) 0%, var(--gold) 38%, var(--line) 38%); }
+
+  /* ---------- Footer ---------- */
+  .foot{
+    position:absolute; left:18mm; right:18mm; bottom:10mm;
+    display:flex; justify-content:space-between; align-items:center;
+    font-size:8.5pt; color:var(--gold-mid); letter-spacing:.08em;
+    border-top:1px solid var(--line); padding-top:2.5mm;
+  }
+  .foot .en{ letter-spacing:.18em; }
+
+  /* ---------- Generic blocks ---------- */
+  p{ margin-bottom:3mm; text-align:justify; }
+  .lead{ font-size:11.5pt; color:var(--ink-soft); }
+  .section-intro{ background:var(--card); border-left:4px solid var(--gold);
+    padding:4mm 5mm; border-radius:0 6px 6px 0; margin-bottom:6mm; color:var(--ink-soft); }
+
+  h3.blk{ font-size:13pt; font-weight:700; color:var(--gold-deep);
+    margin:6mm 0 3mm; display:flex; align-items:center; gap:2.5mm; }
+  h3.blk::before{ content:''; width:5mm; height:5mm; border-radius:50%;
+    background:var(--gold); flex:none; }
+  h4.sub{ font-size:11.5pt; font-weight:600; color:var(--ink); margin:4mm 0 2mm; }
+
+  ul.clean{ list-style:none; }
+  ul.clean li{ position:relative; padding-left:6mm; margin-bottom:2mm; }
+  ul.clean li::before{ content:'✦'; position:absolute; left:0; color:var(--gold); font-size:9pt; top:1.5pt; }
+
+  /* ---------- Cards grid ---------- */
+  .grid{ display:grid; gap:4mm; }
+  .g2{ grid-template-columns:1fr 1fr; }
+  .g3{ grid-template-columns:1fr 1fr 1fr; }
+  .card{ background:var(--card); border:1px solid var(--line); border-radius:8px;
+    padding:4mm 4.5mm; }
+  .card .num{ font-family:'Cormorant Garamond',serif; font-size:15pt; color:var(--gold-deep); font-weight:600; }
+  .card .ct{ font-weight:700; font-size:11pt; margin:1mm 0; }
+  .card .cd{ font-size:9.5pt; color:var(--ink-soft); line-height:1.7; }
+
+  /* ---------- Tables ---------- */
+  table{ width:100%; border-collapse:collapse; margin:3mm 0 5mm; font-size:9.7pt; }
+  th,td{ border:1px solid var(--line); padding:2.6mm 3mm; text-align:left; vertical-align:top; }
+  thead th{ background:var(--gold-deep); color:#fff; font-weight:600; letter-spacing:.05em; }
+  tbody tr:nth-child(even){ background:var(--card); }
+  td.hl{ background:var(--card2); font-weight:600; }
+  .col-acc{ color:var(--gold-deep); font-weight:700; }
+
+  /* ---------- Technique entry ---------- */
+  .tech{ border:1px solid var(--line); border-radius:8px; overflow:hidden; margin-bottom:4mm; background:#fff; }
+  .tech .th{ background:var(--card2); padding:2.5mm 4mm; display:flex; align-items:center; gap:2.5mm; }
+  .tech .th .tn{ font-family:'Cormorant Garamond',serif; font-weight:600; color:#fff; background:var(--gold-deep);
+    width:8mm; height:8mm; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11pt; flex:none; }
+  .tech .th .tt{ font-weight:700; font-size:11pt; }
+  .tech .th .tag{ margin-left:auto; font-size:8pt; color:#fff; background:var(--rose);
+    padding:.6mm 2.4mm; border-radius:10px; letter-spacing:.05em; }
+  .tech .tb{ padding:3mm 4mm; font-size:9.4pt; line-height:1.7; }
+  .tech .tb .row{ margin-bottom:1.6mm; }
+  .tech .tb .lab{ color:var(--gold-deep); font-weight:700; }
+  .tech .tb .steps{ color:var(--ink-soft); }
+  .four{ display:flex; gap:2mm; flex-wrap:wrap; margin-top:1mm; }
+  .four span{ background:var(--card); border:1px solid var(--line); border-radius:5px;
+    padding:1mm 2.4mm; font-size:8.6pt; color:var(--ink-soft); }
+  .four b{ color:var(--gold-deep); }
+
+  /* ---------- Cover ---------- */
+  .cover{ background:
+      radial-gradient(120% 80% at 50% 0%, #2a2118 0%, #1a140e 60%, #0e0a06 100%);
+    color:#f3e9d8; display:flex; flex-direction:column; align-items:center;
+    justify-content:center; text-align:center; padding:30mm 22mm; }
+  .cover .org{ font-size:10.5pt; letter-spacing:.18em; color:#d8c19a; line-height:2; }
+  .cover .lvl{ font-family:'Cormorant Garamond',serif; letter-spacing:.5em; font-size:13pt;
+    color:var(--gold); margin:14mm 0 5mm; text-transform:uppercase; }
+  .cover h1{ font-size:33pt; font-weight:700; letter-spacing:.06em; line-height:1.35; color:#fdf6e9; }
+  .cover h1 .small{ display:block; font-size:18pt; font-weight:400; color:var(--gold); margin-top:4mm; letter-spacing:.18em; }
+  .cover .divider{ width:46mm; height:1.5px; background:var(--gold); margin:12mm 0; opacity:.8; }
+  .cover .sub{ font-size:12pt; color:#e7d8bd; letter-spacing:.1em; line-height:2; }
+  .cover .editor{ margin-top:16mm; font-size:11pt; color:#d8c19a; letter-spacing:.12em; }
+  .cover .seal{ margin-top:4mm; font-size:8.5pt; color:#9c8a6c; letter-spacing:.2em; }
+
+  /* ---------- TOC ---------- */
+  .toc-row{ display:flex; align-items:baseline; gap:3mm; padding:2.4mm 0; border-bottom:1px dotted var(--line); }
+  .toc-row .tnum{ font-family:'Cormorant Garamond',serif; color:var(--gold-deep); font-weight:600; width:14mm; font-size:11pt; }
+  .toc-row .ttl{ flex:1; }
+  .toc-row .tpg{ color:var(--gold-mid); font-family:'Cormorant Garamond',serif; font-size:11pt; }
+  .toc-part{ font-family:'Cormorant Garamond',serif; letter-spacing:.22em; color:var(--gold-deep);
+    font-size:10.5pt; margin:5mm 0 1mm; font-weight:600; }
+
+  .pill{ display:inline-block; background:var(--gold-deep); color:#fff; font-size:8.5pt;
+    padding:.8mm 3mm; border-radius:12px; letter-spacing:.08em; }
+  .quote{ font-style:italic; color:var(--gold-deep); border-left:3px solid var(--gold);
+    padding:2mm 0 2mm 5mm; margin:4mm 0; font-size:11pt; }
+  .twocol{ column-count:2; column-gap:8mm; }
+
+  /* closing */
+  .closing{ display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; padding-top:40mm; }
+  .closing .en{ letter-spacing:.3em; color:var(--gold-deep); font-size:13pt; }
+  .closing h2{ font-size:20pt; margin:6mm 0; font-weight:700; }
+  .closing p{ text-align:center; color:var(--ink-soft); max-width:120mm; }
+
+  .toolbar{ position:fixed; top:12px; right:12px; z-index:99; }
+  .toolbar button{ font-family:'Noto Sans TC',sans-serif; background:var(--gold-deep); color:#fff;
+    border:none; padding:9px 16px; border-radius:8px; font-size:13px; cursor:pointer; box-shadow:0 3px 10px rgba(0,0,0,.25); }
+</style>
+</head>
+<body>
+
+<div class="toolbar no-print">
+  <button onclick="window.print()">🖨 列印 / 另存 PDF</button>
+</div>
+
+<!-- ============ COVER ============ -->
+<section class="page cover">
+  <div class="org">財團法人中華綜合發展研究院<br>文創藝術研究所　◆　心靈藝術美學中心</div>
+  <div class="lvl">Level Expert · Master Instructor Handbook</div>
+  <h1>曼陀羅心靈彩繪<span class="small">專家級師資培訓</span></h1>
+  <div class="divider"></div>
+  <div class="sub">培育能培訓師資的師資<br>能療癒、能創作、能傳承的心靈藝術指導師</div>
+  <div class="editor">黃彥蓁　所長　編著</div>
+  <div class="seal">學員講義 ・ 請妥善保存，作為日後教學參考 ・ 版權所有／翻印必究</div>
+</section>
+
+<!-- ============ TOC ============ -->
+<section class="page">
+  <div class="head">
+    <div class="kicker">Table of Contents</div>
+    <h2>目　錄</h2>
+    <div class="rule"></div>
+  </div>
+
+  <div class="toc-part">PART I · 課程定位</div>
+  <div class="toc-row"><span class="tnum">01</span><span class="ttl">為什麼需要「專家級」——三級升級邏輯</span><span class="tpg">04</span></div>
+  <div class="toc-row"><span class="tnum">02</span><span class="ttl">三級課程定位對照表</span><span class="tpg">05</span></div>
+  <div class="toc-row"><span class="tnum">03</span><span class="ttl">入學資格・課程架構總覽</span><span class="tpg">06</span></div>
+
+  <div class="toc-part">PART II · 六大專家模組</div>
+  <div class="toc-row"><span class="tnum">04</span><span class="ttl">模組一　神聖幾何與超精密構圖</span><span class="tpg">07</span></div>
+  <div class="toc-row"><span class="tnum">05</span><span class="ttl">模組二　多媒材與立體曼陀羅創作</span><span class="tpg">08</span></div>
+  <div class="toc-row"><span class="tnum">06</span><span class="ttl">模組三　色彩深度解析・能量與作品判讀 ★</span><span class="tpg">09</span></div>
+  <div class="toc-row"><span class="tnum">07</span><span class="ttl">模組四　深度引導與個案實務 ★</span><span class="tpg">10</span></div>
+  <div class="toc-row"><span class="tnum">08</span><span class="ttl">模組五　師資培訓師養成</span><span class="tpg">11</span></div>
+  <div class="toc-row"><span class="tnum">09</span><span class="ttl">模組六　個人品牌・策展・事業經營</span><span class="tpg">11</span></div>
+
+  <div class="toc-part">PART III · 課程流程</div>
+  <div class="toc-row"><span class="tnum">10</span><span class="ttl">三天密集課程流程表</span><span class="tpg">12</span></div>
+
+  <div class="toc-part">PART IV · 技法庫教學手冊（18 項）</div>
+  <div class="toc-row"><span class="tnum">11</span><span class="ttl">四步教法框架・A 立體與媒材類</span><span class="tpg">13</span></div>
+  <div class="toc-row"><span class="tnum">12</span><span class="ttl">B 筆法與線條類</span><span class="tpg">15</span></div>
+  <div class="toc-row"><span class="tnum">13</span><span class="ttl">C 構圖幾何類・D 收尾大型製作類</span><span class="tpg">16</span></div>
+
+  <div class="toc-part">PART V · 結業與資格</div>
+  <div class="toc-row"><span class="tnum">14</span><span class="ttl">畢業考核・證書與生涯路徑</span><span class="tpg">17</span></div>
+  <div class="toc-row"><span class="tnum">15</span><span class="ttl">費用・材料・已確認規劃參數</span><span class="tpg">18</span></div>
+
+  <div class="foot"><span class="en">CONTENTS</span><span>曼陀羅心靈彩繪專家級講師課程　02</span></div>
+</section>
+
+<!-- ============ 01 升級邏輯 ============ -->
+<section class="page">
+  <div class="head">
+    <div class="kicker">Why Expert Level</div>
+    <h2>為什麼需要「專家級」</h2>
+    <div class="rule"></div>
+  </div>
+
+  <div class="section-intro">
+    本中心兩級課程已完整覆蓋「會畫 → 能教」的歷程。二級建立色彩與技法基礎，結業可開興趣班、團體課；一級深化色彩心理、立體與貼鑽，結業<strong>可教授二級講師培訓</strong>。到了一級，學員已能「教二級」——專家級因此不能只是「再難一點的畫」，而要回答一個更高的問題。
+  </div>
+
+  <div class="quote">誰來培訓一級講師？<br>誰來把這套系統做成可以授權、可以策展、可以走進醫院與企業的專業？</div>
+
+  <p class="lead">專家級的定位，是把學員從「優秀講師」提升為三種身分合一的 <strong>心靈藝術指導師（Master Instructor）</strong>。</p>
+
+  <div class="grid g3" style="margin-top:5mm">
+    <div class="card"><div class="num">01</div><div class="ct">師資培訓師</div><div class="cd en" style="color:var(--gold-mid);letter-spacing:.1em">Trainer of Trainers</div><div class="cd">能設計教案、培訓並考核一級／二級講師。</div></div>
+    <div class="card"><div class="num">02</div><div class="ct">療癒引導師</div><div class="cd en" style="color:var(--gold-mid);letter-spacing:.1em">Facilitator</div><div class="cd">能獨立帶領一對一個案與團體療癒，懂倫理與界線。</div></div>
+    <div class="card"><div class="num">03</div><div class="ct">創作藝術家</div><div class="cd en" style="color:var(--gold-mid);letter-spacing:.1em">Artist</div><div class="cd">有個人風格，能做大型／立體／多媒材的展覽級作品。</div></div>
+  </div>
+
+  <h3 class="blk">一條完整的生涯之路</h3>
+  <table>
+    <tbody>
+      <tr><td class="hl" style="width:24%">體驗課</td><td>看見自己 —— 第一次與色彩相遇</td></tr>
+      <tr><td class="hl">二級講師</td><td>會畫 —— 開興趣班、團體課</td></tr>
+      <tr><td class="hl">一級講師</td><td>能教 —— 教授二級講師培訓</td></tr>
+      <tr><td class="hl col-acc">專家級指導師</td><td class="col-acc">培訓一級・做療癒・成風格</td></tr>
+    </tbody>
+  </table>
+
+  <div class="foot"><span class="en">PART I · 01</span><span>曼陀羅心靈彩繪專家級講師課程　04</span></div>
+</section>
+
+<!-- ============ 02 對照表 ============ -->
+<section class="page">
+  <div class="head">
+    <div class="kicker">Three-Tier Comparison</div>
+    <h2>三級課程定位對照表</h2>
+    <div class="rule"></div>
+  </div>
+  <p class="lead">一眼看懂三級課程如何層層升級，以及專家級「新」在哪裡。</p>
+
+  <table>
+    <thead><tr><th style="width:16%">面向</th><th>二級・初階</th><th>一級・進階</th><th>專家級（新）</th></tr></thead>
+    <tbody>
+      <tr><td class="hl">學習主軸</td><td>看見自己・會畫</td><td>深化技法・能教</td><td class="col-acc">培育師資・能療癒・成風格</td></tr>
+      <tr><td class="hl">時數</td><td>16–18 hr／2 天</td><td>22 hr／2 天</td><td class="col-acc">30 hr／3 天＋6 個月導師制</td></tr>
+      <tr><td class="hl">創作載體</td><td>畫布 10–30 cm</td><td>大型八角板木器</td><td class="col-acc">大型／立體／多媒材複合作品</td></tr>
+      <tr><td class="hl">構圖</td><td>4／6／8 等分</td><td>8／16 等分</td><td class="col-acc">16／24／32 等分・神聖幾何</td></tr>
+      <tr><td class="hl">色彩</td><td>四屬性・十色情感・四配色</td><td>色彩心理學・能量指數</td><td class="col-acc">脈輪能量・生命靈數・色彩處方</td></tr>
+      <tr><td class="hl">技法</td><td>九大基礎技法</td><td>十大技法＋立體＋貼鑽</td><td class="col-acc">金箔・暈染・凝珠等 18 項專家技法</td></tr>
+      <tr><td class="hl">心靈深度</td><td>榮格・內在小孩・投射讀法</td><td>作品解析・洞察內在</td><td class="col-acc">個案引導・團體帶領・諮商倫理</td></tr>
+      <tr><td class="hl">教學能力</td><td>引導原則</td><td>教學實戰演練</td><td class="col-acc">教案設計・培訓與考核師資</td></tr>
+      <tr><td class="hl">結業資格</td><td>開興趣班／團體課</td><td>教授二級講師培訓</td><td class="col-acc">培訓並考核一級講師・授權開班・策展</td></tr>
+    </tbody>
+  </table>
+
+  <div class="section-intro" style="margin-top:5mm">
+    <strong>升級主軸一句話：</strong>二級「看見自己」，一級「深化與能教」，專家級「<span class="col-acc">成為師資的師資</span>」——色彩解析更深、引導更專業、技法更多元。
+  </div>
+
+  <div class="foot"><span class="en">PART I · 02</span><span>曼陀羅心靈彩繪專家級講師課程　05</span></div>
+</section>
+
+<!-- ============ 03 入學資格 + 架構 ============ -->
+<section class="page">
+  <div class="head">
+    <div class="kicker">Entry & Structure</div>
+    <h2>入學資格・課程架構</h2>
+    <div class="rule"></div>
+  </div>
+
+  <h3 class="blk">入學資格</h3>
+  <ul class="clean">
+    <li>已取得本中心 <strong>一級講師證書</strong>，並完成至少 <strong>1 次實際開班教學</strong>（檢附紀錄）。</li>
+    <li>提交 <strong>3 件代表作</strong>（含一件一級八角板考核作品）與一段 300 字創作自述。</li>
+    <li>通過 <strong>資格面談</strong>（15–20 分鐘），確認教學動機、時間投入與生涯方向。</li>
+  </ul>
+  <div class="section-intro">設計用意：專家級是「師資的師資」，入學門檻本身就是品質保證，也讓這張證書更具稀缺性與公信力。</div>
+
+  <h3 class="blk">課程架構：三階段混合制</h3>
+  <p>專家級採「<strong>3 天密集 ＋ 6 個月導師陪跑 ＋ 畢業製作與公開帶領</strong>」，而非兩天速成——因為師資養成與療癒能力需要時間沉澱與真實實戰。</p>
+
+  <div class="grid g3" style="margin-top:2mm">
+    <div class="card"><div class="num">階段一</div><div class="ct">3 天密集（30 hr）</div><div class="cd">六大專家模組，技法、能量、引導、師資、品牌一次到位。</div></div>
+    <div class="card"><div class="num">階段二</div><div class="ct">6 個月導師制</div><div class="cd">線上月會 ×6、個案督導、教案修改，真實陪跑落地。</div></div>
+    <div class="card"><div class="num">階段三</div><div class="ct">畢業考核</div><div class="cd">大型／立體代表作 ＋ 教案 ＋ 公開帶領一場工作坊。</div></div>
+  </div>
+
+  <h3 class="blk">六大專家模組總覽</h3>
+  <table>
+    <thead><tr><th style="width:8%">模組</th><th style="width:34%">名稱</th><th>對應升級</th></tr></thead>
+    <tbody>
+      <tr><td class="hl">一</td><td>神聖幾何與超精密構圖</td><td>把「對稱」升級為「宇宙秩序的設計語言」</td></tr>
+      <tr><td class="hl">二</td><td>多媒材與立體曼陀羅創作</td><td>把「平面貼鑽」升級為「立體與複合媒材」</td></tr>
+      <tr><td class="hl">三</td><td>色彩深度解析 ★</td><td>把「色彩心理」升級為「能量診斷與作品判讀」</td></tr>
+      <tr><td class="hl">四</td><td>深度引導與個案實務 ★</td><td>把「作品解析」升級為「專業引導與界線」</td></tr>
+      <tr><td class="hl">五</td><td>師資培訓師養成</td><td>把「會教」升級為「能培訓並考核講師」</td></tr>
+      <tr><td class="hl">六</td><td>個人品牌・策展・事業</td><td>把「開班」升級為「品牌與授權」</td></tr>
+    </tbody>
+  </table>
+
+  <div class="foot"><span class="en">PART I · 03</span><span>曼陀羅心靈彩繪專家級講師課程　06</span></div>
+</section>
+
+<!-- ============ 04 模組一 ============ -->
+<section class="page">
+  <div class="head">
+    <div class="kicker">Module 1 · Sacred Geometry</div>
+    <h2>模組一　神聖幾何與超精密構圖</h2>
+    <div class="rule"></div>
+  </div>
+  <p class="lead">讓構圖從「等分對稱」進化到「神聖幾何的宇宙語言」。<span class="pill">約 5 hr</span></p>
+
+  <h3 class="blk">學習內容</h3>
+  <ul class="clean">
+    <li><strong>黃金比例與費氏螺旋</strong>——在花瓣層次的間距與大小上做出自然韻律。</li>
+    <li><strong>神聖幾何繪製</strong>——生命之花（Flower of Life）、種子之花、麥塔特隆立方體（Metatron's Cube）的畫法與象徵意涵。</li>
+    <li><strong>16／24／32 等分精密分割</strong>——以量角器與分規建立輔助線，挑戰超繁複層次。</li>
+    <li><strong>異形載體構圖</strong>——由一級的「八角板」延伸到六角、十二角與圓中圓嵌套結構。</li>
+    <li><strong>有意識的破格</strong>——在對稱中加入個人語彙，讓作品有「自己的聲音」。</li>
+  </ul>
+
+  <div class="grid g3" style="margin-top:4mm">
+    <div class="card"><div class="ct">16 等分</div><div class="cd">承接一級，過渡到更繁複的層次。</div></div>
+    <div class="card"><div class="ct">24 等分</div><div class="cd">15° 一格，細緻而華麗的專家標準。</div></div>
+    <div class="card"><div class="ct">32 等分</div><div class="cd">11.25° 一格，挑戰極致精密。</div></div>
+  </div>
+
+  <div class="section-intro" style="margin-top:5mm"><strong>本模組產出：</strong>一張 24 等分以上的神聖幾何底稿。</div>
+
+  <div class="foot"><span class="en">PART II · 04</span><span>曼陀羅心靈彩繪專家級講師課程　07</span></div>
+</section>
+
+<!-- ============ 05 模組二 ============ -->
+<section class="page">
+  <div class="head">
+    <div class="kicker">Module 2 · Mixed Media & 3D</div>
+    <h2>模組二　多媒材與立體曼陀羅創作</h2>
+    <div class="rule"></div>
+  </div>
+  <p class="lead">把一級的「平面 ＋ 貼鑽」升級為立體與複合媒材的藝術級作品。<span class="pill">約 6 hr</span></p>
+
+  <h3 class="blk">★ 三大主力媒材技法</h3>
+  <div class="grid g3">
+    <div class="card"><div class="ct" style="color:var(--gold-deep)">金箔貼附</div><div class="cd">上膠、轉貼、壓實、封層，營造光澤與貴氣；掌握金箔與深色底、與鑽飾的搭配層序。</div></div>
+    <div class="card"><div class="ct" style="color:var(--gold-deep)">色彩漸層暈染</div><div class="cd">濕中濕與多階推移，做出無痕雲霧感與寶石般的深淺過渡——讓曼陀羅「會呼吸」的關鍵。</div></div>
+    <div class="card"><div class="ct" style="color:var(--gold-deep)">立體凝珠技法</div><div class="cd">以凝膠堆出半圓「珍珠／露珠」立體點，飽滿可觸，是平面升級立體質感的招牌技法。</div></div>
+  </div>
+
+  <h3 class="blk">延伸搭配技法</h3>
+  <ul class="clean">
+    <li>浮雕立體堆疊（結構膏）、透明釉層疊，與三大主力技法混用。</li>
+    <li><strong>立體載體</strong>：曼陀羅球體、曼陀羅盤、多片組合大型壁掛。</li>
+    <li><strong>大型作品控制</strong>：60 cm 以上載體的構圖比例、節奏與體力分配。</li>
+    <li><strong>媒材混搭原則</strong>：金箔／凝珠／暈染／鑽飾如何搭配而不雜亂。</li>
+  </ul>
+
+  <div class="section-intro" style="margin-top:5mm"><strong>本模組產出：</strong>一件 A4 尺寸的多媒材技法樣板（須含金箔、漸層暈染、立體凝珠三大主力技法）。</div>
+
+  <div class="foot"><span class="en">PART II · 05</span><span>曼陀羅心靈彩繪專家級講師課程　08</span></div>
+</section>
+
+<!-- ============ 06 模組三 ★ ============ -->
+<section class="page">
+  <div class="head">
+    <div class="kicker">Module 3 · Color Reading</div>
+    <h2>模組三　色彩深度解析<span class="star">★</span></h2>
+    <div class="rule"></div>
+  </div>
+  <p class="lead">把解析做成一套<strong>可重複、可教學、可口述給學員聽</strong>的判讀系統——不只「讀得懂」，更能「教別人怎麼讀」。<span class="pill">約 5 hr・本級重點</span></p>
+
+  <h3 class="blk">1. 三層次色彩解析法（本中心獨家框架）</h3>
+  <table>
+    <thead><tr><th style="width:24%">層次</th><th>讀什麼</th><th>看見什麼</th></tr></thead>
+    <tbody>
+      <tr><td class="hl">第一層・色相情緒</td><td>選了哪些顏色</td><td>當下的情緒主旋律</td></tr>
+      <tr><td class="hl">第二層・色彩關係</td><td>主／副／點綴色比例與配色法</td><td>內在能量的平衡或衝突</td></tr>
+      <tr><td class="hl">第三層・色彩動態</td><td>明度走向、彩度高低、冷暖比例</td><td>內在能量的方向與流動</td></tr>
+    </tbody>
+  </table>
+
+  <h3 class="blk">2. 不只看顏色，更看「怎麼畫」</h3>
+  <ul class="clean">
+    <li>筆觸力道、密度、規律度所透露的狀態。</li>
+    <li>留白比例與位置＝心理上哪裡需要呼吸或迴避。</li>
+    <li>中心點處理（飽滿／空心／偏移）＝對「自我核心」的關係。</li>
+    <li>圈層完成度與擴展節奏＝能量的開展或收束。</li>
+  </ul>
+
+  <div class="grid g2" style="margin-top:3mm">
+    <div class="card"><div class="ct">3. 能量學疊加層</div><div class="cd">七脈輪色彩對應、生命靈數主題色、依當下狀態開立「色彩處方箋」（配方＋構圖＋一句引導語）。</div></div>
+    <div class="card"><div class="ct">4. 解析的倫理與口語化</div><div class="cd">不算命、不診斷、不貼標籤；只描述、只映照，把詮釋權還給學員，並翻譯成溫柔非評論的語言。</div></div>
+  </div>
+
+  <div class="section-intro" style="margin-top:5mm"><strong>本模組產出：</strong>一份「三層次色彩解析報告」——針對一位同學的作品，逐層寫出判讀並轉成口語引導稿。</div>
+
+  <div class="foot"><span class="en">PART II · 06</span><span>曼陀羅心靈彩繪專家級講師課程　09</span></div>
+</section>
+
+<!-- ============ 07 模組四 ★ ============ -->
+<section class="page">
+  <div class="head">
+    <div class="kicker">Module 4 · Facilitation</div>
+    <h2>模組四　深度引導與個案實務<span class="star">★</span></h2>
+    <div class="rule"></div>
+  </div>
+  <p class="lead">從「能解析作品」到「能專業地陪伴一個人走完一段內在歷程」。引導力在本級被當作一門<strong>可訓練的專業技術</strong>。<span class="pill">約 6 hr・本級重點</span></p>
+
+  <h3 class="blk">1. 引導的四大核心技術</h3>
+  <div class="grid g2">
+    <div class="card"><div class="ct">積極傾聽與回映</div><div class="cd">把學員說的、畫的，溫柔地映照回去。</div></div>
+    <div class="card"><div class="ct">開放式提問</div><div class="cd">「這個顏色讓你想到什麼？」而非「你是不是很累？」</div></div>
+    <div class="card"><div class="ct">沉默的力量</div><div class="cd">不急著說話，讓情緒與覺察自然浮現。</div></div>
+    <div class="card"><div class="ct">歷程陪伴而非解決</div><div class="cd">講師是鏡子與容器，不是給答案的人。</div></div>
+  </div>
+
+  <h3 class="blk">2. 一對一個案完整流程（五階段）</h3>
+  <table><tbody><tr>
+    <td class="hl">①開場安頓</td><td class="hl">②直覺選色與意圖</td><td class="hl">③創作陪伴觀察</td><td class="hl">④完成對話映照</td><td class="hl">⑤收尾定錨祝福</td>
+  </tr></tbody></table>
+
+  <h3 class="blk">3–5. 團體帶領・倫理界線・特殊族群</h3>
+  <ul class="clean">
+    <li><strong>團體療癒帶領</strong>：8–15 人的節奏掌控、場域安全感、分享圈設計、團體動力處理。</li>
+    <li><strong>倫理與安全</strong>：保密、不評論、不診斷；<strong>轉介紅線</strong>；創傷知情「陪伴而不介入」；講師自我照顧。</li>
+    <li><strong>特殊族群差異化</strong>：樂齡長照、特教身心障礙、校園情緒教育、企業正念工作坊。</li>
+    <li><strong>建立引導語腳本庫</strong>：開場／過程／收尾三段式語句，可傳授給一級講師。</li>
+  </ul>
+
+  <div class="section-intro" style="margin-top:4mm"><strong>本模組產出：</strong>一份個案引導逐字腳本 ＋ 一次同儕一對一引導演練（含被督導回饋）。</div>
+
+  <div class="foot"><span class="en">PART II · 07</span><span>曼陀羅心靈彩繪專家級講師課程　10</span></div>
+</section>
+
+<!-- ============ 08 模組五+六 ============ -->
+<section class="page">
+  <div class="head">
+    <div class="kicker">Module 5 & 6 · Trainer · Brand</div>
+    <h2>模組五　師資培訓師養成</h2>
+    <div class="rule"></div>
+  </div>
+  <p class="lead">讓學員具備「培訓並考核一級／二級講師」的能力——這是專家級的核心資格。<span class="pill">約 6 hr</span></p>
+  <ul class="clean">
+    <li><strong>教案設計</strong>（ADDIE 簡化版）：學習目標 → 內容 → 演練 → 評核的完整撰寫。</li>
+    <li><strong>拆解教學</strong>：把一個技法拆成「示範 → 分解 → 陪練 → 回饋」四步。</li>
+    <li><strong>回饋技術</strong>：建設性、有溫度、可執行的回饋語言。</li>
+    <li><strong>考核與評分</strong>：客觀評核九大／十大技法，建立評分量表（rubric）。</li>
+    <li><strong>公開演講與大型工作坊帶領</strong>：聲音、節奏、舞台、突發狀況處理。</li>
+    <li><strong>微型試教</strong>：每人試教 10 分鐘並接受同儕與導師回饋。</li>
+  </ul>
+  <div class="section-intro"><strong>產出：</strong>一份可用於培訓二級講師的完整單元教案。</div>
+
+  <div class="head" style="margin-top:8mm">
+    <div class="kicker">Module 6 · Brand & Business</div>
+    <h2>模組六　個人品牌・策展・事業經營</h2>
+    <div class="rule"></div>
+  </div>
+  <p class="lead">把「開班教課」升級為「可持續的品牌與事業」。<span class="pill">約 4 hr</span></p>
+  <div class="grid g2">
+    <div class="card"><div class="ct">個人風格定位</div><div class="cd">找出自己的色彩語彙、主題與作品識別度。</div></div>
+    <div class="card"><div class="ct">策展實務</div><div class="cd">聯展／個展籌備、佈展、作品論述撰寫。</div></div>
+    <div class="card"><div class="ct">商業應用與授權</div><div class="cd">作品商品化、合作邀約、定價策略、版權保護。</div></div>
+    <div class="card"><div class="ct">社群與事業地圖</div><div class="cd">作品攝影、貼文、學員見證；規劃收入組合。</div></div>
+  </div>
+  <div class="section-intro"><strong>產出：</strong>一頁個人品牌與半年行動計畫。</div>
+
+  <div class="foot"><span class="en">PART II · 08–09</span><span>曼陀羅心靈彩繪專家級講師課程　11</span></div>
+</section>
+
+<!-- ============ 10 流程表 ============ -->
+<section class="page">
+  <div class="head">
+    <div class="kicker">Course Flow · 3 Days</div>
+    <h2>三天密集課程流程表</h2>
+    <div class="rule"></div>
+  </div>
+  <p class="lead">連續三天密集——從幾何與媒材，到能量與療癒，再到師資與品牌，循序把學員推上「師資的師資」。</p>
+
+  <table>
+    <thead><tr><th style="width:13%">時段</th><th>第一天・幾何與媒材</th><th>第二天・能量與療癒</th><th>第三天・師資與品牌</th></tr></thead>
+    <tbody>
+      <tr><td class="hl">上午 1</td><td>開訓・專家級的視野</td><td>脈輪與色彩能量地圖</td><td>教案設計與拆解教學</td></tr>
+      <tr><td class="hl">上午 2</td><td>神聖幾何與超精密構圖</td><td>生命靈數與色彩處方</td><td>微型試教（每人 10 分鐘）</td></tr>
+      <tr><td class="hl">下午 1</td><td>金箔貼附・色彩漸層暈染</td><td>一對一個案流程演練</td><td>考核評分與回饋技術</td></tr>
+      <tr><td class="hl">下午 2</td><td>立體凝珠技法・大型作品</td><td>團體帶領與倫理界線</td><td>品牌定位・策展・事業地圖</td></tr>
+      <tr><td class="hl">收尾</td><td>技法樣板互評</td><td>個案腳本分享</td><td>畢業製作說明・導師制啟動</td></tr>
+    </tbody>
+  </table>
+
+  <div class="grid g3" style="margin-top:4mm">
+    <div class="card" style="text-align:center"><div class="num">30 hr</div><div class="cd">三日密集實作</div></div>
+    <div class="card" style="text-align:center"><div class="num">6 個月</div><div class="cd">導師制陪跑</div></div>
+    <div class="card" style="text-align:center"><div class="num">3 項</div><div class="cd">作品＋教案＋帶領考核</div></div>
+  </div>
+
+  <div class="section-intro" style="margin-top:5mm">合計約 30 小時。每日含靜心開場與作品退遠檢視時間；密集結束後進入 6 個月導師制，完成畢業製作。</div>
+
+  <div class="foot"><span class="en">PART III · 10</span><span>曼陀羅心靈彩繪專家級講師課程　12</span></div>
+</section>
+
+<!-- ============ 11 技法庫 A ============ -->
+<section class="page">
+  <div class="head">
+    <div class="kicker">Technique Manual · A</div>
+    <h2>技法庫教學手冊・A 立體與媒材</h2>
+    <div class="rule"></div>
+  </div>
+
+  <div class="section-intro">
+    <strong>四步教法・通用框架</strong>　專家級的關鍵不只是「會做」，而是「會教給一級講師」——
+    <span class="four" style="display:inline-flex;margin-left:1mm">
+      <span><b>①示範</b> 慢速操作，講出為什麼</span>
+      <span><b>②分解</b> 拆 3–5 步，標出關鍵節點</span>
+      <span><b>③陪練</b> 即時微調手勢力道</span>
+      <span><b>④回饋</b> 對照審核重點修正</span>
+    </span>
+  </div>
+
+  <div class="tech">
+    <div class="th"><span class="tn">1</span><span class="tt">立體凝珠技法</span><span class="tag">★ 主力</span></div>
+    <div class="tb">
+      <div class="row"><span class="lab">技法說明：</span>以透明凝膠堆出半圓凸起的「珍珠／露珠」立體點，乾後飽滿、有光澤、可觸摸。</div>
+      <div class="row"><span class="lab">執行要點：</span><span class="steps">①凝膠取量飽滿但不流動 ②點珠工具垂直下壓、定點停留成半球 ③提起垂直收尾不拖尾 ④由大到小做漸變串 ⑤乾透 6–24 hr 再疊色封層。</span></div>
+      <div class="four"><span><b>示範</b>下壓→停留→垂直提起</span><span><b>分解</b>取量／力道／角度</span><span><b>陪練</b>點 20 顆同尺寸</span><span><b>回饋</b>校正拖尾與塌陷</span></div>
+      <div class="row" style="margin-top:1.4mm"><span class="lab">審核重點：</span>半球飽滿對稱、表面光潔無氣泡、整排大小一致、無拖尾或塌陷。</div>
+    </div>
+  </div>
+
+  <div class="tech">
+    <div class="th"><span class="tn">2</span><span class="tt">金箔貼附與封層</span><span class="tag">★ 主力</span></div>
+    <div class="tb">
+      <div class="row"><span class="lab">技法說明：</span>以金箔（或銀／銅箔）貼附於指定區塊，營造光澤與貴氣，是作品「畫龍點睛」的高質感元素。</div>
+      <div class="row"><span class="lab">執行要點：</span><span class="steps">①上專用金箔膠，待膠半透明微黏 ②取箔輕覆、軟刷壓實 ③乾刷掃去碎箔 ④上封層防氧化 ⑤少而精、集中焦點。</span></div>
+      <div class="four"><span><b>示範</b>膠的最佳黏性時機</span><span><b>分解</b>上膠→等待→覆箔→壓實→掃邊</span><span><b>陪練</b>貼 2×2 cm</span><span><b>回饋</b>校正皺褶掃邊</span></div>
+      <div class="row" style="margin-top:1.4mm"><span class="lab">審核重點：</span>平整服貼、邊緣乾淨、無大面積掉箔或氧化、封層均勻。</div>
+    </div>
+  </div>
+
+  <div class="tech">
+    <div class="th"><span class="tn">3</span><span class="tt">立體浮雕堆疊</span></div>
+    <div class="tb">
+      <div class="row"><span class="lab">技法說明：</span>以結構膏堆出可觸摸的凸起圖案，做出有實體厚度的浮雕層次。</div>
+      <div class="row"><span class="lab">執行要點：</span><span class="steps">①刮刀或模具上膏 ②控制厚度與邊界 ③分次薄堆防龜裂 ④乾後可打磨上色 ⑤與凝珠做高低層次。</span></div>
+      <div class="four"><span><b>示範</b>刮刀運膏手勢</span><span><b>分解</b>上膏／塑形／收邊</span><span><b>陪練</b>單一花瓣浮雕</span><span><b>回饋</b>厚度與防裂</span></div>
+      <div class="row" style="margin-top:1.4mm"><span class="lab">審核重點：</span>邊界清晰、厚度均勻、乾後無裂痕、與底面結合牢固。</div>
+    </div>
+  </div>
+
+  <div class="tech">
+    <div class="th"><span class="tn">4</span><span class="tt">多層透明釉染 Glazing</span></div>
+    <div class="tb">
+      <div class="row"><span class="lab">技法說明：</span>以透明／半透明釉料一層層薄塗疊加，堆出寶石般的深度與通透色感。</div>
+      <div class="row"><span class="lab">執行要點：</span><span class="steps">①每層薄塗、乾後再疊 ②透明媒劑＋少量色 ③同色加深、異色變調 ④記錄層數 ⑤適合花心深邃感。</span></div>
+      <div class="four"><span><b>示範</b>3 層疊色變化</span><span><b>分解</b>調釉／薄塗／乾燥</span><span><b>陪練</b>疊 3 層觀察</span><span><b>回饋</b>通透度與筆痕</span></div>
+      <div class="row" style="margin-top:1.4mm"><span class="lab">審核重點：</span>通透有深度、無混濁、無明顯筆痕、過渡自然。</div>
+    </div>
+  </div>
+
+  <div class="foot"><span class="en">PART IV · 11</span><span>曼陀羅心靈彩繪專家級講師課程　13</span></div>
+</section>
+
+<!-- ============ 11b 技法庫 A 續 ============ -->
+<section class="page">
+  <div class="head">
+    <div class="kicker">Technique Manual · A</div>
+    <h2>A 立體與媒材（續）</h2>
+    <div class="rule"></div>
+  </div>
+
+  <div class="tech">
+    <div class="th"><span class="tn">5</span><span class="tt">滴流與樹脂封層 Resin</span></div>
+    <div class="tb">
+      <div class="row"><span class="lab">技法說明：</span>以環氧樹脂做鏡面封層或局部滴流，帶來通透鏡面與最高等級保護。</div>
+      <div class="row"><span class="lab">執行要點：</span><span class="steps">①A/B 劑精準比例、充分攪拌 ②倒膠後消泡 ③防塵靜置固化 ④注意邊緣溢流與水平 ⑤通風戴手套。</span></div>
+      <div class="four"><span><b>示範</b>調膠消泡</span><span><b>分解</b>比例／攪拌／消泡／固化</span><span><b>陪練</b>小盤面封層</span><span><b>回饋</b>氣泡與水平</span></div>
+      <div class="row" style="margin-top:1.4mm"><span class="lab">審核重點：</span>平整如鏡、無氣泡雜質、固化完全不黏手、邊緣俐落。</div>
+    </div>
+  </div>
+
+  <div class="tech">
+    <div class="th"><span class="tn">6</span><span class="tt">複合媒材整合</span></div>
+    <div class="tb">
+      <div class="row"><span class="lab">技法說明：</span>把金箔＋凝珠＋暈染＋鑽飾＋浮雕等多種元素整合於一件作品，協調而不雜亂。</div>
+      <div class="row"><span class="lab">執行要點：</span><span class="steps">①先定主角元素 ②質感分區、避免堆滿 ③留呼吸負空間 ④注意施作層序（先平面後立體、先暈染後金箔） ⑤統一色調收斂。</span></div>
+      <div class="four"><span><b>示範</b>整合作品拆層序</span><span><b>分解</b>施作先後順序表</span><span><b>陪練</b>排定自己層序</span><span><b>回饋</b>主次與層序</span></div>
+      <div class="row" style="margin-top:1.4mm"><span class="lab">審核重點：</span>主次分明、層序正確、質感協調、整體有焦點不雜亂。</div>
+    </div>
+  </div>
+
+  <div class="head" style="margin-top:7mm">
+    <div class="kicker">Technique Manual · B</div>
+    <h2>B 筆法與線條（7–8）</h2>
+    <div class="rule"></div>
+  </div>
+
+  <div class="tech">
+    <div class="th"><span class="tn">7</span><span class="tt">濕中濕暈染 Wet-on-wet</span></div>
+    <div class="tb">
+      <div class="row"><span class="lab">技法說明：</span>趁底色未乾接入第二色，讓兩色在交界自然融合，做出柔焦雲霧感。</div>
+      <div class="row"><span class="lab">執行要點：</span><span class="steps">①底色保持微濕 ②第二色含水量相當 ③交界輕掃融合 ④動作快趁濕完成 ⑤控水避免水痕。</span></div>
+      <div class="four"><span><b>示範</b>兩色交融</span><span><b>分解</b>濕度／時機／手勢</span><span><b>陪練</b>雙色暈染條</span><span><b>回饋</b>交界與水痕</span></div>
+      <div class="row" style="margin-top:1.4mm"><span class="lab">審核重點：</span>過渡無生硬界線、無水漬髒污、整體柔和均勻。</div>
+    </div>
+  </div>
+
+  <div class="tech">
+    <div class="th"><span class="tn">8</span><span class="tt">同心圓多階漸層</span></div>
+    <div class="tb">
+      <div class="row"><span class="lab">技法說明：</span>在同一圈層內由深到淺排出 6 階以上無痕漸層，是立體感核心基本功的進階版。</div>
+      <div class="row"><span class="lab">執行要點：</span><span class="steps">①預先調好 6 階色 ②順序鋪色 ③交界輕接融合 ④維持等寬 ⑤退遠檢視節奏。</span></div>
+      <div class="four"><span><b>示範</b>6 階推移</span><span><b>分解</b>調階／鋪色／接邊</span><span><b>陪練</b>單圈 6 階</span><span><b>回饋</b>階差與接邊</span></div>
+      <div class="row" style="margin-top:1.4mm"><span class="lab">審核重點：</span>階差清晰均勻遞進、無跳階、交界融合、圈寬一致。</div>
+    </div>
+  </div>
+
+  <div class="foot"><span class="en">PART IV · 11</span><span>曼陀羅心靈彩繪專家級講師課程　14</span></div>
+</section>
+
+<!-- ============ 12 技法庫 B 續 ============ -->
+<section class="page">
+  <div class="head">
+    <div class="kicker">Technique Manual · B</div>
+    <h2>B 筆法與線條（9–12）</h2>
+    <div class="rule"></div>
+  </div>
+
+  <div class="tech">
+    <div class="th"><span class="tn">9</span><span class="tt">長線筆飛白與書法感收尾</span></div>
+    <div class="tb">
+      <div class="row"><span class="lab">技法說明：</span>以長毛勾線筆拉出修長流暢、收尾極細的書法感線條，必要時做飛白效果。</div>
+      <div class="row"><span class="lab">執行要點：</span><span class="steps">①筆毛聚尖飽含顏料 ②落筆圓頭稍停 ③等速拉線漸提筆 ④收尾極細自然離筆 ⑤全排方向長度一致。</span></div>
+      <div class="four"><span><b>示範</b>按→拉→提連貫</span><span><b>分解</b>三動作獨立練</span><span><b>陪練</b>整排長線逗點</span><span><b>回饋</b>流暢與方向</span></div>
+      <div class="row" style="margin-top:1.4mm"><span class="lab">審核重點：</span>修長不斷、起圓收尖、整排一致、無抖動斷線。</div>
+    </div>
+  </div>
+
+  <div class="tech">
+    <div class="th"><span class="tn">10</span><span class="tt">雙色／三色一筆漸變</span></div>
+    <div class="tb">
+      <div class="row"><span class="lab">技法說明：</span>筆肚同時沾取 2–3 色，一筆畫下即帶出彩虹般的自然漸變。</div>
+      <div class="row"><span class="lab">執行要點：</span><span class="steps">①平筆分段沾不同色 ②調色紙輕刮讓交界融合 ③一筆到位不來回 ④每筆重新沾色 ⑤適合花瓣一次成形。</span></div>
+      <div class="four"><span><b>示範</b>一筆出三色</span><span><b>分解</b>沾色／刮筆／落筆</span><span><b>陪練</b>10 片漸變花瓣</span><span><b>回饋</b>色序與交界</span></div>
+      <div class="row" style="margin-top:1.4mm"><span class="lab">審核重點：</span>單筆自然多色漸變、交界柔順、整組色序一致。</div>
+    </div>
+  </div>
+
+  <div class="tech">
+    <div class="th"><span class="tn">11</span><span class="tt">極細勾線與蕾絲層次</span></div>
+    <div class="tb">
+      <div class="row"><span class="lab">技法說明：</span>以極細筆與密點交織出繁複的蕾絲花邊與細緻層次，展現手部控制力。</div>
+      <div class="row"><span class="lab">執行要點：</span><span class="steps">①最細勾線筆、顏料稀稠適中 ②細點密布、間距規律 ③線點交織分層 ④穩定呼吸、手腕支撐 ⑤由疏到密多層。</span></div>
+      <div class="four"><span><b>示範</b>蕾絲單元</span><span><b>分解</b>點／線／交織</span><span><b>陪練</b>一組蕾絲花邊</span><span><b>回饋</b>細緻與規律</span></div>
+      <div class="row" style="margin-top:1.4mm"><span class="lab">審核重點：</span>線細勻不抖、密點規律、層次分明、整體精緻如蕾絲。</div>
+    </div>
+  </div>
+
+  <div class="tech">
+    <div class="th"><span class="tn">12</span><span class="tt">鏤空與負空間造形</span></div>
+    <div class="tb">
+      <div class="row"><span class="lab">技法說明：</span>以留白／底色「畫」出圖案，讓圖形由負空間浮現，使作品呼吸。</div>
+      <div class="row"><span class="lab">執行要點：</span><span class="steps">①先規劃哪裡留白 ②以周邊上色襯托留白形 ③邊界俐落不溢色 ④留白形對稱規律 ⑤善用底色當設計元素。</span></div>
+      <div class="four"><span><b>示範</b>負空間呈現花形</span><span><b>分解</b>規劃／包邊／收界</span><span><b>陪練</b>留白單元</span><span><b>回饋</b>留白形與邊界</span></div>
+      <div class="row" style="margin-top:1.4mm"><span class="lab">審核重點：</span>留白形清晰對稱、邊界俐落、與整體節奏呼應、不溢色。</div>
+    </div>
+  </div>
+
+  <div class="foot"><span class="en">PART IV · 12</span><span>曼陀羅心靈彩繪專家級講師課程　15</span></div>
+</section>
+
+<!-- ============ 13 技法庫 C+D ============ -->
+<section class="page">
+  <div class="head">
+    <div class="kicker">Technique Manual · C & D</div>
+    <h2>C 構圖幾何・D 收尾大型製作</h2>
+    <div class="rule"></div>
+  </div>
+
+  <div class="tech">
+    <div class="th"><span class="tn">13</span><span class="tt">24／32 等分超精密分規構圖</span></div>
+    <div class="tb">
+      <div class="row"><span class="lab">技法說明：</span>以量角器與分規精準分割 24／32 等分，建立超繁複層次的對稱骨架。</div>
+      <div class="row"><span class="lab">執行要點：</span><span class="steps">①定角度（24＝15°、32＝11.25°） ②分規定半徑畫同心圓 ③鉛筆輕描輔助線 ④最小扇形設計好再對稱複製 ⑤完成後淡化輔助線。</span></div>
+      <div class="four"><span><b>示範</b>分規定位</span><span><b>分解</b>定角／定徑／放射線</span><span><b>陪練</b>畫 24 等分網</span><span><b>回饋</b>精度與對稱</span></div>
+      <div class="row" style="margin-top:1.4mm"><span class="lab">審核重點：</span>各扇形完全等分、同心圓正圓、輔助線精準、對稱無偏移。</div>
+    </div>
+  </div>
+
+  <div class="tech">
+    <div class="th"><span class="tn">14</span><span class="tt">神聖幾何繪製</span></div>
+    <div class="tb">
+      <div class="row"><span class="lab">技法說明：</span>繪製生命之花、種子之花、麥塔特隆立方體等神聖幾何圖形，並理解其象徵。</div>
+      <div class="row"><span class="lab">執行要點：</span><span class="steps">①分規等半徑連續畫圓構成花瓣交疊 ②圓心定位精準是成敗關鍵 ③由種子之花擴展到生命之花 ④連線構出立方體 ⑤結合象徵設計主題。</span></div>
+      <div class="four"><span><b>示範</b>生命之花畫法</span><span><b>分解</b>定圓心／等半徑／交疊</span><span><b>陪練</b>一組種子之花</span><span><b>回饋</b>圓心與對齊</span></div>
+      <div class="row" style="margin-top:1.4mm"><span class="lab">審核重點：</span>圓圈等大、交疊對齊、結構完整、線條乾淨。</div>
+    </div>
+  </div>
+
+  <div class="tech">
+    <div class="th"><span class="tn">15</span><span class="tt">黃金比例與費氏螺旋</span></div>
+    <div class="tb">
+      <div class="row"><span class="lab">技法說明：</span>以黃金比例（約 1:1.618）與費氏螺旋安排花瓣層次的間距與大小，做出自然韻律。</div>
+      <div class="row"><span class="lab">執行要點：</span><span class="steps">①各圈半徑依比例遞增 ②元素大小依比例縮放 ③螺旋排列點／花瓣 ④比例優先於均分 ⑤退遠檢視自然度。</span></div>
+      <div class="four"><span><b>示範</b>比例尺規劃圈距</span><span><b>分解</b>定比例／算圈距／縮放</span><span><b>陪練</b>規劃比例圈距</span><span><b>回饋</b>韻律自然度</span></div>
+      <div class="row" style="margin-top:1.4mm"><span class="lab">審核重點：</span>圈距與元素遞增符合比例、韻律自然順眼、無突兀跳階。</div>
+    </div>
+  </div>
+
+  <div class="tech">
+    <div class="th"><span class="tn">16</span><span class="tt">圓中圓嵌套與多邊形結構</span></div>
+    <div class="tb">
+      <div class="row"><span class="lab">技法說明：</span>在六角、十二角等異形載體上，以圓中圓嵌套與多邊形組合構圖。</div>
+      <div class="row"><span class="lab">執行要點：</span><span class="steps">①依載體外形定主結構等分 ②圓與多邊形交錯嵌套 ③角落小元素呼應 ④維持向心力 ⑤異形邊緣特別處理對稱。</span></div>
+      <div class="four"><span><b>示範</b>十二角構圖規劃</span><span><b>分解</b>定外形／嵌套／角落</span><span><b>陪練</b>異形底稿</span><span><b>回饋</b>對稱與向心</span></div>
+      <div class="row" style="margin-top:1.4mm"><span class="lab">審核重點：</span>嵌套對齊、與外形呼應、角落飽滿、整體向心穩定。</div>
+    </div>
+  </div>
+
+  <div class="grid g2">
+    <div class="tech" style="margin:0">
+      <div class="th"><span class="tn">17</span><span class="tt">大型作品分區與比例管理</span></div>
+      <div class="tb">
+        <div class="row"><span class="lab">說明：</span>60 cm 以上載體的分區施作、比例節奏與體力分配。</div>
+        <div class="row"><span class="lab">要點：</span><span class="steps">①分內中外三大區 ②由中心向外分段 ③比例間距預規劃 ④大面積保持濕邊 ⑤安排節奏休息。</span></div>
+        <div class="four"><span><b>示範</b>分區規劃</span><span><b>分解</b>分區／排序／濕邊</span><span><b>陪練</b>施作地圖</span><span><b>回饋</b>比例與接痕</span></div>
+        <div class="row" style="margin-top:1.4mm"><span class="lab">審核：</span>分區協調、無接痕、向心、品質不因疲勞下降。</div>
+      </div>
+    </div>
+    <div class="tech" style="margin:0">
+      <div class="th"><span class="tn">18</span><span class="tt">進階保護與裝裱</span></div>
+      <div class="tb">
+        <div class="row"><span class="lab">說明：</span>啞光／亮光分區封層、立體作品封層與展示裝裱。</div>
+        <div class="row"><span class="lab">要點：</span><span class="steps">①依質感選啞光或亮光 ②立體與金箔處謹慎封層 ③多層薄塗層間輕磨 ④側底完整 ⑤依需求裝框吊掛立架。</span></div>
+        <div class="four"><span><b>示範</b>分區封層</span><span><b>分解</b>選漆／薄塗／層間</span><span><b>陪練</b>一件封層</span><span><b>回饋</b>均勻與裝裱</span></div>
+        <div class="row" style="margin-top:1.4mm"><span class="lab">審核：</span>封層均勻無刷痕氣泡、啞亮得當、側底完整、裝裱穩固。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot"><span class="en">PART IV · 13</span><span>曼陀羅心靈彩繪專家級講師課程　16</span></div>
+</section>
+
+<!-- ============ 14 結業考核 ============ -->
+<section class="page">
+  <div class="head">
+    <div class="kicker">Capstone & Certification</div>
+    <h2>畢業考核・證書與生涯路徑</h2>
+    <div class="rule"></div>
+  </div>
+  <p class="lead">專家級不以單一作品結業，而以「<strong>作品 ＋ 教學 ＋ 帶領</strong>」三項實戰驗收。</p>
+
+  <div class="grid g3">
+    <div class="card"><div class="num">01</div><div class="ct">大型／立體代表作</div><div class="cd">60 cm 以上或立體載體，須用至少 4 項專家技法與神聖幾何，附 300–500 字創作論述。</div></div>
+    <div class="card"><div class="num">02</div><div class="ct">完整教案</div><div class="cd">可培訓二級講師的單元教案，含學習目標、流程、評分量表。</div></div>
+    <div class="card"><div class="num">03</div><div class="ct">公開帶領工作坊</div><div class="cd">自招 ≥6 人，帶領一場 2–3 小時課程，提交紀錄、照片與學員回饋。</div></div>
+  </div>
+  <div class="section-intro">期限：3 天密集結束後 <strong>6 個月內</strong>完成，期間有導師月會與線上督導陪跑。</div>
+
+  <h3 class="blk">證書與結業後資格</h3>
+  <p>通過考核者，取得 <strong>「曼陀羅心靈彩繪・專家級心靈藝術指導師（Master Instructor）」</strong> 證書。</p>
+  <ul class="clean">
+    <li><strong>可培訓並考核一級與二級講師</strong>（成為本體系的師資來源）。</li>
+    <li>可申請成為本中心特約講師／授權開班。</li>
+    <li>優先參與年度策展、聯展與大型專案；可掛名協助課程研發與教材編修。</li>
+    <li>納入公務人員終身學習認證體系；終身師資群與導師網絡支持。</li>
+  </ul>
+
+  <div class="foot"><span class="en">PART V · 14</span><span>曼陀羅心靈彩繪專家級講師課程　17</span></div>
+</section>
+
+<!-- ============ 15 費用材料 ============ -->
+<section class="page">
+  <div class="head">
+    <div class="kicker">Fees · Materials · Specs</div>
+    <h2>費用・材料・規劃參數</h2>
+    <div class="rule"></div>
+  </div>
+
+  <h3 class="blk">費用與報名</h3>
+  <table>
+    <thead><tr><th style="width:24%">項目</th><th style="width:20%">金額 NT$</th><th>說明</th></tr></thead>
+    <tbody>
+      <tr><td class="hl">課程費用</td><td class="col-acc">38,000</td><td>含 3 天密集 ＋ 6 個月導師制（月會 6 次、線上督導）、全套材料與講義、三天餐飲</td></tr>
+      <tr><td class="hl">早鳥優惠價</td><td class="col-acc">35,000</td><td>於開課前指定期限內報名繳費適用</td></tr>
+      <tr><td class="hl">證書費</td><td class="col-acc">4,800</td><td>通過畢業考核後申請專家級證書</td></tr>
+    </tbody>
+  </table>
+
+  <h3 class="blk">課程提供材料</h3>
+  <table>
+    <tbody>
+      <tr><td class="hl" style="width:24%">載體</td><td>大型木器／立體載體（球體或盤面）×1、技法練習板數件</td></tr>
+      <tr><td class="hl">主力媒材</td><td class="col-acc">金箔套組・立體凝珠膠・漸層暈染專用色與媒劑・專家級壓克力延伸色</td></tr>
+      <tr><td class="hl">延伸媒材</td><td>結構膏（立體膏）、透明釉料、施華洛世奇鑽飾</td></tr>
+      <tr><td class="hl">工具</td><td>分規／量角器、貼箔工具、凝珠點珠工具、刮刀／抹刀、進階貂毛筆組</td></tr>
+      <tr><td class="hl">文件</td><td>專家級講義、神聖幾何模板、教案範本、個案腳本範本、評分量表</td></tr>
+    </tbody>
+  </table>
+
+  <h3 class="blk">已確認規劃參數</h3>
+  <table>
+    <tbody>
+      <tr><td class="hl" style="width:30%">課程名稱</td><td>曼陀羅心靈彩繪・專家級心靈藝術指導師（Master Instructor）</td></tr>
+      <tr><td class="hl">時數與形式</td><td>30 hr／3 天密集 ＋ 6 個月導師制</td></tr>
+      <tr><td class="hl">三大主力媒材</td><td>金箔貼附・色彩漸層暈染・立體凝珠技法</td></tr>
+      <tr><td class="hl">核心結業資格</td><td>可培訓並考核一級講師、授權開班、參與策展</td></tr>
+    </tbody>
+  </table>
+
+  <div class="foot"><span class="en">PART V · 15</span><span>曼陀羅心靈彩繪專家級講師課程　18</span></div>
+</section>
+
+<!-- ============ CLOSING ============ -->
+<section class="page">
+  <div class="closing">
+    <div class="en">May this manual walk with you</div>
+    <h2>願這本講義<br>陪你走得更遠</h2>
+    <div style="width:40mm;height:1.5px;background:var(--gold);margin:6mm 0"></div>
+    <p>你在每一頁停留的時間，都會回到你身上，<br>化成下一個學員心中，被你點亮的那道光。</p>
+    <p style="margin-top:10mm;color:var(--gold-deep);letter-spacing:.1em">文創藝術研究所　黃彥蓁　所長</p>
+    <p style="margin-top:18mm;font-size:8.5pt;color:var(--gold-mid)">© 財團法人中華綜合發展研究院・文創藝術研究所・心靈藝術美學中心<br>版權所有，禁止以任何形式局部或全部影印和仿製</p>
+  </div>
+</section>
+
+</body>
+</html>
