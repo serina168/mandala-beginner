@@ -1,0 +1,15 @@
+# 靜光綻放 · Luminous Unfurling
+
+## A Design Philosophy
+
+This movement emerges from the threshold between the seen and the felt — where pigment dissolves into breath and geometry becomes devotion. It is rooted in the ancient understanding that beauty is not decoration but transmission: that a well-composed field of color can alter the nervous system, that a circle drawn with care can return the viewer to themselves.
+
+**Form and Space** surrender to organic radiance. The mandala — not as motif but as cosmology — anchors every composition. Petals and arcs repeat outward from invisible centers, pulling the eye inward and then releasing it into spacious ground. Negative space is treated as sacred: cream silences hold their weight as fully as the gilt marks that float within them. Every element breathes.
+
+**Color and Material** speak the language of mineral and dawn. Lavender ground — the color of late twilight over mountains — grades imperceptibly into blush and warm cream. Against this field, gold appears not as metallic decoration but as arrested light: lines so fine they seem drawn by a single hair, accumulated with the patience of a monk illuminating scripture. The palette is meticulous — four or five tones, each chosen with the seriousness of a chemist selecting pigments, calibrated to feel as though they emerged from the earth rather than a color wheel.
+
+**Scale and Rhythm** pulse like slow breath. Ornamental rings expand at differing radii, creating polyrhythmic visual music — the eye hears both the fast rhythm of small petal clusters and the slow revolution of outer arcs. A single character or short phrase placed off-center introduces syncopation, resisting symmetry just enough to feel alive rather than mechanical. Everything labored over, every radius measured as though the universe depended on its precision.
+
+**Composition and Balance** honor the ancient principle of *yǐ jìng zhì dòng* — stillness in motion. The front face reads as a portal: a large central form radiating in every direction, flanked by botanical whispers at the periphery, with calligraphic name-strokes occupying center-left as the human element within the cosmic pattern. The reverse face opens into pure information arranged as ritual: contact details listed as though they were verses, each line given breathing room, each icon reduced to its essential gesture.
+
+**Visual Hierarchy** is achieved through luminosity, not size. The name is not the largest element but the brightest — surrounded by darkness or warmth in a way that causes the eye to rest there first. Subtitles recede into refined small-caps or elegant thin script, whispering context. The brand mark appears as both word and symbol, unified: text and icon inseparable, the way a signature merges person and craft. This is the work of someone who has painstakingly refined every relationship — the distance between lines, the weight of a stroke, the precise hue of a shadow — until the composition achieves the inevitability of something discovered rather than designed.
